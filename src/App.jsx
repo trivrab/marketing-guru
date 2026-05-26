@@ -1,0 +1,1681 @@
+import { useState, useEffect } from "react";
+
+// localStorage polyfill for window.storage (Claude.ai artifact API)
+if (typeof window !== 'undefined' && !window.storage) {
+  window.storage = {
+    get: async (key) => {
+      const value = localStorage.getItem(key);
+      return value !== null ? { key, value } : null;
+    },
+    set: async (key, value) => {
+      localStorage.setItem(key, value);
+      return { key, value };
+    },
+    delete: async (key) => {
+      localStorage.removeItem(key);
+      return { key, deleted: true };
+    },
+    list: async (prefix) => {
+      const keys = Object.keys(localStorage).filter(k => !prefix || k.startsWith(prefix));
+      return { keys };
+    },
+  };
+}
+
+
+const INIT_KONTEXTER=[
+  {id:"gepant",namn:"Ge Pant",farg:"#2dd4bf",beskrivning:"Pilotlansering – partnerföreningar ger sin pant digitalt.",metricLabel:"Pantade burkar",senderName:"Marketing Guru",senderEmail:"",aktiv:true},
+  {id:"saljpant",namn:"Sälja Pant",farg:"#22c55e",beskrivning:"Föreningar säljer pant och tjänar pengar.",metricLabel:"Såld pant (kr)",senderName:"Marketing Guru",senderEmail:"",aktiv:false},
+];
+
+const BLEKINGE = [
+  {id:1,namn:"KRIF Hockey",epost:"kansli@krifhockey.se",epostOrdf:"emma.persson@krifhockey.se",ort:"Kallinge",kommun:"Ronneby",idrott:"Ishockey",burkar:28147,skickadeMail:0,ordforande:"Emma Persson",telefon:"0733-015633",lan:"Blekinge",ant:"Hockeyettan",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:2,namn:"Ramdala IF",epost:"hemmainorrevik@gmail.com",epostOrdf:"hemmainorrevik@gmail.com",ort:"Ramdala",kommun:"Karlskrona",idrott:"Fotboll",burkar:20400,skickadeMail:0,ordforande:"Linda Eriksson",telefon:"0708-33 18 47",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:3,namn:"Drottningskärs IF",epost:"",epostOrdf:"",ort:"Drottningskär",kommun:"Karlskrona",idrott:"Fotboll",burkar:14474,skickadeMail:0,ordforande:"Michael Hellman Olofsson",telefon:"0730-571024",lan:"Blekinge",ant:"Ring 15:30-19:30",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:4,namn:"Mörrum Hockey",epost:"kansli@morrumhockey.se",epostOrdf:"per.olsson84@gmail.com",ort:"Mörrum",kommun:"Karlshamn",idrott:"Ishockey",burkar:13232,skickadeMail:0,ordforande:"Per Olsson",telefon:"073-405 19 03",lan:"Blekinge",ant:"Hockeyettan",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:5,namn:"Lörby IF",epost:"lorbyif@gmail.com",epostOrdf:"lorbyif@gmail.com",ort:"Lörby",kommun:"Sölvesborg",idrott:"Fotboll",burkar:10789,skickadeMail:0,ordforande:"Katarina Knese",telefon:"076-627 09 77",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:6,namn:"AIK Atlas",epost:"post@aik-atlas.nu",epostOrdf:"",ort:"Sturkö",kommun:"Karlskrona",idrott:"Fotboll",burkar:7905,skickadeMail:0,ordforande:"Åsa Holm",telefon:"070-960 50 80",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:7,namn:"Kristianopels GoIF",epost:"info@kristianopelsgoif.com",epostOrdf:"lennartkarlsson100@gmail.com",ort:"Fågelmara",kommun:"Karlskrona",idrott:"Fotboll",burkar:7500,skickadeMail:0,ordforande:"Lennart Karlsson",telefon:"0704-150750",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:8,namn:"Jämjö GoIF",epost:"jamjokansli@gmail.com",epostOrdf:"jgoifstyrelse@gmail.com",ort:"Jämjö",kommun:"Karlskrona",idrott:"Fotboll",burkar:7450,skickadeMail:0,ordforande:"Styrelsen",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:9,namn:"Belganet-Hallabro IF",epost:"styrelsen@belganet.nu",epostOrdf:"",ort:"Hallabro",kommun:"Ronneby",idrott:"Fotboll",burkar:5304,skickadeMail:0,ordforande:"",telefon:"073-382 21 22",lan:"Blekinge",ant:"Swish 1232136463",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:10,namn:"Olofström IBK",epost:"",epostOrdf:"",ort:"Olofström",kommun:"Olofström",idrott:"Innebandy",burkar:4223,skickadeMail:0,ordforande:"Malin Mathiasson",telefon:"0768-514607",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:11,namn:"Olofströms IK",epost:"olofstroms.if@oktv.se",epostOrdf:"olofstroms.if@oktv.se",ort:"Olofström",kommun:"Olofström",idrott:"Fotboll",burkar:3815,skickadeMail:0,ordforande:"Per-Åke Samsioe",telefon:"0454-42765",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:12,namn:"KaRo IBF",epost:"andersmagnusson.karoibf@outlook.com",epostOrdf:"andersmagnusson.karoibf@outlook.com",ort:"Kallinge",kommun:"Ronneby",idrott:"Innebandy",burkar:3416,skickadeMail:0,ordforande:"Anders Magnusson",telefon:"0721926619",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:13,namn:"SMK Ronneby",epost:"st.roos@telia.com",epostOrdf:"st.roos@telia.com",ort:"Kallinge",kommun:"Ronneby",idrott:"Motorsport",burkar:3287,skickadeMail:0,ordforande:"Staffan Roos",telefon:"0709-907810",lan:"Blekinge",ant:"Vice: pjjansson@live.se",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:14,namn:"Backaryds Sportklubb",epost:"ordforande@backaryd.se",epostOrdf:"",ort:"Backaryd",kommun:"Ronneby",idrott:"Fotboll",burkar:2804,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:15,namn:"Lyckå FF 2016",epost:"tommy.28475@gmail.com",epostOrdf:"tommy.28475@gmail.com",ort:"Lyckeby",kommun:"Karlskrona",idrott:"Fotboll",burkar:2290,skickadeMail:0,ordforande:"Mats Göran Hansson",telefon:"0455-28475",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:16,namn:"Olofström MC",epost:"",epostOrdf:"",ort:"Olofström",kommun:"Olofström",idrott:"Motorsport",burkar:1914,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:17,namn:"Olofströms BK",epost:"",epostOrdf:"",ort:"Olofström",kommun:"Olofström",idrott:"Basket",burkar:1900,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:18,namn:"IF Trion",epost:"",epostOrdf:"",ort:"Rödeby",kommun:"Karlskrona",idrott:"Friidrott",burkar:1877,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:19,namn:"Ronneby Ryttarförening",epost:"ridskola@rrf.nu",epostOrdf:"",ort:"Ronneby",kommun:"Ronneby",idrott:"Ridsport",burkar:1744,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:20,namn:"Ronneby Bollklubb P-13",epost:"",epostOrdf:"",ort:"Ronneby",kommun:"Ronneby",idrott:"Fotboll ungdom",burkar:1500,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:21,namn:"KHF pojkar 11/12",epost:"kansli@khk.se",epostOrdf:"ungdomsstyrelsen@khk.se",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Ishockey ungdom",burkar:1450,skickadeMail:0,ordforande:"KHK Ungdomsstyrelse",telefon:"0455-350 430",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:22,namn:"DF Hamboringen",epost:"",epostOrdf:"",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Folkdans",burkar:1329,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:23,namn:"Johannishus Pistolskytteklubb",epost:"",epostOrdf:"",ort:"Johannishus",kommun:"Ronneby",idrott:"Skytte",burkar:1323,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:24,namn:"Karlskrona Judoklubb",epost:"",epostOrdf:"",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Judo",burkar:1214,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:25,namn:"Lyckeby Bordtennis",epost:"",epostOrdf:"",ort:"Lyckeby",kommun:"Karlskrona",idrott:"Bordtennis",burkar:1120,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:26,namn:"Rödeby AIF",epost:"kansli@raif.se",epostOrdf:"",ort:"Rödeby",kommun:"Karlskrona",idrott:"Fotboll",burkar:1097,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:27,namn:"Karlshamns Ridklubb",epost:"",epostOrdf:"",ort:"Karlshamn",kommun:"Karlshamn",idrott:"Ridsport",burkar:950,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:28,namn:"Jämshög Saints HC",epost:"",epostOrdf:"",ort:"Jämshög",kommun:"Olofström",idrott:"Ishockey",burkar:750,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:29,namn:"Badmintonklubben Carlskrona",epost:"kansliet@bkc.se",epostOrdf:"",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Badminton",burkar:519,skickadeMail:0,ordforande:"",telefon:"076-886 71 00",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:30,namn:"Saxemara IF",epost:"kansli@saxemaraif.se",epostOrdf:"kansli@saxemaraif.se",ort:"Saxemara",kommun:"Ronneby",idrott:"Fotboll",burkar:500,skickadeMail:0,ordforande:"Peter Mattsson",telefon:"0705 71 74 27",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:31,namn:"OK ORION",epost:"info@okorion.se",epostOrdf:"",ort:"Jämjö",kommun:"Karlskrona",idrott:"Orientering",burkar:500,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:32,namn:"Olofströms Ridklubb",epost:"",epostOrdf:"",ort:"Olofström",kommun:"Olofström",idrott:"Ridsport",burkar:353,skickadeMail:0,ordforande:"",telefon:"070-597 08 66",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:33,namn:"Karlskrona Sjösportklubb",epost:"",epostOrdf:"",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Segling",burkar:292,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:34,namn:"Ronneby OK",epost:"rok@rok.nu",epostOrdf:"ordforande@rok.nu",ort:"Kallinge",kommun:"Ronneby",idrott:"Orientering",burkar:261,skickadeMail:0,ordforande:"Gustav Bäcklund",telefon:"0457-460016",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:35,namn:"BK Union",epost:"",epostOrdf:"",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Boxning",burkar:251,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:36,namn:"OK Skogsfalken",epost:"kassor@skogsfalken.nu",epostOrdf:"",ort:"Svängsta",kommun:"Karlshamn",idrott:"Orientering",burkar:250,skickadeMail:0,ordforande:"Margret Karlsson",telefon:"073-84 70 655",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:37,namn:"Karlskrona Segelsällskap",epost:"bokning@knss.nu",epostOrdf:"",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Segling",burkar:250,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:38,namn:"FK Karlskrona",epost:"kansli@fkkarlskrona.com",epostOrdf:"kansli@fkkarlskrona.com",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Fotboll",burkar:247,skickadeMail:0,ordforande:"FK Karlskrona kansli",telefon:"0455-311850",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+  {id:39,namn:"Karlskrona Cykelklubb",epost:"",epostOrdf:"",ort:"Karlskrona",kommun:"Karlskrona",idrott:"Cykling",burkar:41,skickadeMail:0,ordforande:"",telefon:"",lan:"Blekinge",ant:"",mailLog:[],kontaktIds:[],taggar:[]},
+];
+
+// ── Dalarna leads – BottleDROP-kampanj (15 st) ─────────────────────────────────
+// Mail 1 skickat 2026-05-10
+const M1_SUBJ = "{{namn}} – exklusiv plats i pilotlanseringen för Ge Pant";
+const M1_DATE = "2026-05-10 09:00";
+const M1_CAMP = 1000000;
+const M2_SUBJ = "Enkelt, effektivt och roligt – digital insamling för förening";
+const M2_DATE = "2026-05-14 09:30";
+const M2_CAMP = 1000001;
+const M3_SUBJ = "Förening – pionjärplatserna börjar ta slut";
+const M3_DATE = "2026-05-18 10:00";
+const M3_CAMP = 1000002;
+const ml3 = (toEmail, dual) => [
+  {id:`m1_${toEmail}`,campaignId:M1_CAMP,date:M1_DATE,subject:M1_SUBJ,toEmail,status:"sent",dual:!!dual},
+  {id:`m2_${toEmail}`,campaignId:M2_CAMP,date:M2_DATE,subject:M2_SUBJ,toEmail,status:"sent",dual:!!dual},
+  {id:`m3_${toEmail}`,campaignId:M3_CAMP,date:M3_DATE,subject:M3_SUBJ,toEmail,status:"sent",dual:!!dual},
+];
+// keep backward compat alias
+const ml1 = ml3;
+
+const DALARNA = [
+  {id:100,namn:"Färnäs Sportklubb",epost:"jesperottossonlassis@live.se",epostOrdf:"msj@jysk.com",ort:"Färnäs",kommun:"Mora",idrott:"Fotboll",burkar:0,skickadeMail:3,ordforande:"Jesper & Martin",telefon:"",lan:"Dalarna",ant:"Dubbel mottagare – Jesper + Martin",mailLog:ml1("jesperottossonlassis@live.se + msj@jysk.com",true),kontaktIds:[200,201],taggar:["gepant"]},
+  {id:101,namn:"Avesta Brovallen HF P16",epost:"avesta.brovallen@outlook.com",epostOrdf:"",ort:"Avesta",kommun:"Avesta",idrott:"Handboll",burkar:0,skickadeMail:3,ordforande:"Linn Olsson",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("avesta.brovallen@outlook.com"),kontaktIds:[202],taggar:["gepant"]},
+  {id:102,namn:"Sundborns GOIF",epost:"info@sundbornsgoif.se",epostOrdf:"",ort:"Sundborn",kommun:"Falun",idrott:"Fotboll",burkar:0,skickadeMail:3,ordforande:"Kansli",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("info@sundbornsgoif.se"),kontaktIds:[203],taggar:["gepant"]},
+  {id:103,namn:"KAIS Mora IF",epost:"kansliet@kaismora.se",epostOrdf:"",ort:"Mora",kommun:"Mora",idrott:"Ishockey / Fotboll",burkar:0,skickadeMail:3,ordforande:"Kansli",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("kansliet@kaismora.se"),kontaktIds:[204],taggar:["gepant"]},
+  {id:104,namn:"Avesta AIK",epost:"info@avestaaik.se",epostOrdf:"",ort:"Avesta",kommun:"Avesta",idrott:"Fleridrott",burkar:0,skickadeMail:3,ordforande:"Kansli",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("info@avestaaik.se"),kontaktIds:[205],taggar:["gepant"]},
+  {id:105,namn:"IBF Falun Ungdom",epost:"Kansli@ibffalunub.se",epostOrdf:"",ort:"Falun",kommun:"Falun",idrott:"Innebandy",burkar:0,skickadeMail:3,ordforande:"Kansli",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("Kansli@ibffalunub.se"),kontaktIds:[206],taggar:["gepant"]},
+  {id:106,namn:"Rättviks Ridklubb",epost:"kontakt@rattviksridklubb.se",epostOrdf:"",ort:"Rättvik",kommun:"Rättvik",idrott:"Ridsport",burkar:0,skickadeMail:3,ordforande:"Kontakt",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("kontakt@rattviksridklubb.se"),kontaktIds:[207],taggar:["gepant"]},
+  {id:107,namn:"Svärdsjö Ridklubb",epost:"svardsjoridklubb@hotmail.com",epostOrdf:"",ort:"Svärdsjö",kommun:"Falun",idrott:"Ridsport",burkar:0,skickadeMail:3,ordforande:"Kontakt",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("svardsjoridklubb@hotmail.com"),kontaktIds:[208],taggar:["gepant"]},
+  {id:108,namn:"Falu BS",epost:"info@falubs.com",epostOrdf:"",ort:"Falun",kommun:"Falun",idrott:"Fotboll",burkar:0,skickadeMail:3,ordforande:"Kansli",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("info@falubs.com"),kontaktIds:[209],taggar:["gepant"]},
+  {id:109,namn:"Falu IK Skidklubb",epost:"faluikskidklubb@gmail.com",epostOrdf:"",ort:"Falun",kommun:"Falun",idrott:"Skidåkning",burkar:0,skickadeMail:3,ordforande:"Kontakt",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("faluikskidklubb@gmail.com"),kontaktIds:[210],taggar:["gepant"]},
+  {id:110,namn:"Slätta SK",epost:"info@slattask.se",epostOrdf:"",ort:"Falun",kommun:"Falun",idrott:"Fotboll",burkar:0,skickadeMail:3,ordforande:"Kansli",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("info@slattask.se"),kontaktIds:[211],taggar:["gepant"]},
+  {id:111,namn:"SMK Dala Falun",epost:"info@smkdala.se",epostOrdf:"",ort:"Falun",kommun:"Falun",idrott:"Motorsport",burkar:0,skickadeMail:3,ordforande:"Kontakt",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("info@smkdala.se"),kontaktIds:[212],taggar:["gepant"]},
+  {id:112,namn:"Sollerö IF",epost:"info@solleroif.se",epostOrdf:"",ort:"Sollerön",kommun:"Mora",idrott:"Fleridrott",burkar:0,skickadeMail:3,ordforande:"Kansli",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("info@solleroif.se"),kontaktIds:[213],taggar:["gepant"]},
+  {id:113,namn:"Bjursås Ridklubb",epost:"bjursasridklubb@hotmail.se",epostOrdf:"",ort:"Bjursås",kommun:"Falun",idrott:"Ridsport",burkar:0,skickadeMail:3,ordforande:"Kontakt",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("bjursasridklubb@hotmail.se"),kontaktIds:[214],taggar:["gepant"]},
+  {id:114,namn:"Borlänge Flygklubb",epost:"bfk@bfk.nu",epostOrdf:"",ort:"Borlänge",kommun:"Borlänge",idrott:"Flygsport",burkar:0,skickadeMail:3,ordforande:"Kontakt",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("bfk@bfk.nu"),kontaktIds:[215],taggar:["gepant"]},
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA];
+
+// ── Förifylld kampanjhistorik ─────────────────────────────────────────────────
+const INIT_CAMP=[
+  {id:M1_CAMP,date:"2026-05-10",subject:"{{namn}} – exklusiv plats i pilotlanseringen för Ge Pant",recipients:15,sent:15,failed:0,mall:"📬 Mail 1 – Introduktion",lan:"Dalarna"},
+  {id:M2_CAMP,date:"2026-05-14",subject:"Enkelt, effektivt och roligt – digital insamling för förening",recipients:15,sent:15,failed:0,mall:"🤝 Mail 2 – Relationsbyggande",lan:"Dalarna"},
+  {id:M3_CAMP,date:"2026-05-18",subject:"Förening – pionjärplatserna börjar ta slut",recipients:15,sent:15,failed:0,mall:"⏰ Mail 3 – Urgency",lan:"Dalarna"},
+];
+
+// ── Dalarna kontakter ──────────────────────────────────────────────────────────
+const INIT_CONTACTS=[
+  // Färnäs Sportklubb – dubbel mottagare
+  {id:200,fornamn:"Jesper",efternamn:"Ottosson",epost:"jesperottossonlassis@live.se",telefon:"",roll:"Kontakt",foreningId:100,anteckningar:"Primär kontakt – Färnäs SK"},
+  {id:201,fornamn:"Martin",efternamn:"",epost:"msj@jysk.com",telefon:"",roll:"Kontakt",foreningId:100,anteckningar:"Sekundär kontakt – Färnäs SK (Jysk)"},
+  // Avesta Brovallen HF P16
+  {id:202,fornamn:"Linn",efternamn:"Olsson",epost:"avesta.brovallen@outlook.com",telefon:"",roll:"Kontakt",foreningId:101,anteckningar:"Avesta Brovallen HF P16"},
+  // Sundborns GOIF
+  {id:203,fornamn:"Kansli",efternamn:"",epost:"info@sundbornsgoif.se",telefon:"",roll:"Kansli",foreningId:102,anteckningar:"Sundborns GOIF"},
+  // KAIS Mora IF
+  {id:204,fornamn:"Kansli",efternamn:"",epost:"kansliet@kaismora.se",telefon:"",roll:"Kansli",foreningId:103,anteckningar:"KAIS Mora IF"},
+  // Avesta AIK
+  {id:205,fornamn:"Kansli",efternamn:"",epost:"info@avestaaik.se",telefon:"",roll:"Kansli",foreningId:104,anteckningar:"Avesta AIK"},
+  // IBF Falun Ungdom
+  {id:206,fornamn:"Kansli",efternamn:"",epost:"Kansli@ibffalunub.se",telefon:"",roll:"Kansli",foreningId:105,anteckningar:"IBF Falun Ungdom"},
+  // Rättviks Ridklubb
+  {id:207,fornamn:"Kontakt",efternamn:"",epost:"kontakt@rattviksridklubb.se",telefon:"",roll:"Kontakt",foreningId:106,anteckningar:"Rättviks Ridklubb"},
+  // Svärdsjö Ridklubb
+  {id:208,fornamn:"Kontakt",efternamn:"",epost:"svardsjoridklubb@hotmail.com",telefon:"",roll:"Kontakt",foreningId:107,anteckningar:"Svärdsjö Ridklubb"},
+  // Falu BS
+  {id:209,fornamn:"Kansli",efternamn:"",epost:"info@falubs.com",telefon:"",roll:"Kansli",foreningId:108,anteckningar:"Falu BS"},
+  // Falu IK Skidklubb
+  {id:210,fornamn:"Kontakt",efternamn:"",epost:"faluikskidklubb@gmail.com",telefon:"",roll:"Kontakt",foreningId:109,anteckningar:"Falu IK Skidklubb"},
+  // Slätta SK
+  {id:211,fornamn:"Kansli",efternamn:"",epost:"info@slattask.se",telefon:"",roll:"Kansli",foreningId:110,anteckningar:"Slätta SK"},
+  // SMK Dala Falun
+  {id:212,fornamn:"Kontakt",efternamn:"",epost:"info@smkdala.se",telefon:"",roll:"Kontakt",foreningId:111,anteckningar:"SMK Dala Falun"},
+  // Sollerö IF
+  {id:213,fornamn:"Kansli",efternamn:"",epost:"info@solleroif.se",telefon:"",roll:"Kansli",foreningId:112,anteckningar:"Sollerö IF"},
+  // Bjursås Ridklubb
+  {id:214,fornamn:"Kontakt",efternamn:"",epost:"bjursasridklubb@hotmail.se",telefon:"",roll:"Kontakt",foreningId:113,anteckningar:"Bjursås Ridklubb"},
+  // Borlänge Flygklubb
+  {id:215,fornamn:"Kontakt",efternamn:"",epost:"bfk@bfk.nu",telefon:"",roll:"Kontakt",foreningId:114,anteckningar:"Borlänge Flygklubb"},
+];
+
+const TEMPLATES=[
+  {
+    id:"mail1",
+    namn:"📬 Mail 1 – Introduktion",
+    steg:1,
+    subject:"Vi söker 5 partnerföreningar till Ge Pant – är {{namn}} intresserade?",
+    body:`Hej {{namn}}!
+
+Vi lanserar just nu BottleDROP – Ge Pant — en ny plattform som gör det enklare för människor att ge sin pant till lokala föreningar.
+
+Vi söker nu 5 partnerföreningar som vill få tidig access till plattformen och vara med under pilotlanseringen.
+
+Som partnerförening får {{namn}}:
+
+• Kostnadsfri access under pilotlanseringen
+• Möjlighet att påverka utvecklingen
+• Prioriterad support
+• 50% lägre abonnemangspris for life
+
+Ansök här: https://www.bottledrop.se/
+Mer information: https://www.bottledrop.se/
+
+Vi väljer partnerföreningar löpande.
+
+Allt gott,
+{{avsandare}}`
+  },
+  {
+    id:"mail2",
+    namn:"🤝 Mail 2 – Uppföljning",
+    steg:2,
+    subject:"{{namn}} – en snabb följdfråga om Ge Pant",
+    body:`Hej {{namn}}!
+
+Jag hörde av mig förra veckan angående Ge Pant och pilotlanseringen. Ville bara följa upp kort.
+
+Kort om vad Ge Pant löser: idag missar många föreningar insamlingar för att det är för omständligt för givarna att bidra när de inte är på plats. Med Ge Pant kan föreningens givare ge sin pant direkt från mobilen, när som helst och var som helst.
+
+Vi onboardar partnerföreningar löpande, en i taget, och erbjuder personlig hjälp under hela processen.
+
+Platserna är begränsade och vi väljer löpande. Det här erbjudandet ges inte igen efter lansering.
+
+Ansök här: https://www.bottledrop.se/
+
+Allt gott,
+{{avsandare}}`
+  },
+  {
+    id:"mail3",
+    namn:"⏰ Mail 3 – Sista chansen",
+    steg:3,
+    subject:"{{namn}} – sista platsen i piloten snart fylld",
+    body:`Hej {{namn}}!
+
+Sista gången jag hör av mig om det här.
+
+Vi söker 5 partnerföreningar till Ge Pant och platserna fylls löpande. De föreningar som är med nu låser in villkor som inte erbjuds igen:
+
+• Kostnadsfri access under pilotlanseringen
+• Möjlighet att påverka utvecklingen
+• Prioriterad support
+• 50% lägre abonnemangspris for life
+
+Om {{namn}} är intresserade: ansök på https://www.bottledrop.se/ så återkommer vi direkt.
+
+Vi väljer partnerföreningar löpande – villkoren efter lansering kommer att se annorlunda ut.
+
+Allt gott,
+{{avsandare}}`
+  },
+  {
+    id:"custom",
+    namn:"✏️ Eget meddelande",
+    steg:null,
+    subject:"",
+    body:""
+  },
+];
+
+const ROLLER=["Ordförande","Vice ordförande","Kassör","Sekreterare","Styrelseledamot","Tränare","Kansliansvarig","Kontakt","Annan"];
+
+const C={bg:"#0f172a",bg2:"#0c1628",bg3:"#111827",bg4:"#0a1020",border:"#1e3a5f",blue:"#3b82f6",text:"#e2e8f0",muted:"#64748b",green:"#22c55e",amber:"#f59e0b",red:"#ef4444",purple:"#a78bfa",teal:"#2dd4bf"};
+const I=(x={})=>({background:C.bg,border:`1px solid ${C.border}`,borderRadius:8,color:C.text,padding:"10px 12px",fontSize:14,fontFamily:"inherit",outline:"none",boxSizing:"border-box",width:"100%",...x});
+const card=(x={})=>({background:C.bg2,border:`1px solid ${C.border}`,borderRadius:12,padding:"14px 16px",...x});
+const lbl={fontSize:10,fontWeight:700,letterSpacing:"0.8px",textTransform:"uppercase",color:C.blue,marginBottom:4,display:"block"};
+const btn=(v="primary",lg=false)=>({padding:lg?"14px 20px":"9px 18px",borderRadius:9,border:v==="ghost"?`1px solid ${C.border}`:"none",background:v==="primary"?C.blue:v==="danger"?C.red:"transparent",color:v==="ghost"?C.muted:"#fff",fontWeight:600,fontSize:lg?15:13,cursor:"pointer",fontFamily:"inherit",display:"inline-flex",alignItems:"center",gap:6,minHeight:lg?52:40,WebkitTapHighlightColor:"transparent"});
+const fmtN=n=>(n||0).toLocaleString("sv-SE");
+const hasEmail=f=>!!(f.epost||f.epostOrdf);
+const hasDual=f=>!!(f.epost&&f.epostOrdf&&f.epost!==f.epostOrdf);
+const getEmail=(f,pref)=>(pref&&f.epostOrdf)?f.epostOrdf:(f.epost||f.epostOrdf||"");
+const uniq=arr=>[...new Set(arr.filter(Boolean))].sort();
+const fill=(t,f,s)=>(t||"").replace(/{{namn}}/g,(f&&f.namn)||"").replace(/{{mottagare}}/g,(f&&(f.ordforande||f.namn))||"föreningen").replace(/{{ordforande}}/g,(f&&(f.ordforande||f.namn))||"föreningen").replace(/{{burkar}}/g,fmtN(f&&f.burkar)).replace(/{{ort}}/g,(f&&f.ort)||"").replace(/{{idrott}}/g,(f&&f.idrott)||"").replace(/{{avsandare}}/g,s||"Marketing Guru");
+
+const PIPE_STAGES=[
+  {id:"prospekt",label:"Ej kontaktad",icon:"👀",color:"#64748b",bg:"rgba(100,116,139,0.12)"},
+  {id:"mail1",label:"Fått mail 1",icon:"📬",color:"#3b82f6",bg:"rgba(59,130,246,0.12)"},
+  {id:"mail2",label:"Fått mail 1–2",icon:"🤝",color:"#2dd4bf",bg:"rgba(45,212,191,0.12)"},
+  {id:"mail3",label:"Fått alla 3",icon:"⏰",color:"#f59e0b",bg:"rgba(245,158,11,0.12)"},
+  {id:"ansökt",label:"Ansökt",icon:"📋",color:"#a78bfa",bg:"rgba(167,139,250,0.12)"},
+  {id:"antagen",label:"Antagen ✓",icon:"🎉",color:"#22c55e",bg:"rgba(34,197,94,0.12)"},
+  {id:"avvisad",label:"Avvisad",icon:"✕",color:"#ef4444",bg:"rgba(239,68,68,0.10)"},
+];
+
+function getAutoStage(f,overrides){
+  if(!f)return"prospekt";
+  if(!overrides)overrides={};
+  if(overrides[f.id])return overrides[f.id];
+  const m=f.skickadeMail||0;
+  if(m>=3)return"mail3";
+  if(m>=2)return"mail2";
+  if(m>=1)return"mail1";
+  return"prospekt";
+}
+
+function useWidth(){const[w,setW]=useState(()=>typeof window!=="undefined"?window.innerWidth:680);useEffect(()=>{const fn=()=>setW(window.innerWidth);window.addEventListener("resize",fn);return()=>window.removeEventListener("resize",fn);},[]);return w;}
+function BackBar({onBack,title,actions}){return(<div style={{display:"flex",alignItems:"center",gap:10,padding:"12px 16px",background:C.bg3,borderBottom:`1px solid ${C.border}`,minHeight:52}}><button onClick={onBack} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:8,color:C.text,cursor:"pointer",fontSize:13,fontWeight:600,padding:"7px 12px",fontFamily:"inherit"}}>← Tillbaka</button><span style={{flex:1,fontWeight:600,fontSize:14,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{title}</span>{actions}</div>);}
+function Chip({color,children,sm}){return <span style={{background:color+"22",color,padding:sm?"1px 7px":"2px 9px",borderRadius:10,fontSize:sm?10:11,fontWeight:600,whiteSpace:"nowrap"}}>{children}</span>;}
+function SectionHd({children,right}){return <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}><div style={{fontSize:11,fontWeight:700,letterSpacing:"0.8px",textTransform:"uppercase",color:C.blue}}>{children}</div>{right}</div>;}
+
+export default function App(){
+  const w=useWidth();const M=w<640;
+  const [tab,setTab]=useState("oversikt");
+  const [fr,setFr]=useState(INIT_FR);
+  const [camp,setCamp]=useState(INIT_CAMP);
+  const [contacts,setContacts]=useState(INIT_CONTACTS);
+  const [cfg,setCfg]=useState({apiKey:"",senderName:"Marketing Guru",senderEmail:"",preferOrdf:false,proxyUrl:""});
+  const [templates,setTemplates]=useState(TEMPLATES);
+  const [kontexter,setKontexter]=useState(INIT_KONTEXTER);
+  const [aktivKontextId,setAktivKontextId]=useState("gepant");
+  const [pipelineOverrides,setPipelineOverrides]=useState({});
+  const [ready,setReady]=useState(false);
+
+  useEffect(()=>{
+    (async()=>{
+      try{const r=await window.storage.get("bd5_fr");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(f=>f.id));setFr([...s,...INIT_FR.filter(f=>!ids.has(f.id))]);}else setFr(INIT_FR);}catch{setFr(INIT_FR);}
+      try{const r=await window.storage.get("bd5_contacts");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(c=>c.id));setContacts([...s,...INIT_CONTACTS.filter(c=>!ids.has(c.id))]);}else setContacts(INIT_CONTACTS);}catch{setContacts(INIT_CONTACTS);}
+      try{const r=await window.storage.get("bd5_camp");if(r?.value)setCamp(JSON.parse(r.value));}catch{}
+      try{const r=await window.storage.get("bd5_cfg");if(r?.value)setCfg(JSON.parse(r.value));}catch{}
+      try{const r=await window.storage.get("bd5_kontexter");if(r?.value)setKontexter(JSON.parse(r.value));}catch{}
+      try{const r=await window.storage.get("bd5_aktiv");if(r?.value)setAktivKontextId(JSON.parse(r.value));}catch{}
+      try{const r=await window.storage.get("bd5_pipe");if(r?.value)setPipelineOverrides(JSON.parse(r.value));}catch{}
+      setTemplates(TEMPLATES);
+      await window.storage.set("bd5_templates",JSON.stringify(TEMPLATES)).catch(()=>{});
+      setReady(true);
+    })();
+  },[]);
+
+  const saveFr=async d=>{setFr(d);try{await window.storage.set("bd5_fr",JSON.stringify(d));}catch{}};
+  const saveCamp=async d=>{setCamp(d);try{await window.storage.set("bd5_camp",JSON.stringify(d));}catch{}};
+  const saveContacts=async d=>{setContacts(d);try{await window.storage.set("bd5_contacts",JSON.stringify(d));}catch{}};
+  const saveCfg=async d=>{setCfg(d);try{await window.storage.set("bd5_cfg",JSON.stringify(d));}catch{}};
+  const saveTemplates=async d=>{setTemplates(d);try{await window.storage.set("bd5_templates",JSON.stringify(d));}catch{}};
+  const saveKontexter=async d=>{setKontexter(d);try{await window.storage.set("bd5_kontexter",JSON.stringify(d));}catch{}};
+  const saveAktivKontext=async id=>{setAktivKontextId(id);try{await window.storage.set("bd5_aktiv",JSON.stringify(id));}catch{}};
+  const savePipe=async d=>{setPipelineOverrides(d);try{await window.storage.set("bd5_pipe",JSON.stringify(d));}catch{}};
+
+  if(!ready)return <div style={{background:C.bg,height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",color:C.muted,fontFamily:"Aptos,Calibri,system-ui,sans-serif"}}>Laddar…</div>;
+
+  const TABS=[{id:"oversikt",icon:"📊",short:"Övers."},{id:"pipeline",icon:"🎯",short:"Pipeline"},{id:"foreningar",icon:"🏆",short:"Fören."},{id:"utskick",icon:"📧",short:"Utskick"},{id:"mallar",icon:"🤖",short:"Mallar"},{id:"kontakter",icon:"👥",short:"Kont."},{id:"installningar",icon:"⚙️",short:"Inställn."}];
+  const aktivK=kontexter.find(k=>k.id===aktivKontextId);
+
+  return(
+    <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"Aptos,Calibri,system-ui,-apple-system,sans-serif",fontSize:14}}>
+      <style>{`
+  :root { --font: "Aptos", "Aptos Display", Calibri, system-ui, -apple-system, sans-serif; }
+  body, button, input, textarea, select, option { font-family: var(--font) !important; }
+  pre, code { font-family: "Courier New", monospace !important; }
+  .mail-preview { font-family: Georgia, "Times New Roman", serif !important; }
+`}</style>
+      <div style={{background:C.bg3,borderBottom:`1px solid ${C.border}`,position:"sticky",top:0,zIndex:20}}>
+        <div style={{display:"flex",alignItems:"center",overflowX:"auto",scrollbarWidth:"none"}}>
+          <div style={{display:"flex",alignItems:"center",gap:7,padding:"0 14px",flexShrink:0,borderRight:`1px solid ${C.border}`}}>
+            <div style={{width:26,height:26,background:C.blue,borderRadius:6,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>♻️</div>
+            {!M&&<span style={{fontWeight:700,fontSize:13,whiteSpace:"nowrap"}}>Marketing Guru</span>}
+            {aktivK&&<span style={{fontSize:10,fontWeight:700,background:aktivK.farg+"22",color:aktivK.farg,border:`1px solid ${aktivK.farg}44`,borderRadius:10,padding:"2px 8px",flexShrink:0}}>{aktivK.namn}</span>}
+          </div>
+          {TABS.map(t=>(
+            <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",padding:M?"12px 10px":"11px 14px",fontSize:M?11:12,fontWeight:tab===t.id?600:400,color:tab===t.id?C.text:C.muted,borderBottom:`2px solid ${tab===t.id?C.blue:"transparent"}`,whiteSpace:"nowrap",flexShrink:0}}>
+              {t.icon} {t.short}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{padding:M?"10px 12px":"16px 18px",maxWidth:M?"100%":1200,margin:"0 auto"}}>
+        {tab==="oversikt"&&<Oversikt fr={fr} camp={camp} contacts={contacts} kontexter={kontexter} M={M}/>}
+        {tab==="pipeline"&&<Pipeline fr={fr} pipelineOverrides={pipelineOverrides} savePipe={savePipe} kontexter={kontexter} M={M}/>}
+        {tab==="foreningar"&&<Foreningar fr={fr} saveFr={saveFr} contacts={contacts} saveContacts={saveContacts} kontexter={kontexter} pipelineOverrides={pipelineOverrides} savePipe={savePipe} M={M}/>}
+        {tab==="utskick"&&<Utskick fr={fr} camp={camp} saveCamp={saveCamp} saveFr={saveFr} cfg={cfg} saveCfg={saveCfg} templates={templates} kontexter={kontexter} M={M}/>}
+        {tab==="mallar"&&<MallarAI templates={templates} saveTemplates={saveTemplates} cfg={cfg} fr={fr} M={M}/>}
+        {tab==="kontakter"&&<Kontakter contacts={contacts} saveContacts={saveContacts} fr={fr} saveFr={saveFr} M={M}/>}
+        {tab==="installningar"&&<Installningar cfg={cfg} saveCfg={saveCfg} templates={templates} saveTemplates={saveTemplates} kontexter={kontexter} saveKontexter={saveKontexter} aktivKontextId={aktivKontextId} saveAktivKontext={saveAktivKontext} fr={fr} camp={camp} contacts={contacts} M={M}/>}
+      </div>
+    </div>
+  );
+}
+
+function Oversikt({fr,camp,contacts,kontexter,M}){
+  const dalarna=fr.filter(f=>f.lan==="Dalarna");
+  const blekinge=fr.filter(f=>f.lan==="Blekinge");
+  const withE=fr.filter(hasEmail).length;
+  const kontaktade=fr.filter(f=>(f.skickadeMail||0)>0).length;
+  return(
+    <div>
+      <div style={{display:"grid",gridTemplateColumns:M?"1fr 1fr":"repeat(4,1fr)",gap:M?8:10,marginBottom:14}}>
+        {[[fmtN(fr.length),"Föreningar","🏆",C.blue],[`${dalarna.length}/${blekinge.length}`,"Dalarna/Blekinge","📍",C.teal],[`${withE}/${fr.length}`,"Har e-post","📧",C.amber],[contacts.length,"Kontakter","👥",C.purple]].map(([v,l,ic,co])=>(
+          <div key={l} style={{...card(),borderColor:co+"44",padding:M?"12px":"14px 16px"}}>
+            <div style={{fontSize:M?17:20,marginBottom:3}}>{ic}</div>
+            <div style={{fontSize:M?18:22,fontWeight:700,color:co,lineHeight:1}}>{v}</div>
+            <div style={{fontSize:10,color:C.muted,marginTop:3}}>{l}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{...card({marginBottom:12,borderColor:C.teal+"44"})}}>
+        <SectionHd>🎯 Kampanjsekvens – Dalarna ({dalarna.length} leads)</SectionHd>
+        <div style={{display:"grid",gridTemplateColumns:M?"1fr":"repeat(3,1fr)",gap:8}}>
+          {TEMPLATES.filter(t=>t.steg).map(t=>{
+            const sent=dalarna.filter(f=>(f.skickadeMail||0)>=t.steg).length;
+            const total=dalarna.filter(f=>hasEmail(f)).length;
+            const pct=total>0?Math.round(sent/total*100):0;
+            const co=[C.blue,C.teal,C.amber][t.steg-1]||C.blue;
+            return(<div key={t.id} style={{background:C.bg3,borderRadius:10,padding:"12px 14px",border:`1px solid ${C.border}`}}>
+              <div style={{fontWeight:600,fontSize:12,marginBottom:3,color:co}}>{t.namn}</div>
+              <div style={{height:4,background:C.bg4,borderRadius:2,marginBottom:4}}><div style={{height:"100%",width:`${pct}%`,background:co,borderRadius:2}}/></div>
+              <div style={{fontSize:11,color:co}}>{sent}/{total} skickade</div>
+            </div>);
+          })}
+        </div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:12}}>
+        <div style={card()}>
+          <SectionHd>Topplista Blekinge</SectionHd>
+          {[...blekinge].sort((a,b)=>b.burkar-a.burkar).slice(0,6).map((f,i)=>(
+            <div key={f.id} style={{display:"flex",alignItems:"center",gap:8,padding:"7px 0",borderBottom:i<5?`1px solid ${C.border}`:"none"}}>
+              <div style={{width:20,fontSize:i<3?14:11,textAlign:"center"}}>{i<3?["🥇","🥈","🥉"][i]:i+1}</div>
+              <div style={{flex:1,minWidth:0}}><div style={{fontSize:12,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</div><div style={{fontSize:10,color:C.muted}}>{f.idrott}</div></div>
+              <div style={{fontSize:12,fontWeight:600,color:C.green}}>{fmtN(f.burkar)}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+          <div style={card()}>
+            <SectionHd>Kontaktstatus</SectionHd>
+            {[[withE,fr.length,"Har e-post",C.green],[kontaktade,fr.length,"Kontaktade",C.blue]].map(([c2,t,l,col])=>{
+              const p=t>0?Math.round(c2/t*100):0;
+              return <div key={l} style={{marginBottom:8}}><div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:2}}><span style={{color:C.muted}}>{l}</span><span style={{color:col,fontWeight:500}}>{c2} ({p}%)</span></div><div style={{height:4,background:C.bg4,borderRadius:2}}><div style={{height:"100%",width:`${p}%`,background:col,borderRadius:2}}/></div></div>;
+            })}
+          </div>
+          <div style={card()}>
+            <SectionHd>Senaste kampanjer</SectionHd>
+            {camp.length===0?<div style={{fontSize:12,color:C.muted}}>Inga ännu</div>:[...camp].reverse().slice(0,4).map((c2,i)=>(
+              <div key={c2.id||i} style={{padding:"7px 0",borderBottom:i<3?`1px solid ${C.border}`:"none",display:"flex",justifyContent:"space-between",gap:8}}>
+                <div style={{minWidth:0}}><div style={{fontSize:12,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c2.subject||"Utskick"}</div><div style={{fontSize:11,color:C.muted}}>{c2.date}</div></div>
+                <div style={{flexShrink:0}}><span style={{color:C.green,fontSize:12}}>{c2.sent}✓</span></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Pipeline({fr,pipelineOverrides,savePipe,kontexter,M}){
+  const [filterLan,setFilterLan]=useState("");
+  const [selected,setSelected]=useState(null);
+  const [view,setView]=useState("kanban");
+  const laner=uniq(fr.map(f=>f.lan));
+  const leads=fr.filter(f=>!filterLan||f.lan===filterLan);
+  const stageOf=f=>getAutoStage(f,pipelineOverrides);
+  const setStage=(id,s)=>savePipe({...pipelineOverrides,[id]:s});
+  const clearStage=id=>{const n={...pipelineOverrides};delete n[id];savePipe(n);};
+  const isOv=id=>!!pipelineOverrides[id];
+  const byStage=s=>leads.filter(f=>stageOf(f)===s);
+  const selF=selected?fr.find(f=>f.id===selected):null;
+  const selStg=selF?PIPE_STAGES.find(s=>s.id===stageOf(selF)):null;
+  const conv=leads.length>0?Math.round(leads.filter(f=>["ansökt","antagen"].includes(stageOf(f))).length/leads.length*100):0;
+
+  return(
+    <div>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12,flexWrap:"wrap"}}>
+        <div><div style={{fontWeight:700,fontSize:M?14:16}}>🎯 Pipeline</div><div style={{fontSize:11,color:C.muted}}>{leads.length} leads · {conv}% konverterade</div></div>
+        <div style={{marginLeft:"auto",display:"flex",gap:8,alignItems:"center"}}>
+          <select value={filterLan} onChange={e=>{setFilterLan(e.target.value);setSelected(null);}} style={{...I({fontSize:12,padding:"6px 10px",width:"auto",minHeight:38})}}>
+            <option value="">Alla</option>{laner.map(l=><option key={l} value={l}>{l}</option>)}
+          </select>
+          {!M&&<div style={{display:"flex",border:`1px solid ${C.border}`,borderRadius:8,overflow:"hidden"}}>
+            {[["kanban","☰ Kanban"],["list","≡ Lista"]].map(([v,l])=>(
+              <button key={v} onClick={()=>setView(v)} style={{background:view===v?C.blue:"transparent",border:"none",color:view===v?"#fff":C.muted,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit",fontSize:11,fontWeight:600}}>{l}</button>
+            ))}
+          </div>}
+        </div>
+      </div>
+      <div style={{display:"flex",gap:4,overflowX:"auto",marginBottom:12,paddingBottom:2}}>
+        {PIPE_STAGES.map(s=><div key={s.id} style={{flexShrink:0,background:s.bg,border:`1px solid ${s.color}44`,borderRadius:20,padding:"4px 12px",display:"flex",gap:5,alignItems:"center"}}>
+          <span style={{fontSize:12}}>{s.icon}</span><span style={{fontSize:12,fontWeight:700,color:s.color}}>{byStage(s.id).length}</span>
+          {!M&&<span style={{fontSize:10,color:C.muted}}>{s.label}</span>}
+        </div>)}
+      </div>
+      {(view==="kanban"||M)&&(
+        <div style={{display:M?"flex":"grid",flexDirection:M?"column":undefined,gridTemplateColumns:"repeat(7,minmax(140px,1fr))",gap:8,alignItems:"start",overflowX:M?"visible":"auto"}}>
+          {PIPE_STAGES.map(s=>{
+            const items=byStage(s.id);
+            return(
+              <div key={s.id} style={{background:C.bg3,borderRadius:12,overflow:"hidden",minWidth:M?"auto":140}}>
+                <div style={{background:s.bg,borderBottom:`2px solid ${s.color}`,padding:"9px 10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <div style={{fontSize:M?13:11,fontWeight:700,color:s.color}}>{s.icon} {s.label}</div>
+                  <div style={{background:s.color,borderRadius:"50%",width:19,height:19,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,color:"#fff"}}>{items.length}</div>
+                </div>
+                <div style={{padding:"6px",minHeight:50}}>
+                  {items.map(f=>{
+                    const isSel=selected===f.id;
+                    const cardStgIdx=PIPE_STAGES.findIndex(x=>x.id===stageOf(f));
+                    return(
+                      <div key={f.id} onClick={()=>setSelected(isSel?null:f.id)} style={{background:isSel?"rgba(59,130,246,0.15)":C.bg,border:`1px solid ${isSel?C.blue:s.color+"33"}`,borderRadius:9,padding:"9px 10px",marginBottom:5,cursor:"pointer",userSelect:"none"}}>
+                        <div style={{fontWeight:600,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</div>
+                        <div style={{fontSize:9,color:C.muted,marginBottom:4}}>{f.idrott} · {f.ort}</div>
+                        <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>
+                          {[1,2,3].map(n=><span key={n} style={{fontSize:8,padding:"0 4px",borderRadius:3,fontWeight:700,background:(f.skickadeMail||0)>=n?C.blue+"33":C.bg3,color:(f.skickadeMail||0)>=n?C.blue:C.muted}}>M{n}</span>)}
+                          {isOv(f.id)&&<span style={{fontSize:8,color:C.amber}}>✎</span>}
+                          {(f.taggar||[]).map(tid=>{const k=kontexter.find(x=>x.id===tid);return k?<span key={tid} style={{fontSize:8,padding:"0 3px",borderRadius:3,background:k.farg+"22",color:k.farg,fontWeight:700}}>{k.namn}</span>:null;})}
+                        </div>
+                        {isSel&&(
+                          <div style={{marginTop:8,borderTop:`1px solid ${C.border}`,paddingTop:7}}>
+                            <div style={{display:"flex",flexWrap:"wrap",gap:3}}>
+                              {PIPE_STAGES.filter(ps=>ps.id!==s.id).map(ps=>(
+                                <button key={ps.id} onClick={e=>{e.stopPropagation();setStage(f.id,ps.id);setSelected(null);}} style={{background:ps.color+"20",border:`1px solid ${ps.color}55`,borderRadius:6,padding:"2px 7px",cursor:"pointer",fontFamily:"inherit",fontSize:9,fontWeight:700,color:ps.color}}>
+                                  {ps.icon} {ps.label}
+                                </button>
+                              ))}
+                              {isOv(f.id)&&<button onClick={e=>{e.stopPropagation();clearStage(f.id);}} style={{background:C.amber+"15",border:`1px solid ${C.amber}44`,borderRadius:6,padding:"2px 7px",cursor:"pointer",fontFamily:"inherit",fontSize:9,fontWeight:700,color:C.amber}}>↺</button>}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                  {items.length===0&&!M&&<div style={{fontSize:9,color:C.muted,textAlign:"center",padding:"12px 0"}}>Inga leads</div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {view==="list"&&!M&&(
+        <div style={{...card({padding:0,overflow:"hidden"})}}>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+            <thead><tr style={{background:C.bg3,borderBottom:`1px solid ${C.border}`}}>
+              {["Förening","Idrott","Ort","Mail","Steg","Flytta"].map(h=><th key={h} style={{padding:"9px 12px",textAlign:"left",fontSize:10,fontWeight:600,color:C.muted}}>{h}</th>)}
+            </tr></thead>
+            <tbody>
+              {[...leads].sort((a,b)=>PIPE_STAGES.findIndex(s=>s.id===stageOf(a))-PIPE_STAGES.findIndex(s=>s.id===stageOf(b))).map((f,i)=>{
+                const stg=PIPE_STAGES.find(s=>s.id===stageOf(f))||PIPE_STAGES[0];
+                const idx=PIPE_STAGES.findIndex(s=>s.id===stageOf(f));
+                return(
+                  <tr key={f.id} style={{borderBottom:`1px solid ${C.border}`,background:i%2===0?C.bg2:"transparent"}}>
+                    <td style={{padding:"9px 12px",fontWeight:500}}>{f.namn}</td>
+                    <td style={{padding:"9px 12px",color:C.muted}}>{f.idrott}</td>
+                    <td style={{padding:"9px 12px",color:C.muted}}>{f.ort}</td>
+                    <td style={{padding:"9px 12px"}}><div style={{display:"flex",gap:3}}>{[1,2,3].map(n=><span key={n} style={{fontSize:9,padding:"1px 5px",borderRadius:4,fontWeight:700,background:(f.skickadeMail||0)>=n?C.blue+"33":C.bg3,color:(f.skickadeMail||0)>=n?C.blue:C.muted}}>M{n}</span>)}</div></td>
+                    <td style={{padding:"9px 12px"}}><span style={{color:stg.color,fontWeight:700}}>{stg.icon} {stg.label}</span></td>
+                    <td style={{padding:"9px 12px"}}><div style={{display:"flex",gap:4}}>
+                      <button onClick={()=>{if(idx>0)setStage(f.id,PIPE_STAGES[idx-1].id);}} disabled={idx===0} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:5,color:idx===0?C.muted:C.text,cursor:idx===0?"not-allowed":"pointer",padding:"3px 8px",fontSize:10,fontFamily:"inherit"}}>←</button>
+                      <button onClick={()=>{if(idx<PIPE_STAGES.length-1)setStage(f.id,PIPE_STAGES[idx+1].id);}} disabled={idx===PIPE_STAGES.length-1} style={{background:idx===PIPE_STAGES.length-1?"none":stg.color,border:`1px solid ${idx===PIPE_STAGES.length-1?C.border:stg.color}`,borderRadius:5,color:idx===PIPE_STAGES.length-1?C.muted:"#fff",cursor:idx===PIPE_STAGES.length-1?"not-allowed":"pointer",padding:"3px 8px",fontSize:10,fontFamily:"inherit"}}>→</button>
+                      {isOv(f.id)&&<button onClick={()=>clearStage(f.id)} style={{background:"none",border:`1px solid ${C.amber}44`,borderRadius:5,color:C.amber,cursor:"pointer",padding:"3px 7px",fontSize:9,fontFamily:"inherit"}}>↺</button>}
+                    </div></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {selF&&selStg&&(
+        <div style={{marginTop:14,background:C.bg2,border:`1px solid ${selStg.color}55`,borderRadius:14,overflow:"hidden"}}>
+          <div style={{background:selStg.bg,borderBottom:`1px solid ${selStg.color}44`,padding:"11px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <span style={{fontWeight:700,fontSize:14,color:selStg.color}}>{selStg.icon} {selF.namn}</span>
+            <button onClick={()=>setSelected(null)} style={{background:"none",border:"none",color:C.muted,cursor:"pointer",fontSize:16}}>✕</button>
+          </div>
+          <div style={{padding:"14px 16px",display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:14}}>
+            <div>
+              <div style={{fontSize:10,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:"0.6px",marginBottom:8}}>Förening</div>
+              {[["Idrott",selF.idrott],["Ort",selF.ort],["Lan",selF.lan],["E-post",selF.epost||selF.epostOrdf],["Mail skickade",selF.skickadeMail||0]].map(([l,v])=>(
+                <div key={l} style={{display:"flex",gap:8,padding:"5px 0",borderBottom:`1px solid ${C.border}`,fontSize:12}}>
+                  <span style={{color:C.muted,minWidth:90,flexShrink:0}}>{l}</span><span>{v||"—"}</span>
+                </div>
+              ))}
+            </div>
+            <div>
+              <div style={{fontSize:10,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:"0.6px",marginBottom:8}}>Flytta i pipeline</div>
+              <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                {PIPE_STAGES.map(ps=>(
+                  <button key={ps.id} onClick={()=>setStage(selF.id,ps.id)} style={{display:"flex",alignItems:"center",gap:8,background:stageOf(selF)===ps.id?ps.color:"transparent",border:`1px solid ${stageOf(selF)===ps.id?ps.color:C.border}`,borderRadius:8,padding:"7px 12px",cursor:"pointer",fontFamily:"inherit",width:"100%"}}>
+                    <span style={{fontSize:14}}>{ps.icon}</span>
+                    <span style={{fontSize:12,fontWeight:600,color:stageOf(selF)===ps.id?"#fff":C.muted,flex:1}}>{ps.label}</span>
+                    {stageOf(selF)===ps.id&&<span style={{fontSize:10,color:"rgba(255,255,255,0.6)"}}>← Nu</span>}
+                  </button>
+                ))}
+                {isOv(selF.id)&&<button onClick={()=>clearStage(selF.id)} style={{background:"none",border:`1px solid ${C.amber}44`,borderRadius:8,padding:"6px 12px",cursor:"pointer",fontFamily:"inherit",color:C.amber,fontSize:11,fontWeight:600}}>↺ Återställ automatiskt</button>}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const BLANK_F={q:"",lan:"",ort:"",idrott:"",epost:"all",mail:"all",kontext:""};
+function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides,savePipe,M}){
+  const [selectedId,setSelectedId]=useState(null);
+  const [detTab,setDetTab]=useState("info");
+  const [filters,setFilters]=useState(BLANK_F);
+  const [showFilt,setShowFilt]=useState(false);
+  const [editing,setEditing]=useState(false);
+  const [editVals,setEditVals]=useState({});
+  const [adding,setAdding]=useState(false);
+  const [viewMode,setViewMode]=useState("list");
+  const blank={namn:"",epost:"",epostOrdf:"",ort:"",kommun:"",idrott:"",burkar:"",ordforande:"",telefon:"",ant:"",lan:"Blekinge",skickadeMail:0,mailLog:[],kontaktIds:[],taggar:[]};
+  const [nw,setNw]=useState(blank);
+  const orter=uniq(fr.map(f=>f.ort));
+  const idrotts=uniq(fr.map(f=>f.idrott));
+  const laner=uniq(fr.map(f=>f.lan));
+  const stageOf=f=>getAutoStage(f,pipelineOverrides);
+
+  const applyF=f=>{
+    const{q,lan,ort,idrott,epost,mail,kontext}=filters;
+    if(q&&![f.namn,f.ort,f.idrott,f.epost,f.ordforande].some(v=>v?.toLowerCase().includes(q.toLowerCase())))return false;
+    if(lan&&f.lan!==lan)return false;
+    if(ort&&f.ort!==ort)return false;
+    if(idrott&&f.idrott!==idrott)return false;
+    if(epost==="yes"&&!hasEmail(f))return false;
+    if(epost==="no"&&hasEmail(f))return false;
+    const m=f.skickadeMail||0;
+    if(mail==="0"&&m!==0)return false;
+    if(mail==="1"&&m!==1)return false;
+    if(mail==="2"&&m!==2)return false;
+    if(mail==="3+"&&m<3)return false;
+    if(kontext&&!(f.taggar||[]).includes(kontext))return false;
+    return true;
+  };
+
+  const shown=fr.filter(applyF).sort((a,b)=>{if(a.lan!==b.lan)return a.lan==="Dalarna"?-1:1;return b.burkar-a.burkar;});
+  const sel=selectedId?fr.find(f=>f.id===selectedId):null;
+  const activeF=Object.entries(filters).filter(([k,v])=>v&&v!=="all"&&k!=="q").length+(filters.q?1:0);
+  const saveEdit=()=>{saveFr(fr.map(f=>f.id===sel.id?{...f,...editVals,burkar:parseInt(editVals.burkar)||0}:f));setEditing(false);};
+  const del=id=>{if(confirm("Ta bort?"))saveFr(fr.filter(f=>f.id!==id));if(selectedId===id)setSelectedId(null);};
+  const add=()=>{if(!nw.namn)return;saveFr([...fr,{...nw,id:Math.max(...fr.map(f=>f.id))+1,burkar:parseInt(nw.burkar)||0}]);setAdding(false);setNw(blank);};
+
+  const DetailView=()=>{
+    const linked=contacts.filter(c=>sel.kontaktIds?.includes(c.id));
+    return(
+      <div>
+        {M&&<BackBar onBack={()=>{setSelectedId(null);setEditing(false);}} title={sel.namn}/>}
+        {!M&&<div style={{background:C.bg3,borderBottom:`1px solid ${C.border}`,padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}><div style={{fontWeight:600,fontSize:13,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",maxWidth:260}}>{sel.namn}</div><button onClick={()=>setSelectedId(null)} style={{background:"none",border:"none",color:C.muted,cursor:"pointer",fontSize:16}}>✕</button></div>}
+        <div style={{display:"flex",borderBottom:`1px solid ${C.border}`,background:C.bg4}}>
+          {[["info","Info"],["mail",`Mail (${(sel.mailLog||[]).length})`],["kontakter",`Kont. (${linked.length})`]].map(([v,l])=>(
+            <button key={v} onClick={()=>setDetTab(v)} style={{flex:1,background:"none",border:"none",borderBottom:`2px solid ${detTab===v?C.blue:"transparent"}`,cursor:"pointer",padding:"10px 6px",fontSize:M?13:11,fontWeight:detTab===v?600:400,color:detTab===v?C.text:C.muted,fontFamily:"inherit"}}>{l}</button>
+          ))}
+        </div>
+        <div style={{padding:"14px",maxHeight:M?"none":"55vh",overflowY:"auto"}}>
+          {detTab==="info"&&(editing?(
+            <div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+                {[["namn","Namn"],["epost","E-post 1"],["epostOrdf","E-post 2"],["ordforande","Mottagare"],["telefon","Telefon"],["idrott","Idrott"],["ort","Ort"],["burkar","Mätvärde"]].map(([k,l])=>(
+                  <div key={k}><label style={lbl}>{l}</label><input value={editVals[k]||""} onChange={e=>setEditVals(p=>({...p,[k]:e.target.value}))} style={{...I(),minHeight:M?46:40}}/></div>
+                ))}
+              </div>
+              <div style={{marginBottom:10}}><label style={lbl}>Anteckningar</label><textarea value={editVals.ant||""} onChange={e=>setEditVals(p=>({...p,ant:e.target.value}))} rows={2} style={{...I(),resize:"vertical"}}/></div>
+              <div style={{display:"flex",gap:8}}><button onClick={saveEdit} style={{...btn("primary"),flex:1,justifyContent:"center"}}>Spara</button><button onClick={()=>setEditing(false)} style={{...btn("ghost"),flex:1,justifyContent:"center"}}>Avbryt</button></div>
+            </div>
+          ):(
+            <div>
+              {hasDual(sel)&&<div style={{...card({padding:"8px 12px",marginBottom:8,borderColor:C.teal+"66"}),background:"rgba(45,212,191,0.06)"}}><span style={{fontSize:11,color:C.teal}}>✉️ Dubbel mottagare</span></div>}
+              {[["Idrott",sel.idrott],["Ort",sel.ort],["Mottagare",sel.ordforande],["E-post",sel.epost],["E-post 2",hasDual(sel)?sel.epostOrdf:""],["Telefon",sel.telefon],["Lan",sel.lan],["Mätvärde",sel.burkar>0?fmtN(sel.burkar):null],["Mail skickade",sel.skickadeMail||0],["Anteckningar",sel.ant]].filter(([,v])=>v).map(([l,v])=>(
+                <div key={l} style={{display:"flex",gap:8,padding:"9px 0",borderBottom:`1px solid ${C.border}`}}>
+                  <span style={{color:C.muted,fontSize:11,minWidth:110,flexShrink:0}}>{l}</span>
+                  <span style={{fontSize:13,wordBreak:"break-all"}}>{v}</span>
+                </div>
+              ))}
+              <InlineMetricEdit f={sel} fr={fr} saveFr={saveFr}/>
+              <div style={{marginTop:12,padding:"10px 12px",background:C.bg4,borderRadius:9,border:`1px solid ${C.border}`}}>
+                <div style={{fontSize:10,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:8}}>Pipeline-status</div>
+                <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+                  {[["ansökt","📋 Ansökt",C.purple],["antagen","🎉 Antagen",C.green],["avvisad","✕ Avvisad",C.red]].map(([stage,label,color])=>{
+                    const curr=pipelineOverrides&&pipelineOverrides[sel.id]===stage;
+                    return <button key={stage} onClick={()=>{if(curr){const n={...pipelineOverrides};delete n[sel.id];savePipe(n);}else savePipe({...pipelineOverrides,[sel.id]:stage});}} style={{background:curr?color+"22":"transparent",border:`1px solid ${curr?color:C.border}`,borderRadius:20,padding:"4px 12px",cursor:"pointer",fontFamily:"inherit",fontSize:11,fontWeight:curr?700:400,color:curr?color:C.muted}}>{curr?"✓ ":""}{label}</button>;
+                  })}
+                  {pipelineOverrides&&pipelineOverrides[sel.id]&&<button onClick={()=>{const n={...pipelineOverrides};delete n[sel.id];savePipe(n);}} style={{background:"none",border:"none",color:C.muted,cursor:"pointer",fontSize:11,fontFamily:"inherit"}}>↺</button>}
+                </div>
+              </div>
+              {kontexter.length>0&&(
+                <div style={{marginTop:10,padding:"10px 12px",background:C.bg4,borderRadius:9,border:`1px solid ${C.border}`}}>
+                  <div style={{fontSize:10,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:8}}>Kontext</div>
+                  <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+                    {kontexter.map(k=>{const tagged=(sel.taggar||[]).includes(k.id);return(
+                      <button key={k.id} onClick={()=>{const curr=sel.taggar||[];const next=tagged?curr.filter(x=>x!==k.id):[...curr,k.id];saveFr(fr.map(f=>f.id===sel.id?{...f,taggar:next}:f));}} style={{background:tagged?k.farg+"22":"transparent",border:`1px solid ${tagged?k.farg:C.border}`,borderRadius:20,padding:"4px 12px",cursor:"pointer",fontFamily:"inherit",fontSize:11,fontWeight:tagged?700:400,color:tagged?k.farg:C.muted}}>
+                        {tagged?"✓ ":""}{k.namn}
+                      </button>
+                    );})}
+                  </div>
+                </div>
+              )}
+              <button onClick={()=>{setEditVals({...sel});setEditing(true);}} style={{...btn("ghost"),marginTop:12,width:"100%",justifyContent:"center"}}>✎ Redigera</button>
+            </div>
+          ))}
+          {detTab==="mail"&&(
+            <div>
+              {(sel.mailLog||[]).length===0?<div style={{textAlign:"center",padding:"32px 0",color:C.muted}}>Inga mail skickade</div>:[...(sel.mailLog||[])].reverse().map((m,i)=>(
+                <div key={i} style={{padding:"10px 0",borderBottom:`1px solid ${C.border}`}}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:8,marginBottom:3}}>
+                    <span style={{fontSize:12,fontWeight:500,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.subject||"Utskick"}</span>
+                    <Chip color={m.status==="sent"?C.green:C.red} sm>{m.status==="sent"?"✓":"✗"}</Chip>
+                  </div>
+                  <div style={{fontSize:11,color:C.muted}}>{m.date} · {m.toEmail}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          {detTab==="kontakter"&&<LinkedContacts f={sel} contacts={contacts} saveFr={saveFr} fr={fr}/>}
+        </div>
+      </div>
+    );
+  };
+
+  if(M&&sel)return <DetailView/>;
+  if(M&&adding)return(
+    <div><BackBar onBack={()=>setAdding(false)} title="Ny förening"/>
+      <div style={{padding:"14px 12px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+          {[["namn","Namn *"],["epost","E-post"],["ordforande","Mottagare"],["idrott","Idrott"],["ort","Ort"]].map(([k,l])=>(
+            <div key={k}><label style={lbl}>{l}</label><input value={nw[k]||""} onChange={e=>setNw(p=>({...p,[k]:e.target.value}))} style={{...I(),minHeight:46}}/></div>
+          ))}
+        </div>
+        <button onClick={add} disabled={!nw.namn} style={{...btn("primary",true),width:"100%",justifyContent:"center",minHeight:52}}>Spara</button>
+      </div>
+    </div>
+  );
+
+  return(
+    <div>
+      <div style={{display:"flex",gap:8,marginBottom:showFilt?8:12,alignItems:"stretch"}}>
+        <input value={filters.q} onChange={e=>setFilters(p=>({...p,q:e.target.value}))} placeholder="Sök förening…" style={{...I(),flex:1,minHeight:44}}/>
+        <button onClick={()=>setShowFilt(v=>!v)} style={{...btn(activeF>0?"primary":"ghost"),padding:"0 14px",minHeight:44,flexShrink:0}}>🔽{activeF>0?` (${activeF})`:""}</button>
+        <div style={{display:"flex",border:`1px solid ${C.border}`,borderRadius:9,overflow:"hidden",flexShrink:0}}>
+          <button onClick={()=>setViewMode("list")} style={{background:viewMode==="list"?C.blue:"transparent",border:"none",color:viewMode==="list"?"#fff":C.muted,padding:"0 13px",minHeight:44,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:600}}>≡</button>
+          <button onClick={()=>setViewMode("kanban")} style={{background:viewMode==="kanban"?C.blue:"transparent",border:"none",color:viewMode==="kanban"?"#fff":C.muted,padding:"0 13px",minHeight:44,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:600}}>☰</button>
+        </div>
+        <button onClick={()=>setAdding(true)} style={{...btn("primary"),padding:"0 14px",minHeight:44,flexShrink:0}}>+</button>
+      </div>
+      {showFilt&&(
+        <div style={{...card({marginBottom:12})}}>
+          <div style={{display:"grid",gridTemplateColumns:M?"1fr 1fr":"repeat(4,1fr)",gap:8,marginBottom:10}}>
+            {[["Lan","lan",[["","Alla"],[...laner.map(l=>[l,l])]]],["Ort","ort",[["","Alla orter"],...orter.map(o=>[o,o])]],["Idrott","idrott",[["","Alla"],...idrotts.map(i=>[i,i])]],["E-post","epost",[["all","Alla"],["yes","Ja"],["no","Nej"]]],["Mail","mail",[["all","Alla"],["0","Ej kontaktad"],["1","Mail 1"],["2","Mail 1–2"],["3+","Alla 3"]]],["Kontext","kontext",[["","Alla"],...kontexter.map(k=>[k.id,k.namn])]]].map(([l,k,opts])=>(
+              <div key={k}><label style={lbl}>{l}</label><select value={filters[k]} onChange={e=>setFilters(p=>({...p,[k]:e.target.value}))} style={{...I(),minHeight:M?46:40}}>{opts.map(([v,t])=><option key={v} value={v}>{t}</option>)}</select></div>
+            ))}
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <button onClick={()=>setFilters(BLANK_F)} style={{...btn("ghost"),minHeight:40}}>Rensa</button>
+            <button onClick={()=>setShowFilt(false)} style={{...btn("primary"),minHeight:40}}>Stäng ({shown.length})</button>
+          </div>
+        </div>
+      )}
+      {!M&&adding&&(
+        <div style={{...card({marginBottom:12})}}>
+          <div style={{fontWeight:600,marginBottom:10}}>Ny förening</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:8}}>
+            {[["namn","Namn *"],["epost","E-post"],["ordforande","Mottagare"],["telefon","Telefon"],["ort","Ort"],["idrott","Idrott"]].map(([k,l])=>(
+              <div key={k}><label style={lbl}>{l}</label><input value={nw[k]||""} onChange={e=>setNw(p=>({...p,[k]:e.target.value}))} style={{...I(),padding:"7px 10px"}}/></div>
+            ))}
+          </div>
+          <div style={{display:"flex",gap:8}}><button onClick={add} disabled={!nw.namn} style={btn()}>Spara</button><button onClick={()=>setAdding(false)} style={btn("ghost")}>Avbryt</button></div>
+        </div>
+      )}
+      <div style={{fontSize:11,color:C.muted,marginBottom:8}}>{shown.length} av {fr.length} föreningar</div>
+      {viewMode==="kanban"&&!M?(
+        <div style={{display:"grid",gridTemplateColumns:"repeat(7,minmax(140px,1fr))",gap:8,overflowX:"auto"}}>
+          {PIPE_STAGES.map(s=>{
+            const items=shown.filter(f=>stageOf(f)===s.id);
+            return(
+              <div key={s.id} style={{background:C.bg3,borderRadius:12,overflow:"hidden"}}>
+                <div style={{background:s.bg,borderBottom:`2px solid ${s.color}`,padding:"8px 10px",display:"flex",justifyContent:"space-between"}}>
+                  <div style={{fontSize:11,fontWeight:700,color:s.color}}>{s.icon} {s.label}</div>
+                  <div style={{background:s.color,borderRadius:"50%",width:18,height:18,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:"#fff"}}>{items.length}</div>
+                </div>
+                <div style={{padding:"6px",minHeight:50}}>
+                  {items.map(f=>(
+                    <div key={f.id} onClick={()=>{setSelectedId(f.id);setDetTab("info");setEditing(false);setViewMode("list");}} style={{background:C.bg,border:`1px solid ${s.color+"33"}`,borderRadius:9,padding:"8px 10px",marginBottom:5,cursor:"pointer"}}>
+                      <div style={{fontSize:11,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</div>
+                      <div style={{fontSize:9,color:C.muted}}>{f.idrott}</div>
+                      <div style={{display:"flex",gap:3,marginTop:3}}>
+                        {[1,2,3].map(n=><span key={n} style={{fontSize:8,padding:"0 3px",borderRadius:3,background:(f.skickadeMail||0)>=n?C.blue+"33":C.bg3,color:(f.skickadeMail||0)>=n?C.blue:C.muted,fontWeight:700}}>M{n}</span>)}
+                        {(f.taggar||[]).map(tid=>{const k=kontexter.find(x=>x.id===tid);return k?<span key={tid} style={{fontSize:8,padding:"0 3px",borderRadius:3,background:k.farg+"22",color:k.farg,fontWeight:700}}>{k.namn}</span>:null;})}
+                      </div>
+                    </div>
+                  ))}
+                  {items.length===0&&<div style={{fontSize:9,color:C.muted,textAlign:"center",padding:"10px 0"}}>Inga</div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ):M?(
+        <div style={{display:"flex",flexDirection:"column",gap:8}}>
+          {shown.map(f=>(
+            <div key={f.id} onClick={()=>{setSelectedId(f.id);setDetTab("info");setEditing(false);}} style={{...card({cursor:"pointer",padding:"14px 16px",borderColor:f.lan==="Dalarna"?C.teal+"44":C.border})}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><div style={{fontWeight:600,fontSize:14,flex:1}}>{f.namn}</div><span style={{color:C.muted}}>›</span></div>
+              <div style={{fontSize:12,color:C.muted,marginBottom:5}}>{f.idrott} · {f.ort} · <span style={{color:f.lan==="Dalarna"?C.teal:C.muted}}>{f.lan}</span></div>
+              <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+                {f.burkar>0&&<Chip color={C.green} sm>♻️ {fmtN(f.burkar)}</Chip>}
+                {(f.skickadeMail||0)>0&&<Chip color={C.blue} sm>✉️ {f.skickadeMail}</Chip>}
+                {(f.taggar||[]).map(tid=>{const k=kontexter.find(x=>x.id===tid);return k?<Chip key={tid} color={k.farg} sm>{k.namn}</Chip>:null;})}
+              </div>
+            </div>
+          ))}
+          {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0",color:C.muted}}>Inga träffar</div>}
+        </div>
+      ):(
+        <div style={{display:"grid",gridTemplateColumns:sel?"1fr 420px":"1fr",gap:14,alignItems:"start"}}>
+          <div style={{...card({padding:0,overflow:"hidden"})}}>
+            <div style={{overflowX:"auto"}}>
+              <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+                <thead><tr style={{background:C.bg3,borderBottom:`1px solid ${C.border}`}}>
+                  {["Förening","Idrott","Ort","Lan","E-post","Mottagare","Värde","Mail","Kontext",""].map(h=><th key={h} style={{padding:"9px 12px",textAlign:"left",fontSize:10,fontWeight:600,color:C.muted}}>{h}</th>)}
+                </tr></thead>
+                <tbody>
+                  {shown.map((f,i)=>(
+                    <tr key={f.id} onClick={()=>setSelectedId(selectedId===f.id?null:f.id)} style={{borderBottom:`1px solid ${C.border}`,background:selectedId===f.id?"rgba(59,130,246,0.1)":i%2===0?C.bg2:"transparent",cursor:"pointer"}}>
+                      <td style={{padding:"9px 12px",fontWeight:500,maxWidth:160,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</td>
+                      <td style={{padding:"9px 12px",color:C.muted,fontSize:11}}>{f.idrott}</td>
+                      <td style={{padding:"9px 12px",color:C.muted,fontSize:11}}>{f.ort}</td>
+                      <td style={{padding:"9px 12px"}}><Chip color={f.lan==="Dalarna"?C.teal:C.muted} sm>{f.lan}</Chip></td>
+                      <td style={{padding:"9px 12px",fontSize:11}}>{hasDual(f)?<Chip color={C.teal} sm>2</Chip>:hasEmail(f)?<span style={{color:C.green}}>✓</span>:<span style={{color:C.red}}>✗</span>}</td>
+                      <td style={{padding:"9px 12px",color:C.muted,fontSize:11,maxWidth:100,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.ordforande||"—"}</td>
+                      <td style={{padding:"9px 12px",color:C.green,fontWeight:500}}>{f.burkar>0?fmtN(f.burkar):"—"}</td>
+                      <td style={{padding:"9px 12px"}}>{(f.skickadeMail||0)>0?<Chip color={C.blue} sm>{f.skickadeMail}</Chip>:<span style={{color:C.muted}}>0</span>}</td>
+                      <td style={{padding:"9px 12px"}}><div style={{display:"flex",gap:3}}>{(f.taggar||[]).map(tid=>{const k=kontexter.find(x=>x.id===tid);return k?<Chip key={tid} color={k.farg} sm>{k.namn}</Chip>:null;})}</div></td>
+                      <td style={{padding:"9px 12px"}}><button onClick={e=>{e.stopPropagation();del(f.id);}} style={{background:"none",border:"none",color:C.muted,cursor:"pointer",fontSize:14}}>✕</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {shown.length===0&&<div style={{padding:24,textAlign:"center",color:C.muted}}>Inga träffar</div>}
+            </div>
+          </div>
+          {sel&&<div style={{...card({padding:0,overflow:"hidden",position:"sticky",top:60})}}>
+            <DetailView/>
+          </div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LinkedContacts({f,contacts,saveFr,fr}){
+  const linked=contacts.filter(c=>f.kontaktIds?.includes(c.id));
+  const unlinked=contacts.filter(c=>!f.kontaktIds?.includes(c.id));
+  const [pick,setPick]=useState("");const [adding,setAdding]=useState(false);
+  const link=()=>{if(!pick)return;const id=parseInt(pick);saveFr(fr.map(x=>x.id===f.id?{...x,kontaktIds:[...(x.kontaktIds||[]),id]}:x));setAdding(false);setPick("");};
+  const unlink=cid=>saveFr(fr.map(x=>x.id===f.id?{...x,kontaktIds:(x.kontaktIds||[]).filter(i=>i!==cid)}:x));
+  return(
+    <div>
+      {linked.map(c=>(
+        <div key={c.id} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 0",borderBottom:`1px solid ${C.border}`}}>
+          <div style={{width:32,height:32,borderRadius:"50%",background:"rgba(167,139,250,0.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:C.purple,flexShrink:0}}>{c.fornamn?.[0]||"?"}</div>
+          <div style={{flex:1}}><div style={{fontSize:13,fontWeight:500}}>{c.fornamn} {c.efternamn}</div><div style={{fontSize:11,color:C.muted}}>{c.roll||"—"} · {c.epost||"ingen epost"}</div></div>
+          <button onClick={()=>unlink(c.id)} style={{background:"none",border:"none",color:C.muted,cursor:"pointer",fontSize:16}}>✕</button>
+        </div>
+      ))}
+      {adding?(
+        <div style={{marginTop:10,display:"flex",gap:8}}>
+          <select value={pick} onChange={e=>setPick(e.target.value)} style={{...I({flex:1,minHeight:44})}}>
+            <option value="">Välj kontakt…</option>
+            {unlinked.map(c=><option key={c.id} value={c.id}>{c.fornamn} {c.efternamn} – {c.roll}</option>)}
+          </select>
+          <button onClick={link} disabled={!pick} style={{...btn("primary"),minHeight:44}}>Länka</button>
+          <button onClick={()=>setAdding(false)} style={{...btn("ghost"),minHeight:44}}>✕</button>
+        </div>
+      ):<button onClick={()=>setAdding(true)} style={{...btn("ghost"),marginTop:10,width:"100%",justifyContent:"center"}}>+ Länka kontakt</button>}
+    </div>
+  );
+}
+
+function InlineMetricEdit({f,fr,saveFr}){
+  const [editing,setEditing]=useState(false);
+  const [val,setVal]=useState(String(f.burkar||0));
+  const [flash,setFlash]=useState(false);
+  const save=()=>{saveFr(fr.map(x=>x.id===f.id?{...x,burkar:parseInt(val)||0}:x));setEditing(false);setFlash(true);setTimeout(()=>setFlash(false),1500);};
+  if(editing)return(
+    <div style={{display:"flex",gap:6,marginTop:12,alignItems:"stretch"}}>
+      <input type="number" value={val} onChange={e=>setVal(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")save();if(e.key==="Escape")setEditing(false);}} autoFocus style={{...I({flex:1,minHeight:38,border:`1px solid ${C.blue}`})}}/>
+      <button onClick={save} style={{background:C.blue,border:"none",borderRadius:7,color:"#fff",padding:"0 12px",cursor:"pointer",fontFamily:"inherit",fontWeight:600,minHeight:38}}>✓</button>
+      <button onClick={()=>setEditing(false)} style={{...btn("ghost"),minHeight:38}}>✕</button>
+    </div>
+  );
+  return(
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginTop:12,padding:"10px 12px",background:C.bg4,borderRadius:9}}>
+      <span style={{fontSize:18,fontWeight:700,color:C.green}}>{fmtN(f.burkar||0)}{flash&&<span style={{fontSize:11,color:C.green,marginLeft:6,fontWeight:400}}>✓ sparat</span>}</span>
+      <button onClick={()=>{setVal(String(f.burkar||0));setEditing(true);}} style={{...btn("ghost"),padding:"4px 10px",fontSize:11}}>✎ Uppdatera</button>
+    </div>
+  );
+}
+
+function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
+  const T=Array.isArray(templates)&&templates.length>0?templates:TEMPLATES;
+  const [tmpl,setTmpl]=useState(T[0]?.id||"mail1");
+  const [subj,setSubj]=useState(T[0]?.subject||"");
+  const [body,setBody]=useState(T[0]?.body||"");
+  const [sel,setSel]=useState(()=>{const s={};fr.filter(f=>f.lan==="Dalarna"&&hasEmail(f)).forEach(f=>{s[f.id]=true;});return s;});
+  const [lanFilt,setLanFilt]=useState("Dalarna");
+  const [mailFilt,setMailFilt]=useState("all");
+  const [kontFilt,setKontFilt]=useState("");
+  const [cfgOpen,setCfgOpen]=useState(!cfg.apiKey||!cfg.senderEmail);
+  const [view,setView]=useState("compose"); // compose | preview | history
+  const [sending,setSending]=useState(false);
+  const [results,setResults]=useState(null); // [{id,namn,ok,msg}]
+  const [testEmail,setTestEmail]=useState("");
+  const [testSending,setTestSending]=useState(false);
+  const [testResult,setTestResult]=useState(null);
+  const laner=uniq(fr.map(f=>f.lan));
+
+  const withE=fr.filter(f=>{
+    if(!hasEmail(f))return false;
+    if(lanFilt&&f.lan!==lanFilt)return false;
+    const m=f.skickadeMail||0;
+    if(mailFilt==="0"&&m!==0)return false;
+    if(mailFilt==="1"&&m!==1)return false;
+    if(mailFilt==="2"&&m!==2)return false;
+    if(mailFilt==="3+"&&m<3)return false;
+    if(kontFilt&&!(f.taggar||[]).includes(kontFilt))return false;
+    return true;
+  });
+  const selList=withE.filter(f=>sel[f.id]);
+  const pickTmpl=id=>{const t=T.find(t=>t.id===id);if(t){setSubj(t.subject||"");setBody(t.body||"");}setTmpl(id);};
+  const getRecipients=f=>{if(hasDual(f))return[{email:f.epost,name:f.namn},{email:f.epostOrdf,name:f.namn}];const email=getEmail(f,cfg.preferOrdf);return email?[{email,name:f.namn}]:[];};
+
+  const brevoPost=async(payload)=>{
+    const target="https://api.brevo.com/v3/smtp/email";
+    const url=cfg.proxyUrl?cfg.proxyUrl.replace(/\/$/,"")+"?url="+encodeURIComponent(target):target;
+    return fetch(url,{method:"POST",headers:{"accept":"application/json","content-type":"application/json","api-key":cfg.apiKey},body:JSON.stringify(payload)});
+  };
+  const brevoGet=async(path)=>{
+    const target="https://api.brevo.com"+path;
+    const url=cfg.proxyUrl?cfg.proxyUrl.replace(/\/$/,"")+"?url="+encodeURIComponent(target):target;
+    return fetch(url,{headers:{"accept":"application/json","api-key":cfg.apiKey}});
+  };
+
+  const makeHtml=text=>`<div style="font-family:Aptos,Arial,sans-serif;max-width:580px;margin:auto;padding:28px;color:#1e293b;line-height:1.7">${text.split("\n").map(l=>l.trim()?`<p style="margin:0 0 10px">${l}</p>`:"<p style='margin:0 0 6px'></p>").join("")}</div>`;
+
+  const sendAll=async()=>{
+    if(!cfg.apiKey||!cfg.senderEmail||!selList.length)return;
+    setSending(true);setResults(null);setView("preview");
+    const res=[];
+    for(const f of selList){
+      const recs=getRecipients(f);
+      if(!recs.length){res.push({id:f.id,namn:f.namn,ok:false,msg:"Ingen e-post"});continue;}
+      try{
+        const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName)),textContent:fill(body,f,cfg.senderName)});
+        if(r.ok){
+          res.push({id:f.id,namn:f.namn,ok:true});
+          const now=new Date().toLocaleDateString("sv-SE")+" "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
+          const email=recs.map(r=>r.email).join(" + ");
+          saveFr(fr.map(x=>x.id===f.id?{...x,skickadeMail:(x.skickadeMail||0)+1,mailLog:[...(x.mailLog||[]),{id:Date.now()+"_"+f.id,campaignId:0,date:now,subject:fill(subj,f,cfg.senderName),toEmail:email,status:"sent"}]}:x));
+        }else{
+          const err=await r.json().catch(()=>({}));
+          res.push({id:f.id,namn:f.namn,ok:false,msg:err.message||"HTTP "+r.status});
+        }
+      }catch(e){res.push({id:f.id,namn:f.namn,ok:false,msg:e.message});}
+      setResults([...res]);
+      await new Promise(r=>setTimeout(r,150));
+    }
+    const sent=res.filter(r=>r.ok).length;
+    if(sent>0)saveCamp([...camp,{id:Date.now(),date:new Date().toLocaleDateString("sv-SE"),subject:fill(subj,selList[0]||{},cfg.senderName),recipients:selList.length,sent,failed:res.length-sent}]);
+    setSending(false);
+  };
+
+  const sendTest=async()=>{
+    if(!testEmail||!selList[0])return;
+    setTestSending(true);setTestResult(null);
+    const f=selList[0];
+    try{
+      const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:[{email:testEmail,name:"Test"}],subject:"[TEST] "+fill(subj,f,cfg.senderName),htmlContent:`<div style="background:#fff3cd;padding:8px 14px;font-family:sans-serif;font-size:11px;color:#856404">⚠️ Testmail – data från: ${f.namn}</div>`+makeHtml(fill(body,f,cfg.senderName)),textContent:"[TEST] "+fill(body,f,cfg.senderName)});
+      if(r.ok)setTestResult({ok:true,msg:"✓ Testmail skickat till "+testEmail});
+      else{const e=await r.json().catch(()=>({}));setTestResult({ok:false,msg:e.message||"HTTP "+r.status});}
+    }catch(e){setTestResult({ok:false,msg:e.message});}
+    setTestSending(false);
+  };
+
+
+  // ── Sidebar: Avsändare + Mottagare
+  const Sidebar=()=>(
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <div style={card()}>
+        <button onClick={()=>setCfgOpen(v=>!v)} style={{background:"none",border:"none",cursor:"pointer",width:"100%",display:"flex",justifyContent:"space-between",alignItems:"center",color:C.text,fontFamily:"inherit",padding:0,minHeight:36}}>
+          <span style={{fontWeight:600,fontSize:13}}>⚙️ Avsändare {cfg.apiKey&&cfg.senderEmail?"✓":""}</span>
+          <span style={{color:C.muted,fontSize:11}}>{cfgOpen?"▲":"▼"}</span>
+        </button>
+        {cfgOpen&&<div style={{marginTop:10}}>
+          {[["API-nyckel","apiKey","password"],["Avsändarnamn","senderName","text"],["Avsändar-e-post","senderEmail","email"]].map(([l,k,t])=>(
+            <div key={k} style={{marginBottom:8}}><label style={lbl}>{l}</label><input type={t} value={cfg[k]||""} onChange={e=>saveCfg({...cfg,[k]:e.target.value})} style={{...I(),minHeight:M?46:40}}/></div>
+          ))}
+          <label style={{display:"flex",alignItems:"center",gap:8,fontSize:12,color:C.muted,cursor:"pointer"}}>
+            <input type="checkbox" checked={cfg.preferOrdf||false} onChange={e=>saveCfg({...cfg,preferOrdf:e.target.checked})} style={{accentColor:C.blue,width:16,height:16}}/>
+            Prioritera ordförandemail
+          </label>
+        </div>}
+      </div>
+      <div style={card()}>
+        <div style={{fontWeight:600,fontSize:13,marginBottom:8}}>👥 Mottagare <span style={{fontSize:11,fontWeight:400,color:C.muted}}>({selList.length}/{withE.length})</span></div>
+        <div style={{display:"flex",gap:4,marginBottom:8}}>
+          <button onClick={()=>{const n={};withE.forEach(f=>{n[f.id]=true;});setSel(n);}} style={{...btn("primary"),flex:1,justifyContent:"center",padding:"4px 0",fontSize:11,minHeight:30}}>✓ Alla</button>
+          <button onClick={()=>setSel({})} style={{...btn("ghost"),flex:1,justifyContent:"center",padding:"4px 0",fontSize:11,minHeight:30}}>✕ Rensa</button>
+        </div>
+        <div style={{marginBottom:6}}>
+          <select value={lanFilt} onChange={e=>{setLanFilt(e.target.value);setSel({});}} style={{...I({fontSize:12,padding:"5px 8px",minHeight:36})}}>
+            <option value="">Alla regioner</option>{laner.map(l=><option key={l} value={l}>{l}</option>)}
+          </select>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:4,marginBottom:8}}>
+          {[["all","Alla",C.muted],["0","Ej kontaktad",C.muted],["1","Fått M1",C.blue],["2","Fått M1–2",C.teal],["3+","Fått alla 3",C.amber]].map(([v,l,co])=>(
+            <button key={v} onClick={()=>{setMailFilt(v);setSel({});}} style={{background:mailFilt===v?co+"22":"transparent",border:`1px solid ${mailFilt===v?co:C.border}`,borderRadius:7,padding:"4px 8px",cursor:"pointer",fontFamily:"inherit",fontSize:10,fontWeight:mailFilt===v?700:400,color:mailFilt===v?co:C.muted,textAlign:"left"}}>{l}</button>
+          ))}
+        </div>
+        {kontexter.length>0&&<div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:8}}>
+          {[{id:"",namn:"Alla",farg:C.muted},...kontexter].map(k=>(
+            <button key={k.id} onClick={()=>setKontFilt(k.id)} style={{background:kontFilt===k.id?k.farg+"22":"transparent",border:`1px solid ${kontFilt===k.id?k.farg:C.border}`,borderRadius:14,padding:"3px 9px",cursor:"pointer",fontFamily:"inherit",fontSize:10,fontWeight:kontFilt===k.id?700:400,color:kontFilt===k.id?k.farg:C.muted}}>{k.namn}</button>
+          ))}
+        </div>}
+        <div style={{maxHeight:220,overflowY:"auto",display:"flex",flexDirection:"column",gap:2}}>
+          {withE.map(f=>(
+            <label key={f.id} style={{display:"flex",alignItems:"center",gap:8,padding:"5px 4px",borderRadius:6,cursor:"pointer",background:sel[f.id]?"rgba(59,130,246,0.1)":"transparent",minHeight:34}}>
+              <input type="checkbox" checked={!!sel[f.id]} onChange={e=>setSel(p=>({...p,[f.id]:e.target.checked}))} style={{accentColor:C.blue,width:15,height:15,flexShrink:0}}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontSize:12,fontWeight:500}}>{f.namn}</div>
+                <div style={{display:"flex",gap:2}}>{[1,2,3].map(n=><span key={n} style={{fontSize:8,padding:"0 3px",borderRadius:3,fontWeight:700,background:(f.skickadeMail||0)>=n?C.blue+"33":C.bg3,color:(f.skickadeMail||0)>=n?C.blue:C.muted}}>M{n}</span>)}</div>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  return(
+    <div>
+      {/* Sekvensbanderoll */}
+      <div style={{...card({marginBottom:12,borderColor:C.teal+"44",background:"rgba(45,212,191,0.04)"})}}>
+        <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:2}}>
+          {T.filter(t=>t.steg).map(t=>{
+            const co=[C.blue,C.teal,C.amber][t.steg-1]||C.blue;
+            const sent=fr.filter(f=>f.lan==="Dalarna"&&(f.skickadeMail||0)>=t.steg).length;
+            const total=fr.filter(f=>f.lan==="Dalarna"&&hasEmail(f)).length;
+            const ready=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).length;
+            const isAct=tmpl===t.id;
+            return(
+              <button key={t.id} onClick={()=>{pickTmpl(t.id);setMailFilt(String(t.steg-1));const n={};fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).forEach(f=>{n[f.id]=true;});setSel(n);setView("compose");setResults(null);}} style={{background:isAct?co+"22":"rgba(255,255,255,0.03)",border:`2px solid ${isAct?co:C.border}`,borderRadius:10,padding:"9px 13px",cursor:"pointer",fontFamily:"inherit",flexShrink:0,textAlign:"left",minWidth:M?160:185}}>
+                <div style={{fontSize:12,fontWeight:600,color:isAct?co:C.text,marginBottom:3}}>{t.namn}</div>
+                <div style={{display:"flex",justifyContent:"space-between",fontSize:10,marginBottom:3}}><span style={{color:C.muted}}>{sent}/{total} skickat</span>{ready>0&&<span style={{color:co,fontWeight:700}}>{ready} redo →</span>}</div>
+                <div style={{height:3,background:C.bg4,borderRadius:2}}><div style={{height:"100%",width:total>0?`${Math.round(sent/total*100)}%`:"0%",background:co,borderRadius:2}}/></div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* View switcher */}
+      <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
+        {[["compose","✉️ Komponera"],["preview","📋 Granska & skicka"],["history","📚 Historik"]].map(([v,l])=>(
+          <button key={v} onClick={()=>{setView(v);if(v!=="preview")setResults(null);}} style={{...btn(view===v?"primary":"ghost"),minHeight:M?44:38}}>{l}{v==="preview"&&selList.length>0?` (${selList.length})`:""}</button>
+        ))}
+      </div>
+
+      {/* Historik */}
+      {view==="history"&&(
+        <div style={{display:"flex",flexDirection:"column",gap:8}}>
+          {camp.length===0?<div style={{...card({textAlign:"center",padding:40,color:C.muted})}}>Inga kampanjer</div>:
+          [...camp].reverse().map((c2,i)=>(
+            <div key={c2.id||i} style={card()}>
+              <div style={{fontWeight:500,marginBottom:4,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c2.subject||"Utskick"}</div>
+              <div style={{display:"flex",gap:12,fontSize:12,color:C.muted,flexWrap:"wrap"}}><span>{c2.date}</span><span>{c2.recipients} mottagare</span><span style={{color:C.green}}>{c2.sent}✓</span>{c2.failed>0&&<span style={{color:C.red}}>{c2.failed}✗</span>}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Komponera */}
+      {view==="compose"&&(
+        <div style={{display:"grid",gridTemplateColumns:M?"1fr":"260px 1fr",gap:12}}>
+          <Sidebar/>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div style={card()}>
+              <label style={lbl}>Mall</label>
+              <select value={tmpl} onChange={e=>pickTmpl(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:40}}>{T.map(t=><option key={t.id} value={t.id}>{t.namn}</option>)}</select>
+              <label style={lbl}>Ämnesrad</label>
+              <input value={subj} onChange={e=>setSubj(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:40}}/>
+              <label style={lbl}>Meddelande</label>
+              <textarea value={body} onChange={e=>setBody(e.target.value)} rows={M?10:12} style={{...I(),resize:"vertical",lineHeight:1.7}}/>
+              <div style={{fontSize:10,color:C.muted,marginTop:4}}>{"{{namn}} {{mottagare}} {{ort}} {{idrott}} {{avsandare}}"}</div>
+            </div>
+            <button onClick={()=>setView("preview")} disabled={!selList.length} style={{...btn("primary",M),width:"100%",justifyContent:"center",minHeight:M?52:44,opacity:selList.length?1:0.4}}>
+              Granska {selList.length} mail →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Granska & Skicka */}
+      {view==="preview"&&(
+        <div style={{display:"grid",gridTemplateColumns:M?"1fr":"260px 1fr",gap:12}}>
+          <Sidebar/>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            {/* Preview list */}
+            <MailPreviewList selList={selList} subj={subj} body={body} cfg={cfg} getRecipients={getRecipients} hasDual={hasDual} M={M}/>
+
+            {/* Testmail */}
+            <div style={{...card({borderColor:C.amber+"44",background:"rgba(245,158,11,0.03)"})}}>
+              <div style={{fontWeight:600,fontSize:12,marginBottom:8,color:C.amber}}>🧪 Skicka testmail (personaliserat med första mottagaren)</div>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>
+                <input value={testEmail} onChange={e=>{setTestEmail(e.target.value);setTestResult(null);}} placeholder="din@epost.se" type="email" style={{...I({minHeight:M?44:38,flex:1,minWidth:150})}}/>
+                <button onClick={sendTest} disabled={testSending||!testEmail||!cfg.apiKey||!cfg.senderEmail} style={{...btn("ghost"),minHeight:M?44:38,borderColor:C.amber+"66",color:C.amber}}>{testSending?"⏳":selList[0]?`Skicka till mig →`:"Välj mottagare"}</button>
+              </div>
+              {testResult&&<div style={{fontSize:12,color:testResult.ok?C.green:C.red,padding:"6px 8px",background:testResult.ok?"rgba(34,197,94,0.07)":"rgba(239,68,68,0.07)",borderRadius:6}}>{testResult.msg}</div>}
+              {(!cfg.apiKey||!cfg.senderEmail)&&<div style={{fontSize:11,color:C.muted}}>⚙️ Fyll i API-nyckel och avsändar-e-post under Inställningar</div>}
+
+            </div>
+
+            {/* Sending results */}
+            {results&&(
+              <div style={card()}>
+                <div style={{fontWeight:600,marginBottom:8}}>{sending?"Skickar…":results.filter(r=>r.ok).length+"/"+results.length+" skickade"}</div>
+                <div style={{display:"flex",flexDirection:"column",gap:4,maxHeight:240,overflowY:"auto"}}>
+                  {results.map(r=>(
+                    <div key={r.id} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",borderRadius:6,background:r.ok?"rgba(34,197,94,0.07)":"rgba(239,68,68,0.07)"}}>
+                      <span style={{color:r.ok?C.green:C.red,width:14,flexShrink:0}}>{r.ok?"✓":"✗"}</span>
+                      <span style={{flex:1,fontSize:12,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.namn}</span>
+                      {!r.ok&&<span style={{fontSize:11,color:C.red,flexShrink:0,maxWidth:180,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.msg}</span>}
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+            )}
+
+            {/* Send button */}
+            <div style={{display:"flex",gap:8}}>
+              <button onClick={()=>setView("compose")} style={{...btn("ghost"),flex:1,justifyContent:"center"}}>← Tillbaka</button>
+              <button onClick={sendAll} disabled={sending||!cfg.apiKey||!cfg.senderEmail||!selList.length} style={{...btn("primary"),flex:2,justifyContent:"center",minHeight:M?52:46,opacity:(!cfg.apiKey||!cfg.senderEmail)?0.5:1}}>
+                {sending?"⏳ Skickar…":"🚀 Skicka till "+selList.length+" föreningar"}
+              </button>
+            </div>
+            {(!cfg.apiKey||!cfg.senderEmail)&&<div style={{fontSize:11,color:C.amber,textAlign:"center"}}>⚠️ Fyll i API-nyckel och avsändar-e-post under ⚙️ Inställningar</div>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── MailPreviewList ────────────────────────────────────────────────────────────
+function MailPreviewList({selList,subj,body,cfg,getRecipients,hasDual,M}){
+  const [expanded,setExpanded]=useState({});
+  const [showAll,setShowAll]=useState(false);
+  const visible=showAll?selList:selList.slice(0,6);
+  const toggleAll=()=>{const allOpen=visible.every(f=>expanded[f.id]);const n={};selList.forEach(f=>{n[f.id]=!allOpen;});setExpanded(n);};
+  return(
+    <div style={{...card({padding:0,overflow:"hidden"})}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",background:"rgba(59,130,246,0.07)",borderBottom:`1px solid ${C.border}`}}>
+        <div style={{fontWeight:600,fontSize:13}}>📋 {selList.length} mottagare – klicka för förhandsgranskning</div>
+        <button onClick={toggleAll} style={{...btn("ghost"),padding:"3px 10px",fontSize:11,minHeight:28}}>
+          {visible.every(f=>expanded[f.id])?"Fäll ihop alla":"Expandera alla"}
+        </button>
+      </div>
+      <div style={{maxHeight:M?500:560,overflowY:"auto"}}>
+        {visible.map((f,i)=>{
+          const isOpen=expanded[f.id];
+          const recs=getRecipients(f);
+          const pSubj=fill(subj,f,cfg.senderName||"Marketing Guru");
+          const pBody=fill(body,f,cfg.senderName||"Marketing Guru");
+          return(
+            <div key={f.id} style={{borderBottom:i<visible.length-1?`1px solid ${C.border}`:"none"}}>
+              <div onClick={()=>setExpanded(e=>({...e,[f.id]:!e[f.id]}))} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",cursor:"pointer",background:isOpen?"rgba(59,130,246,0.05)":"transparent",WebkitTapHighlightColor:"transparent"}}>
+                <span style={{color:isOpen?C.blue:C.muted,fontSize:11,width:12,flexShrink:0,fontWeight:700}}>{isOpen?"▼":"▶"}</span>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontWeight:600,fontSize:13,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</div>
+                  <div style={{fontSize:11,color:hasDual(f)?C.teal:C.muted,marginTop:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                    {hasDual(f)?<>✉️ {f.epost} <span style={{color:C.border}}>+</span> {f.epostOrdf}</>:recs[0]?.email||"—"}
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:4,flexShrink:0}}>
+                  {hasDual(f)&&<Chip color={C.teal} sm>×2</Chip>}
+                  {(f.skickadeMail||0)>0&&<Chip color={C.blue} sm>M{f.skickadeMail}</Chip>}
+                </div>
+              </div>
+              {isOpen&&(
+                <div style={{margin:"0 14px 12px",borderRadius:9,overflow:"hidden",border:"1px solid #e2e8f0",background:"#fff"}}>
+                  <div style={{background:"#f1f5f9",padding:"9px 14px",borderBottom:"1px solid #e2e8f0"}}>
+                    <div style={{fontSize:10,color:"#64748b",marginBottom:3}}>Från: {cfg.senderName||"Marketing Guru"} &lt;{cfg.senderEmail||"..."}&gt; → {recs.map(r=>r.email).join(", ")}</div>
+                    <div style={{fontSize:13,fontWeight:700,color:"#1e293b"}}>{pSubj}</div>
+                  </div>
+                  <div style={{padding:"14px",color:"#1e293b",fontSize:12,lineHeight:1.8,fontFamily:"Georgia,serif",maxHeight:220,overflowY:"auto"}} dangerouslySetInnerHTML={{__html:pBody.split("\n").map(l=>l.trim()?`<p style="margin:0 0 8px">${l}</p>`:"<p style='margin:0 0 4px'></p>").join("")}}/>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {selList.length>6&&(
+        <div style={{padding:"10px 14px",borderTop:`1px solid ${C.border}`,textAlign:"center"}}>
+          <button onClick={()=>setShowAll(v=>!v)} style={{...btn("ghost"),fontSize:12,minHeight:30}}>{showAll?`Visa färre ▲`:`Visa alla ${selList.length} ▼`}</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── MallarAI ──────────────────────────────────────────────────────────────────
+function MallarAI({templates:rawT,saveTemplates,cfg,fr,M}){
+  const templates=Array.isArray(rawT)&&rawT.length>0?rawT:TEMPLATES;
+  const saveT=d=>saveTemplates&&saveTemplates(Array.isArray(d)?d:TEMPLATES);
+  const [view,setView]=useState("list");
+  const [editIdx,setEditIdx]=useState(null);
+  const [editDraft,setEditDraft]=useState(null);
+  const [previewFr,setPreviewFr]=useState("");
+  const [genStep,setGenStep]=useState(1);
+  const [genForening,setGenForening]=useState("");
+  const [genExtra,setGenExtra]=useState("");
+  const [genResult,setGenResult]=useState("");
+  const [genSubj,setGenSubj]=useState("");
+  const [genLoading,setGenLoading]=useState(false);
+  const [genErr,setGenErr]=useState("");
+  const [saveName,setSaveName]=useState("");
+  const [saveSteg,setSaveSteg]=useState(null);
+  const [flash,setFlash]=useState("");
+  const VARS=["{{namn}}","{{mottagare}}","{{ort}}","{{idrott}}","{{avsandare}}"];
+  const STEP_LABELS={1:"Mail 1 – Introduktion",2:"Mail 2 – Uppföljning",3:"Mail 3 – Sista chansen"};
+  const STEP_HINTS={1:"Presentera Ge Pant, sök 5 partnerföreningar, lista fördelar, ansök bottledrop.se",2:"Följ upp, förklara enkelhet och värde, personlig onboarding",3:"Urgency – platser fyllda, sista chansen, waitlist"};
+
+  const generate=async()=>{
+    setGenLoading(true);setGenErr("");setGenResult("");setGenSubj("");
+    const sf=fr.find(f=>String(f.id)===genForening)||{};
+    const prompt=`Skriv ett säljmail på svenska för BottleDROP – Ge Pant (digital pantplattform).\nSteg ${genStep}: ${STEP_LABELS[genStep]}. Fokus: ${STEP_HINTS[genStep]}\nFörening: ${sf.namn||"{{namn}}"}, idrott: ${sf.idrott||"{{idrott}}"}, ort: ${sf.ort||"{{ort}}"}\n${genExtra?`Extra: ${genExtra}`:""}\nTon: varm, konkret. Max 180 ord. Använd {{namn}} {{mottagare}} {{avsandare}} {{ort}} {{idrott}}.\nSvara BARA med JSON: {"subject":"...","body":"..."}`;
+    try{
+      const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+      const data=await resp.json();
+      const text=data.content?.find(b=>b.type==="text")?.text||"";
+      const json=JSON.parse(text.replace(/```json|```/g,"").trim());
+      setGenSubj(json.subject||"");setGenResult(json.body||"");
+      setSaveName(`${STEP_LABELS[genStep]}${sf.namn?" – "+sf.namn:""}`);setSaveSteg(genStep);
+    }catch(e){setGenErr("Kunde inte generera – "+e.message);}
+    setGenLoading(false);
+  };
+  const saveAsTemplate=()=>{if(!genResult)return;saveT([...templates,{id:"tmpl_"+Date.now(),namn:saveName||"Ny mall",steg:saveSteg,subject:genSubj,body:genResult,generatedAt:new Date().toLocaleDateString("sv-SE")}]);setFlash("✓ Mall sparad!");setTimeout(()=>setFlash(""),2000);setView("list");};
+  const saveEdit=()=>{saveT(templates.map((t,i)=>i===editIdx?{...t,...editDraft}:t));setFlash("✓ Sparad!");setTimeout(()=>setFlash(""),2000);setView("list");setPreviewFr("");};
+
+  if(view==="list")return(
+    <div style={{maxWidth:800}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14,flexWrap:"wrap",gap:8}}>
+        <div><div style={{fontSize:M?15:17,fontWeight:700}}>🤖 Mallar</div><div style={{fontSize:12,color:C.muted,marginTop:2}}>Anpassningsbara mailmallar</div></div>
+        <div style={{display:"flex",gap:8,alignItems:"center"}}>
+          {flash&&<span style={{color:C.green,fontSize:12,fontWeight:500}}>{flash}</span>}
+          <button onClick={async()=>{saveT(TEMPLATES);setFlash("✓ Återställd!");setTimeout(()=>setFlash(""),2000);}} style={{...btn("ghost"),fontSize:11,minHeight:36,color:C.amber,borderColor:C.amber+"55"}}>🗑 Återställ</button>
+          <button onClick={()=>setView("generate")} style={{...btn("primary"),minHeight:M?46:40}}>🤖 Generera med AI</button>
+        </div>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {templates.map((t,i)=>{
+          const co=t.steg===1?C.blue:t.steg===2?C.teal:t.steg===3?C.amber:C.muted;
+          return(<div key={t.id||i} style={{...card({borderColor:co+"33"})}}>
+            <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:10,marginBottom:8}}>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3,flexWrap:"wrap"}}><span style={{fontWeight:600,fontSize:13}}>{t.namn||"Mall"}</span>{t.steg&&<Chip color={co} sm>Steg {t.steg}</Chip>}{t.generatedAt&&<Chip color={C.purple} sm>🤖 AI</Chip>}</div>
+                <div style={{fontSize:12,color:C.muted,fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{(t.subject||"").replace(/{{.*?}}/g,"…")||"(inget ämne)"}</div>
+              </div>
+              <button onClick={()=>{if(!t)return;setEditIdx(i);setEditDraft({...t});setView("edit");setPreviewFr("");}} style={{...btn("ghost"),padding:"5px 10px",fontSize:11,minHeight:32,flexShrink:0}}>✎ Redigera</button>
+            </div>
+            <div style={{fontSize:11,color:C.muted,background:C.bg4,borderRadius:6,padding:"7px 10px",maxHeight:44,overflow:"hidden",lineHeight:1.5}}>{(t.body||"").replace(/\n+/g," ").slice(0,140)}{(t.body||"").length>140?"…":""}</div>
+            <div style={{marginTop:6,display:"flex",gap:4,flexWrap:"wrap"}}>{VARS.map(v=><span key={v} style={{fontSize:9,background:"rgba(59,130,246,0.12)",color:C.blue,padding:"1px 6px",borderRadius:5,fontFamily:"monospace"}}>{v}</span>)}</div>
+          </div>);
+        })}
+      </div>
+    </div>
+  );
+
+  if(view==="generate")return(
+    <div style={{maxWidth:760}}>
+      <BackBar onBack={()=>{setView("list");setGenResult("");setGenErr("");}} title="🤖 Generera mailmall med AI"/>
+      <div style={{padding:M?"12px 0":"14px 0",display:"flex",flexDirection:"column",gap:12}}>
+        <div style={card()}>
+          <div style={{fontWeight:600,fontSize:13,marginBottom:12}}>1. Välj steg</div>
+          <div style={{display:"grid",gridTemplateColumns:M?"1fr":"repeat(3,1fr)",gap:8}}>
+            {[1,2,3].map(s=>(
+              <button key={s} onClick={()=>setGenStep(s)} style={{background:genStep===s?"rgba(59,130,246,0.15)":"rgba(255,255,255,0.03)",border:`1px solid ${genStep===s?C.blue:C.border}`,borderRadius:10,padding:"12px 14px",cursor:"pointer",fontFamily:"inherit",textAlign:"left"}}>
+                <div style={{fontWeight:600,fontSize:12,color:genStep===s?C.blue:C.text,marginBottom:4}}>{STEP_LABELS[s]}</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.4}}>{STEP_HINTS[s]}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div style={card()}>
+          <div style={{fontWeight:600,fontSize:13,marginBottom:12}}>2. Anpassa (valfritt)</div>
+          <label style={lbl}>Välj förening</label>
+          <select value={genForening} onChange={e=>setGenForening(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:42}}>
+            <option value="">Generisk</option>{fr.filter(f=>hasEmail(f)).slice(0,20).map(f=><option key={f.id} value={f.id}>{f.namn} – {f.idrott}, {f.ort}</option>)}
+          </select>
+          <label style={lbl}>Extra info</label>
+          <input value={genExtra} onChange={e=>setGenExtra(e.target.value)} placeholder="T.ex. föreningen har 200 medlemmar" style={{...I(),minHeight:M?46:42}}/>
+        </div>
+        <button onClick={generate} disabled={genLoading} style={{...btn("primary",M),width:"100%",justifyContent:"center",minHeight:M?52:48}}>{genLoading?"⏳ Genererar…":"🤖 Generera"}</button>
+        {genErr&&<div style={{color:C.red,fontSize:12,padding:"8px 12px",background:"rgba(239,68,68,0.08)",borderRadius:8}}>{genErr}</div>}
+        {genResult&&(
+          <div style={{...card({borderColor:C.green+"44"})}}>
+            <div style={{fontWeight:600,fontSize:13,marginBottom:10,color:C.green}}>✓ Genererat</div>
+            <label style={lbl}>Ämnesrad</label>
+            <input value={genSubj} onChange={e=>setGenSubj(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:42}}/>
+            <label style={lbl}>Mailtext</label>
+            <textarea value={genResult} onChange={e=>setGenResult(e.target.value)} rows={M?12:14} style={{...I(),resize:"vertical",lineHeight:1.7,marginBottom:10}}/>
+            <label style={lbl}>Mallnamn</label>
+            <input value={saveName} onChange={e=>setSaveName(e.target.value)} style={{...I(),marginBottom:8,minHeight:M?46:42}}/>
+            <label style={lbl}>Steg</label>
+            <select value={saveSteg||""} onChange={e=>setSaveSteg(e.target.value?parseInt(e.target.value):null)} style={{...I(),marginBottom:12,minHeight:M?46:42}}>
+              <option value="">Ingen</option><option value="1">Steg 1</option><option value="2">Steg 2</option><option value="3">Steg 3</option>
+            </select>
+            <div style={{display:"flex",gap:8}}>
+              <button onClick={saveAsTemplate} style={{...btn("primary",M),flex:2,justifyContent:"center",minHeight:M?50:44}}>💾 Spara mall</button>
+              <button onClick={generate} disabled={genLoading} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:M?50:44}}>🔄 Igen</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  if(view==="edit"&&editDraft&&editDraft.namn!==undefined)return(
+    <div style={{maxWidth:760}}>
+      <BackBar onBack={()=>setView("list")} title={`✎ ${editDraft.namn||"mall"}`} actions={<span style={{color:C.green,fontSize:12}}>{flash}</span>}/>
+      <div style={{padding:M?"12px 0":"14px 0",display:"flex",flexDirection:"column",gap:10}}>
+        <div style={card()}>
+          <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:8,marginBottom:10}}>
+            <div><label style={lbl}>Mallnamn</label><input value={editDraft.namn||""} onChange={e=>setEditDraft(p=>({...p,namn:e.target.value}))} style={{...I(),minHeight:M?46:42}}/></div>
+            <div><label style={lbl}>Steg</label><select value={editDraft.steg||""} onChange={e=>setEditDraft(p=>({...p,steg:e.target.value?parseInt(e.target.value):null}))} style={{...I(),minHeight:M?46:42}}><option value="">Ingen</option><option value="1">Steg 1</option><option value="2">Steg 2</option><option value="3">Steg 3</option></select></div>
+          </div>
+          <label style={lbl}>Ämnesrad</label>
+          <input value={editDraft.subject||""} onChange={e=>setEditDraft(p=>({...p,subject:e.target.value}))} style={{...I(),marginBottom:10,minHeight:M?46:42}}/>
+          <label style={lbl}>Mailtext</label>
+          <textarea value={editDraft.body||""} onChange={e=>setEditDraft(p=>({...p,body:e.target.value}))} rows={M?14:16} style={{...I(),resize:"vertical",lineHeight:1.7,marginBottom:8}}/>
+          <div style={{marginBottom:12,display:"flex",gap:4,flexWrap:"wrap"}}>{VARS.map(v=><button key={v} onClick={()=>setEditDraft(p=>({...p,body:(p.body||"")+v}))} style={{background:"rgba(59,130,246,0.1)",border:"none",borderRadius:6,padding:"2px 8px",fontSize:10,fontFamily:"monospace",color:C.blue,cursor:"pointer"}}>{v}</button>)}</div>
+          <div style={{display:"flex",gap:8}}>
+            <button onClick={saveEdit} style={{...btn("primary",M),flex:2,justifyContent:"center",minHeight:M?50:44}}>💾 Spara</button>
+            <button onClick={()=>setView("list")} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:M?50:44}}>Avbryt</button>
+          </div>
+        </div>
+        <div style={{...card({borderColor:C.amber+"44"})}}>
+          <div style={{fontWeight:600,fontSize:12,marginBottom:8,color:C.amber}}>👁 Förhandsgranskning</div>
+          <select value={previewFr} onChange={e=>setPreviewFr(e.target.value)} style={{...I({fontSize:12}),marginBottom:8}}>
+            <option value="">Generisk</option>{fr.filter(f=>hasEmail(f)).slice(0,15).map(f=><option key={f.id} value={f.id}>{f.namn} – {f.ort}</option>)}
+          </select>
+          {(()=>{const pf=previewFr?fr.find(f=>String(f.id)===previewFr):null;const pd=pf||{namn:"Föreningen",ordforande:"Mottagaren",ort:"Orten",idrott:"Idrott",burkar:0};return(<div style={{background:"#fff",borderRadius:8,overflow:"hidden"}}>{pf&&<div style={{background:"#eef4ff",padding:"5px 12px",fontSize:11,color:"#3b82f6"}}>{pf.namn}</div>}<div style={{background:"#f8fafc",padding:"8px 12px",borderBottom:"1px solid #e2e8f0"}}><div style={{fontSize:12,fontWeight:700,color:"#1e293b"}}>{fill(editDraft.subject||"",pd,cfg.senderName||"Marketing Guru")}</div></div><div style={{padding:"12px",color:"#1e293b",fontSize:12,lineHeight:1.8,fontFamily:"Georgia,serif",maxHeight:200,overflowY:"auto"}} dangerouslySetInnerHTML={{__html:fill(editDraft.body||"",pd,cfg.senderName||"Marketing Guru").split("\n").map(l=>l.trim()?`<p style="margin:0 0 8px">${l}</p>`:"<p style='margin:0 0 4px'></p>").join("")}}/></div>);})()}
+        </div>
+      </div>
+    </div>
+  );
+  return null;
+}
+
+// ── Kontakter ─────────────────────────────────────────────────────────────────
+function Kontakter({contacts,saveContacts,fr,saveFr,M}){
+  const [q,setQ]=useState("");const [screen,setScreen]=useState("list");
+  const [editing,setEditing]=useState(null);
+  const blank={fornamn:"",efternamn:"",epost:"",telefon:"",roll:"",foreningId:null,anteckningar:""};
+  const [form,setForm]=useState(blank);
+  const [selContact,setSelContact]=useState(null);
+  const shown=contacts.filter(c=>!q||[c.fornamn,c.efternamn,c.epost,c.roll].some(v=>v?.toLowerCase().includes(q.toLowerCase())));
+  const getFrNamn=id=>fr.find(f=>f.id===id)?.namn||"—";
+  const getMailsForContact=c=>{if(!c.foreningId)return[];const f=fr.find(x=>x.id===c.foreningId);return f?.mailLog||[];};
+  const save=()=>{
+    const contact={...form,id:editing||Math.max(0,...contacts.map(c=>c.id))+1,foreningId:form.foreningId?parseInt(form.foreningId):null};
+    const nc=editing?contacts.map(c=>c.id===editing?contact:c):[...contacts,contact];
+    saveContacts(nc);
+    let nfr=[...fr];
+    if(editing){const old=contacts.find(c=>c.id===editing);if(old?.foreningId&&old.foreningId!==contact.foreningId)nfr=nfr.map(f=>f.id===old.foreningId?{...f,kontaktIds:(f.kontaktIds||[]).filter(id=>id!==editing)}:f);}
+    if(contact.foreningId){const f=nfr.find(f=>f.id===contact.foreningId);if(f&&!(f.kontaktIds||[]).includes(contact.id))nfr=nfr.map(f=>f.id===contact.foreningId?{...f,kontaktIds:[...(f.kontaktIds||[]),contact.id]}:f);}
+    saveFr(nfr);setScreen("list");
+  };
+  const del=c=>{if(!confirm("Ta bort?"))return;saveContacts(contacts.filter(x=>x.id!==c.id));if(c.foreningId)saveFr(fr.map(f=>f.id===c.foreningId?{...f,kontaktIds:(f.kontaktIds||[]).filter(id=>id!==c.id)}:f));};
+
+  if(screen==="form")return(
+    <div><BackBar onBack={()=>setScreen("list")} title={editing?"Redigera kontakt":"Ny kontakt"}/>
+      <div style={{padding:"14px 12px"}}>
+        <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:8,marginBottom:8}}>
+          {[["fornamn","Förnamn"],["efternamn","Efternamn"],["epost","E-post"],["telefon","Telefon"]].map(([k,l])=>(
+            <div key={k}><label style={lbl}>{l}</label><input value={form[k]||""} onChange={e=>setForm(p=>({...p,[k]:e.target.value}))} style={{...I(),minHeight:M?46:40}}/></div>
+          ))}
+          <div><label style={lbl}>Roll</label><select value={form.roll||""} onChange={e=>setForm(p=>({...p,roll:e.target.value}))} style={{...I(),minHeight:M?46:40}}><option value="">Välj…</option>{ROLLER.map(r=><option key={r} value={r}>{r}</option>)}</select></div>
+          <div><label style={lbl}>Förening</label><select value={form.foreningId||""} onChange={e=>setForm(p=>({...p,foreningId:e.target.value}))} style={{...I(),minHeight:M?46:40}}><option value="">Ingen</option>{fr.map(f=><option key={f.id} value={f.id}>{f.namn}</option>)}</select></div>
+        </div>
+        <div style={{marginBottom:12}}><label style={lbl}>Anteckningar</label><input value={form.anteckningar||""} onChange={e=>setForm(p=>({...p,anteckningar:e.target.value}))} style={{...I(),minHeight:M?46:40}}/></div>
+        <button onClick={save} style={{...btn("primary",M),width:"100%",justifyContent:"center",minHeight:M?52:44}}>Spara kontakt</button>
+      </div>
+    </div>
+  );
+
+  return(
+    <div>
+      <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"flex-end"}}>
+        <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Sök…" style={{...I(),flex:1,minHeight:M?46:40}}/>
+        <button onClick={()=>{setForm(blank);setEditing(null);setScreen("form");}} style={{...btn("primary"),padding:"0 18px",minHeight:M?46:40}}>+</button>
+      </div>
+      <div style={{fontSize:11,color:C.muted,marginBottom:8}}>{shown.length} av {contacts.length} kontakter</div>
+      {M?(
+        <div style={{display:"flex",flexDirection:"column",gap:8}}>
+          {shown.map(c=>{const mails=getMailsForContact(c);const isOpen=selContact===c.id;return(
+            <div key={c.id} style={card()}>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
+                <div style={{width:38,height:38,borderRadius:"50%",background:"rgba(167,139,250,0.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,color:C.purple,flexShrink:0}}>{c.fornamn?.[0]||"?"}</div>
+                <div style={{flex:1,minWidth:0}}><div style={{fontWeight:600,fontSize:13}}>{c.fornamn} {c.efternamn}</div>{c.roll&&<Chip color={C.blue} sm>{c.roll}</Chip>}</div>
+                <div style={{display:"flex",gap:5}}>
+                  <button onClick={()=>{setForm({...c,foreningId:c.foreningId||""});setEditing(c.id);setScreen("form");}} style={{...btn("ghost"),padding:"5px 10px",fontSize:11}}>✎</button>
+                  <button onClick={()=>del(c)} style={{...btn("ghost"),padding:"5px 10px",fontSize:11,color:C.red,borderColor:"rgba(239,68,68,0.3)"}}>✕</button>
+                </div>
+              </div>
+              {c.epost&&<div style={{fontSize:11,color:C.green,marginBottom:2}}>📧 {c.epost}</div>}
+              {c.foreningId&&<div style={{fontSize:11,color:C.muted}}>🏆 {getFrNamn(c.foreningId)}</div>}
+              {mails.length>0&&<button onClick={()=>setSelContact(isOpen?null:c.id)} style={{...btn("ghost"),marginTop:7,width:"100%",justifyContent:"center",fontSize:11,minHeight:34}}>{isOpen?"Dölj mail":"📋 Visa mail ("+mails.length+")"}</button>}
+              {isOpen&&<div style={{marginTop:7,borderTop:`1px solid ${C.border}`,paddingTop:7}}>{[...mails].reverse().map((m,i)=>(
+                <div key={i} style={{padding:"5px 0",borderBottom:i<mails.length-1?`1px solid ${C.border}`:"none"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:6,marginBottom:1}}><span style={{fontSize:11,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.subject||"Utskick"}</span><Chip color={m.status==="sent"?C.green:C.red} sm>{m.status==="sent"?"✓":"✗"}</Chip></div>
+                  <div style={{fontSize:10,color:C.muted}}>{m.date}</div>
+                </div>
+              ))}</div>}
+            </div>
+          );})}
+        </div>
+      ):(
+        <div style={{...card({padding:0,overflow:"hidden"})}}>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+            <thead><tr style={{background:C.bg3,borderBottom:`1px solid ${C.border}`}}>
+              {["Namn","Roll","E-post","Förening","Mail",""].map(h=><th key={h} style={{padding:"9px 12px",textAlign:"left",fontSize:10,fontWeight:600,color:C.muted}}>{h}</th>)}
+            </tr></thead>
+            <tbody>
+              {shown.map((c,i)=>{const mails=getMailsForContact(c);const isOpen=selContact===c.id;return(
+                <>
+                <tr key={c.id} style={{borderBottom:`1px solid ${C.border}`,background:isOpen?"rgba(59,130,246,0.07)":i%2===0?C.bg2:"transparent",cursor:"pointer"}} onClick={()=>setSelContact(isOpen?null:c.id)}>
+                  <td style={{padding:"9px 12px"}}><div style={{display:"flex",alignItems:"center",gap:7}}><div style={{width:26,height:26,borderRadius:"50%",background:"rgba(167,139,250,0.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:C.purple}}>{c.fornamn?.[0]||"?"}</div><span style={{fontWeight:500}}>{c.fornamn} {c.efternamn}</span></div></td>
+                  <td style={{padding:"9px 12px"}}>{c.roll?<Chip color={C.blue} sm>{c.roll}</Chip>:"—"}</td>
+                  <td style={{padding:"9px 12px",color:c.epost?C.green:C.muted,fontSize:11}}>{c.epost||"—"}</td>
+                  <td style={{padding:"9px 12px",fontSize:11}}>{c.foreningId?getFrNamn(c.foreningId):"—"}</td>
+                  <td style={{padding:"9px 12px"}}>{mails.length>0?<span style={{fontSize:11,color:C.blue}}>📋 {mails.length}</span>:"—"}</td>
+                  <td style={{padding:"9px 12px"}} onClick={e=>e.stopPropagation()}><div style={{display:"flex",gap:5}}>
+                    <button onClick={()=>{setForm({...c,foreningId:c.foreningId||""});setEditing(c.id);setScreen("form");}} style={{...btn("ghost"),padding:"4px 10px",fontSize:11,minHeight:30}}>✎</button>
+                    <button onClick={()=>del(c)} style={{...btn("ghost"),padding:"4px 10px",fontSize:11,minHeight:30,color:C.red,borderColor:"rgba(239,68,68,0.3)"}}>✕</button>
+                  </div></td>
+                </tr>
+                {isOpen&&mails.length>0&&(
+                  <tr style={{background:"rgba(59,130,246,0.04)"}}><td colSpan={6} style={{padding:"0 14px 10px"}}><div style={{borderTop:`1px solid ${C.border}`,paddingTop:7,display:"flex",flexDirection:"column",gap:3}}>
+                    {[...mails].reverse().map((m,mi)=>(
+                      <div key={mi} style={{display:"flex",alignItems:"center",gap:10,fontSize:11,padding:"3px 0",borderBottom:mi<mails.length-1?`1px solid ${C.border}`:"none"}}>
+                        <span style={{color:m.status==="sent"?C.green:C.red,width:12}}>{m.status==="sent"?"✓":"✗"}</span>
+                        <span style={{color:C.muted,flexShrink:0}}>{m.date}</span>
+                        <span style={{flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.subject||"Utskick"}</span>
+                      </div>
+                    ))}
+                  </div></td></tr>
+                )}
+                </>
+              );})}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Installningar ─────────────────────────────────────────────────────────────
+function Installningar({cfg,saveCfg,templates:tmplsProp,saveTemplates,kontexter,saveKontexter,aktivKontextId,saveAktivKontext,fr,camp,contacts,M}){
+  const [tab,setTab]=useState("kontexter");
+  const tmplList=Array.isArray(tmplsProp)&&tmplsProp.length>0?tmplsProp:TEMPLATES;
+  const dalarna=fr.filter(f=>f.lan==="Dalarna");
+  const allMails=fr.flatMap(f=>(f.mailLog||[]).map(m=>({...m,foreningNamn:f.namn})));
+  const [editTmplIdx,setEditTmplIdx]=useState(null);
+  const [editDraft,setEditDraft]=useState(null);
+  const [previewFr,setPreviewFr]=useState("");
+  const [tmplFlash,setTmplFlash]=useState("");
+  const SUBTABS=[["kontexter","🎯 Kontexter"],["brevo","🔑 Brevo & Avsändare"],["mallar","📝 Mallar"],["statistik","📊 Statistik"],["maillog","📋 Alla mail"]];
+  const VARS=["{{namn}}","{{mottagare}}","{{ort}}","{{idrott}}","{{avsandare}}"];
+  const startEditTmpl=i=>{if(!tmplList[i])return;setEditTmplIdx(i);setEditDraft({...tmplList[i]});setPreviewFr("");};
+  const saveTmpl=()=>{const next=tmplList.map((t,i)=>i===editTmplIdx?{...t,...editDraft}:t);saveTemplates&&saveTemplates(next);setEditTmplIdx(null);setEditDraft(null);setTmplFlash("✓ Sparad!");setTimeout(()=>setTmplFlash(""),2000);};
+  const resetTmpl=async()=>{if(!confirm("Återställ?"))return;try{await window.storage.set("bd5_templates",JSON.stringify(TEMPLATES));}catch{}saveTemplates&&saveTemplates(TEMPLATES);setEditTmplIdx(null);setEditDraft(null);setTmplFlash("✓ Återställd!");setTimeout(()=>setTmplFlash(""),2000);};
+
+  return(
+    <div style={{maxWidth:760}}>
+      <div style={{fontWeight:700,fontSize:M?16:18,marginBottom:16}}>⚙️ Inställningar</div>
+      <div style={{display:"flex",gap:0,marginBottom:16,overflowX:"auto",borderBottom:`1px solid ${C.border}`}}>
+        {SUBTABS.map(([v,l])=>(
+          <button key={v} onClick={()=>setTab(v)} style={{background:"none",border:"none",borderBottom:`2px solid ${tab===v?C.blue:"transparent"}`,cursor:"pointer",fontFamily:"inherit",padding:M?"10px 12px":"9px 16px",fontSize:M?11:12,fontWeight:tab===v?600:400,color:tab===v?C.text:C.muted,whiteSpace:"nowrap"}}>{l}</button>
+        ))}
+      </div>
+
+      {tab==="kontexter"&&<KontexterEditor kontexter={kontexter} saveKontexter={saveKontexter} aktivKontextId={aktivKontextId} saveAktivKontext={saveAktivKontext} fr={fr} M={M}/>}
+
+      {tab==="brevo"&&(
+        <div style={{display:"flex",flexDirection:"column",gap:12}}>
+          <BrevoStatus cfg={cfg} brevoGet={brevoGet}/>
+          <div style={{...card({borderColor:C.blue+"44"})}}>
+            <div style={{fontWeight:600,fontSize:13,marginBottom:12}}>🔑 API-nyckel</div>
+            <label style={lbl}>Brevo API-nyckel</label>
+            <input type="password" value={cfg.apiKey||""} onChange={e=>saveCfg({...cfg,apiKey:e.target.value})} placeholder="xkeysib-…" style={{...I(),marginBottom:6,minHeight:M?46:42}}/>
+            <div style={{fontSize:10,color:C.muted}}>app.brevo.com → ditt namn → SMTP & API → API Keys</div>
+          </div>
+
+          <div style={{...card({borderColor:cfg.proxyUrl?C.green+"44":C.amber+"44",background:cfg.proxyUrl?"rgba(34,197,94,0.03)":"rgba(245,158,11,0.03)"})}}>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+              <div style={{fontWeight:600,fontSize:13}}>🔀 Proxy-URL</div>
+              {cfg.proxyUrl?<Chip color={C.green} sm>Aktiv ✓</Chip>:<Chip color={C.amber} sm>Behövs för Claude.ai</Chip>}
+            </div>
+            <label style={lbl}>Proxy-URL (lämna tom om appen körs på egen domän)</label>
+            <input value={cfg.proxyUrl||""} onChange={e=>saveCfg({...cfg,proxyUrl:e.target.value})} placeholder="https://din-proxy.din-domän.workers.dev" style={{...I({border:`1px solid ${cfg.proxyUrl?C.green+"66":C.amber+"66"}`}),marginBottom:10,minHeight:M?46:42}}/>
+            <div style={{...card({background:C.bg4,padding:"12px 14px",borderColor:C.border})}}>
+              <div style={{fontWeight:600,fontSize:11,marginBottom:8,color:C.muted}}>⚡ Sätt upp en proxy på 2 min med Cloudflare Workers (gratis)</div>
+              <ol style={{margin:0,padding:"0 0 0 16px",fontSize:11,color:C.muted,lineHeight:2}}>
+                <li>Gå till <strong style={{color:C.text}}>workers.cloudflare.com</strong> → skapa konto (gratis)</li>
+                <li>Klicka <strong style={{color:C.text}}>Create Worker</strong> → klistra in koden nedan → Deploy</li>
+                <li>Kopiera Worker-URL:n och klistra in ovan</li>
+              </ol>
+              <div style={{background:"#0d1117",borderRadius:7,padding:"10px 12px",marginTop:8,position:"relative"}}>
+                <WorkerCopyButton/>
+              </div>
+            </div>
+          </div>
+          <div style={{...card({borderColor:C.teal+"44"})}}>
+            <div style={{fontWeight:600,fontSize:13,marginBottom:12}}>✉️ Avsändare</div>
+            <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:10,marginBottom:10}}>
+              <div><label style={lbl}>Avsändarnamn</label><input value={cfg.senderName||""} onChange={e=>saveCfg({...cfg,senderName:e.target.value})} placeholder="Marketing Guru" style={{...I(),minHeight:M?46:42}}/></div>
+              <div><label style={lbl}>Avsändar-e-post <span style={{color:C.red}}>*</span></label><input type="email" value={cfg.senderEmail||""} onChange={e=>saveCfg({...cfg,senderEmail:e.target.value})} placeholder="din@epost.se" style={{...I({border:`1px solid ${cfg.senderEmail?C.border:C.red+"66"}`}),minHeight:M?46:42}}/></div>
+            </div>
+            <label style={{display:"flex",alignItems:"center",gap:8,fontSize:13,color:C.muted,cursor:"pointer",minHeight:36,marginBottom:6}}>
+              <input type="checkbox" checked={cfg.preferOrdf||false} onChange={e=>saveCfg({...cfg,preferOrdf:e.target.checked})} style={{accentColor:C.blue,width:18,height:18}}/>
+              Prioritera ordförandemail framför generell e-post
+            </label>
+            {!cfg.senderEmail&&<div style={{fontSize:11,color:C.red,padding:"6px 10px",background:"rgba(239,68,68,0.07)",borderRadius:7}}>⚠️ E-postadressen måste vara verifierad i Brevo under Senders & IP.</div>}
+          </div>
+        </div>
+      )}
+
+      {tab==="mallar"&&(
+        <div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12,flexWrap:"wrap",gap:8}}>
+            <div style={{fontWeight:600,fontSize:13}}>📝 Mailmallar</div>
+            <div style={{display:"flex",gap:8,alignItems:"center"}}>{tmplFlash&&<span style={{color:C.green,fontSize:12,fontWeight:500}}>{tmplFlash}</span>}{editTmplIdx===null&&<button onClick={resetTmpl} style={{...btn("ghost"),fontSize:11,minHeight:34,color:C.amber,borderColor:C.amber+"55"}}>🗑 Återställ</button>}</div>
+          </div>
+          {editTmplIdx!==null&&editDraft?(
+            <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:14}}>
+              <div style={card()}>
+                <label style={lbl}>Ämnesrad</label>
+                <input value={editDraft.subject||""} onChange={e=>setEditDraft(p=>({...p,subject:e.target.value}))} style={{...I(),marginBottom:9,minHeight:M?46:40}}/>
+                <label style={lbl}>Mailtext</label>
+                <textarea value={editDraft.body||""} onChange={e=>setEditDraft(p=>({...p,body:e.target.value}))} rows={M?10:14} style={{...I(),resize:"vertical",lineHeight:1.7,marginBottom:6}}/>
+                <div style={{marginBottom:10,display:"flex",gap:4,flexWrap:"wrap"}}>{VARS.map(v=><button key={v} onClick={()=>setEditDraft(p=>({...p,body:(p.body||"")+v}))} style={{background:"rgba(59,130,246,0.1)",border:"none",borderRadius:6,padding:"2px 8px",fontSize:10,fontFamily:"monospace",color:C.blue,cursor:"pointer"}}>{v}</button>)}</div>
+                <div style={{display:"flex",gap:6}}>
+                  <button onClick={saveTmpl} style={{...btn("primary",M),flex:2,justifyContent:"center",minHeight:M?48:40}}>💾 Spara</button>
+                  <button onClick={()=>{setEditTmplIdx(null);setEditDraft(null);}} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:M?48:40}}>Avbryt</button>
+                </div>
+              </div>
+              <div style={{...card({borderColor:C.amber+"44"})}}>
+                <div style={{fontWeight:600,fontSize:12,marginBottom:8,color:C.amber}}>👁 Preview</div>
+                <select value={previewFr} onChange={e=>setPreviewFr(e.target.value)} style={{...I({fontSize:12}),marginBottom:8}}>
+                  <option value="">Generisk</option>{fr.filter(f=>hasEmail(f)).slice(0,15).map(f=><option key={f.id} value={f.id}>{f.namn}</option>)}
+                </select>
+                {(()=>{const pf=previewFr?fr.find(f=>String(f.id)===previewFr):null;const pd=pf||{namn:"Föreningen",ordforande:"Mottagaren",ort:"Orten",idrott:"Idrott",burkar:0};return(<div style={{background:"#fff",borderRadius:8,overflow:"hidden"}}>{pf&&<div style={{background:"#eef4ff",padding:"5px 12px",fontSize:11,color:"#3b82f6"}}>{pf.namn}</div>}<div style={{background:"#f8fafc",padding:"8px 12px",borderBottom:"1px solid #e2e8f0"}}><div style={{fontSize:12,fontWeight:700,color:"#1e293b"}}>{fill(editDraft.subject||"",pd,cfg.senderName||"Marketing Guru")}</div></div><div style={{padding:"12px",color:"#1e293b",fontSize:12,lineHeight:1.8,fontFamily:"Georgia,serif",maxHeight:200,overflowY:"auto"}} dangerouslySetInnerHTML={{__html:fill(editDraft.body||"",pd,cfg.senderName||"Marketing Guru").split("\n").map(l=>l.trim()?`<p style="margin:0 0 8px">${l}</p>`:"<p style='margin:0 0 4px'></p>").join("")}}/></div>);})()}
+              </div>
+            </div>
+          ):(
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {tmplList.map((t,i)=>{
+                const co=t.steg===1?C.blue:t.steg===2?C.teal:t.steg===3?C.amber:C.muted;
+                return(<div key={t.id||i} style={{...card({borderColor:co+"33"})}}>
+                  <div style={{display:"flex",alignItems:"flex-start",gap:10,justifyContent:"space-between"}}>
+                    <div style={{flex:1,minWidth:0}}><div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3,flexWrap:"wrap"}}><span style={{fontWeight:600,fontSize:13}}>{t.namn||"Mall"}</span>{t.steg&&<Chip color={co} sm>Steg {t.steg}</Chip>}</div><div style={{fontSize:12,color:C.muted,fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{(t.subject||"").replace(/{{.*?}}/g,"…")||"(inget ämne)"}</div></div>
+                    <button onClick={()=>startEditTmpl(i)} style={{...btn("ghost"),padding:"5px 10px",fontSize:11,minHeight:32,flexShrink:0}}>✎</button>
+                  </div>
+                  <div style={{marginTop:7,fontSize:11,color:C.muted,background:C.bg4,borderRadius:6,padding:"6px 10px",maxHeight:40,overflow:"hidden",lineHeight:1.5}}>{(t.body||"").replace(/\n+/g," ").slice(0,130)}{(t.body||"").length>130?"…":""}</div>
+                </div>);
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab==="statistik"&&(
+        <div style={{display:"grid",gridTemplateColumns:M?"1fr 1fr":"repeat(4,1fr)",gap:10}}>
+          {[[fr.length,"Föreningar","🏆",C.blue],[dalarna.length,"Dalarna","📍",C.teal],[contacts.length,"Kontakter","👥",C.purple],[camp.length,"Kampanjer","🚀",C.amber],[fr.filter(hasEmail).length,"Har e-post","📧",C.green],[fr.filter(f=>!hasEmail(f)).length,"Saknar e-post","📧",C.red],[fr.reduce((s,f)=>s+(f.skickadeMail||0),0),"Mail skickade","✉️",C.blue],[fr.filter(f=>(f.taggar||[]).length>0).length,"Taggade","🏷",C.teal]].map(([v,l,ic,co])=>(
+            <div key={l} style={{...card({borderColor:co+"33",padding:"14px 16px"})}}>
+              <div style={{fontSize:18,marginBottom:4}}>{ic}</div>
+              <div style={{fontSize:22,fontWeight:700,color:co}}>{v}</div>
+              <div style={{fontSize:11,color:C.muted,marginTop:3}}>{l}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab==="maillog"&&(
+        <div>
+          <div style={{fontSize:11,color:C.muted,marginBottom:10}}>{allMails.length} mail totalt</div>
+          {allMails.length===0?<div style={{...card({textAlign:"center",padding:40,color:C.muted})}}>Inga mail loggade</div>:(
+            <div style={{display:"flex",flexDirection:"column",gap:M?8:0}}>
+              {[...allMails].reverse().map((m,i)=>M?(
+                <div key={i} style={card({padding:"12px 14px"})}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:8,marginBottom:3}}><span style={{fontWeight:500,fontSize:12,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.foreningNamn}</span><Chip color={m.status==="sent"?C.green:C.red} sm>{m.status==="sent"?"✓":"✗"}</Chip></div>
+                  <div style={{fontSize:11,color:C.muted}}>{m.date} · {m.toEmail}</div>
+                </div>
+              ):(
+                <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"8px 14px",background:i%2===0?C.bg2:C.bg,borderBottom:`1px solid ${C.border}`,fontSize:12}}>
+                  <span style={{color:m.status==="sent"?C.green:C.red,width:14}}>{m.status==="sent"?"✓":"✗"}</span>
+                  <span style={{fontWeight:500,minWidth:160,maxWidth:180,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.foreningNamn}</span>
+                  <span style={{flex:1,color:C.muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.subject||"Utskick"}</span>
+                  <span style={{color:C.muted,flexShrink:0,minWidth:100}}>{m.date}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── KontexterEditor ───────────────────────────────────────────────────────────
+function KontexterEditor({kontexter,saveKontexter,aktivKontextId,saveAktivKontext,fr,M}){
+  const [editing,setEditing]=useState(null);
+  const blank={id:"k_"+Date.now(),namn:"",farg:"#3b82f6",beskrivning:"",metricLabel:"",senderName:"Marketing Guru",senderEmail:"",aktiv:true};
+  const [draft,setDraft]=useState(blank);
+  const [flash,setFlash]=useState("");
+  const COLORS=["#3b82f6","#2dd4bf","#22c55e","#f59e0b","#ef4444","#a78bfa","#f97316","#ec4899"];
+  const save=()=>{let next=editing==="new"?[...kontexter,draft]:kontexter.map(k=>k.id===editing?{...k,...draft}:k);saveKontexter(next);setEditing(null);setFlash("✓ Sparad!");setTimeout(()=>setFlash(""),2000);};
+  const del=id=>{if(!confirm("Ta bort?"))return;saveKontexter(kontexter.filter(k=>k.id!==id));};
+  const taggedCount=id=>(fr||[]).filter(f=>(f.taggar||[]).includes(id)).length;
+  const aktivK=kontexter.find(k=>k.id===aktivKontextId);
+  return(
+    <div style={{maxWidth:700}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14,flexWrap:"wrap",gap:8}}>
+        <div><div style={{fontSize:M?14:16,fontWeight:700}}>🎯 Kontexter</div><div style={{fontSize:11,color:C.muted,marginTop:2}}>Definiera kampanjer och tagga föreningar</div></div>
+        <div style={{display:"flex",gap:8,alignItems:"center"}}>{flash&&<span style={{color:C.green,fontSize:12,fontWeight:500}}>{flash}</span>}<button onClick={()=>{setDraft({...blank,id:"k_"+Date.now()});setEditing("new");}} style={{...btn("primary"),minHeight:M?44:38}}>+ Ny kontext</button></div>
+      </div>
+      {aktivK&&<div style={{...card({borderColor:aktivK.farg+"55",background:aktivK.farg+"08",marginBottom:14,padding:"10px 14px"})}}>
+        <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{width:10,height:10,borderRadius:"50%",background:aktivK.farg}}/><span style={{fontWeight:700,color:aktivK.farg}}>{aktivK.namn}</span><span style={{fontSize:11,color:C.muted}}>Aktiv kontext</span></div>
+      </div>}
+      {editing&&(
+        <div style={{...card({marginBottom:14,borderColor:C.blue+"44"})}}>
+          <div style={{fontWeight:600,fontSize:13,marginBottom:12,color:C.blue}}>{editing==="new"?"Ny kontext":"Redigera"}</div>
+          <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:10,marginBottom:10}}>
+            <div><label style={lbl}>Namn *</label><input value={draft.namn} onChange={e=>setDraft(p=>({...p,namn:e.target.value}))} style={{...I(),minHeight:M?46:42}}/></div>
+            <div><label style={lbl}>Metric-label</label><input value={draft.metricLabel} onChange={e=>setDraft(p=>({...p,metricLabel:e.target.value}))} placeholder="T.ex. Pantade burkar" style={{...I(),minHeight:M?46:42}}/></div>
+            <div><label style={lbl}>Avsändarnamn</label><input value={draft.senderName} onChange={e=>setDraft(p=>({...p,senderName:e.target.value}))} style={{...I(),minHeight:M?46:42}}/></div>
+            <div><label style={lbl}>Avsändar-e-post</label><input type="email" value={draft.senderEmail} onChange={e=>setDraft(p=>({...p,senderEmail:e.target.value}))} style={{...I(),minHeight:M?46:42}}/></div>
+          </div>
+          <div style={{marginBottom:10}}><label style={lbl}>Beskrivning</label><input value={draft.beskrivning} onChange={e=>setDraft(p=>({...p,beskrivning:e.target.value}))} style={{...I(),minHeight:M?46:42}}/></div>
+          <div style={{marginBottom:12}}><label style={lbl}>Färg</label><div style={{display:"flex",gap:7,flexWrap:"wrap",marginTop:4}}>
+            {COLORS.map(col=><button key={col} onClick={()=>setDraft(p=>({...p,farg:col}))} style={{width:28,height:28,borderRadius:"50%",background:col,border:`3px solid ${draft.farg===col?"#fff":"transparent"}`,cursor:"pointer",outline:draft.farg===col?`2px solid ${col}`:"none",outlineOffset:2}}/>)}
+            <input type="color" value={draft.farg} onChange={e=>setDraft(p=>({...p,farg:e.target.value}))} style={{width:28,height:28,borderRadius:"50%",border:"none",cursor:"pointer",padding:0}}/>
+          </div></div>
+          <div style={{display:"flex",gap:8}}><button onClick={save} disabled={!draft.namn} style={{...btn("primary",M),flex:2,justifyContent:"center",minHeight:M?48:42}}>💾 Spara</button><button onClick={()=>setEditing(null)} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:M?48:42}}>Avbryt</button></div>
+        </div>
+      )}
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {kontexter.map(k=>{const isAkt=k.id===aktivKontextId;const cnt=taggedCount(k.id);return(
+          <div key={k.id} style={{...card({borderColor:k.farg+(isAkt?"88":"33"),padding:"14px 16px"})}}>
+            <div style={{display:"flex",alignItems:"flex-start",gap:12,justifyContent:"space-between"}}>
+              <div style={{display:"flex",gap:10,alignItems:"flex-start",flex:1,minWidth:0}}>
+                <div style={{width:14,height:14,borderRadius:"50%",background:k.farg,flexShrink:0,marginTop:3}}/>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap",marginBottom:3}}><span style={{fontWeight:700,fontSize:14}}>{k.namn}</span>{isAkt&&<Chip color={k.farg} sm>Aktiv</Chip>}<Chip color={C.muted} sm>{cnt} föreningar</Chip></div>
+                  {k.beskrivning&&<div style={{fontSize:12,color:C.muted}}>{k.beskrivning}</div>}
+                  <div style={{display:"flex",gap:10,fontSize:11,color:C.muted,flexWrap:"wrap",marginTop:3}}>{k.metricLabel&&<span>📊 {k.metricLabel}</span>}{k.senderName&&<span>✉️ {k.senderName}</span>}</div>
+                </div>
+              </div>
+              <div style={{display:"flex",gap:5,flexShrink:0}}>
+                {!isAkt&&<button onClick={()=>saveAktivKontext&&saveAktivKontext(k.id)} style={{...btn("ghost"),padding:"5px 10px",fontSize:11,minHeight:32,color:k.farg,borderColor:k.farg+"44"}}>Aktivera</button>}
+                <button onClick={()=>{setDraft({...k});setEditing(k.id);}} style={{...btn("ghost"),padding:"5px 10px",fontSize:11,minHeight:32}}>✎</button>
+                {kontexter.length>1&&<button onClick={()=>del(k.id)} style={{...btn("ghost"),padding:"5px 10px",fontSize:11,minHeight:32,color:C.red,borderColor:"rgba(239,68,68,0.3)"}}>✕</button>}
+              </div>
+            </div>
+          </div>
+        );})}
+      </div>
+    </div>
+  );
+}
+
+// ── BrevoStatus ───────────────────────────────────────────────────────────────
+
+// ── WorkerCopyButton – Cloudflare Worker script copy ─────────────────────────
+const WORKER_SCRIPT=`export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    const target = url.searchParams.get("url");
+    if (!target) return new Response("Missing ?url=", { status: 400 });
+    const resp = await fetch(target, {
+      method: request.method,
+      headers: request.headers,
+      body: request.method !== "GET" ? request.body : undefined,
+    });
+    const body = await resp.text();
+    return new Response(body, {
+      status: resp.status,
+      headers: {
+        "content-type": resp.headers.get("content-type") || "application/json",
+        "access-control-allow-origin": "*",
+        "access-control-allow-headers": "*",
+        "access-control-allow-methods": "GET,POST,PUT,DELETE,OPTIONS",
+      },
+    });
+  },
+};`;
+
+function WorkerCopyButton(){
+  const [copied,setCopied]=useState(false);
+  const copy=()=>{
+    if(navigator.clipboard)navigator.clipboard.writeText(WORKER_SCRIPT).catch(()=>{});
+    setCopied(true);setTimeout(()=>setCopied(false),2500);
+  };
+  return(
+    <div>
+      <div style={{fontFamily:"monospace",fontSize:9,color:"#58a6ff",lineHeight:1.6,whiteSpace:"pre",overflow:"auto",maxHeight:120}}>{WORKER_SCRIPT}</div>
+      <button onClick={copy} style={{marginTop:8,...btn(copied?"ghost":"primary"),padding:"4px 14px",fontSize:11,minHeight:28,background:copied?"rgba(34,197,94,0.15)":C.blue,border:copied?`1px solid ${C.green}`:"none",color:copied?C.green:"#fff"}}>
+        {copied?"✓ Kopierat!":"📋 Kopiera Worker-koden"}
+      </button>
+    </div>
+  );
+}
