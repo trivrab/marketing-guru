@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 if(typeof window!=='undefined'&&!window.storage){window.storage={get:async k=>{const v=localStorage.getItem(k);return v!==null?{key:k,value:v}:null;},set:async(k,v)=>{localStorage.setItem(k,v);return{key:k,value:v};},delete:async k=>{localStorage.removeItem(k);return{key:k,deleted:true};},list:async p=>{const keys=Object.keys(localStorage).filter(k=>!p||k.startsWith(p));return{keys};}}}
 
 
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS];
+
 const INIT_KONTEXTER=[
   {id:"gepant",namn:"Ge Pant",farg:"#2dd4bf",beskrivning:"Pilotlansering – partnerföreningar ger sin pant digitalt.",metricLabel:"Pantade burkar",senderName:"Marketing Guru",senderEmail:"",aktiv:true},
   {id:"saljpant",namn:"Sälja Pant",farg:"#22c55e",beskrivning:"Föreningar säljer pant och tjänar pengar.",metricLabel:"Såld pant (kr)",senderName:"Marketing Guru",senderEmail:"",aktiv:false},
@@ -88,7 +90,45 @@ const DALARNA = [
   {id:114,namn:"Borlänge Flygklubb",epost:"bfk@bfk.nu",epostOrdf:"",ort:"Borlänge",kommun:"Borlänge",idrott:"Flygsport",burkar:0,skickadeMail:3,ordforande:"Kontakt",telefon:"",lan:"Dalarna",ant:"",mailLog:ml1("bfk@bfk.nu"),kontaktIds:[215],taggar:["gepant"]},
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA];
+const GOTLAND=[
+  {id:300,namn:"Gotland Dart Club",epost:"",epostOrdf:"",ort:"Visby",kommun:"Gotland",idrott:"Dart",burkar:2750,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[300],taggar:[]},
+  {id:301,namn:"IF Hansa Hoburg Fotboll Senior",epost:"",epostOrdf:"",ort:"Grötlingbo",kommun:"Gotland",idrott:"Fotboll",burkar:2439,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[301],taggar:[]},
+  {id:302,namn:"Väskinde AIS P12/13",epost:"",epostOrdf:"",ort:"Väskinde",kommun:"Gotland",idrott:"Fotboll",burkar:2384,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[302],taggar:[]},
+  {id:303,namn:"Visby AIK",epost:"",epostOrdf:"",ort:"Visby",kommun:"Gotland",idrott:"Fleridrott",burkar:2000,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[303],taggar:[]},
+  {id:304,namn:"Visby AK",epost:"",epostOrdf:"",ort:"Visby",kommun:"Gotland",idrott:"Friidrott",burkar:996,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[304],taggar:[]},
+  {id:305,namn:"Stånga IF",epost:"",epostOrdf:"",ort:"Stånga",kommun:"Gotland",idrott:"Fleridrott",burkar:750,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[305],taggar:[]},
+  {id:306,namn:"IF Hansa-Hoburg Gymnastik",epost:"",epostOrdf:"",ort:"Grötlingbo",kommun:"Gotland",idrott:"Gymnastik",burkar:650,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[306],taggar:[]},
+  {id:307,namn:"P18 IK",epost:"",epostOrdf:"",ort:"Visby",kommun:"Gotland",idrott:"Fleridrott",burkar:535,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[307],taggar:[]},
+  {id:308,namn:"Gotlands Bro OK",epost:"",epostOrdf:"",ort:"Bro",kommun:"Gotland",idrott:"Orientering",burkar:250,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[308],taggar:[]},
+  {id:309,namn:"Väskinde AIS",epost:"",epostOrdf:"",ort:"Väskinde",kommun:"Gotland",idrott:"Fleridrott",burkar:191,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[309],taggar:[]},
+  {id:310,namn:"Dalhem IF",epost:"",epostOrdf:"",ort:"Dalhem",kommun:"Gotland",idrott:"Fleridrott",burkar:156,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[310],taggar:[]},
+  {id:311,namn:"MK Gutarna",epost:"",epostOrdf:"",ort:"Visby",kommun:"Gotland",idrott:"Motorsport",burkar:135,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[311],taggar:[]},
+  {id:312,namn:"IFK Visby",epost:"",epostOrdf:"",ort:"Visby",kommun:"Gotland",idrott:"Fleridrott",burkar:130,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[312],taggar:[]},
+  {id:313,namn:"Föreningen TG Hästverksamhet",epost:"",epostOrdf:"",ort:"Visby",kommun:"Gotland",idrott:"Ridsport",burkar:77,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[313],taggar:[]},
+  {id:314,namn:"Mulde VK",epost:"",epostOrdf:"",ort:"Mulde",kommun:"Gotland",idrott:"Volleyboll",burkar:41,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[314],taggar:[]},
+  {id:315,namn:"Endre Skyttegille",epost:"",epostOrdf:"",ort:"Endre",kommun:"Gotland",idrott:"Skytte",burkar:2,skickadeMail:0,ordforande:"",telefon:"",lan:"Gotland",ant:"",mailLog:[],kontaktIds:[315],taggar:[]},
+];
+
+const GOTLAND_CONTACTS=[
+  {id:300,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:300,anteckningar:"Gotland Dart Club"},
+  {id:301,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:301,anteckningar:"IF Hansa Hoburg Fotboll"},
+  {id:302,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:302,anteckningar:"Väskinde AIS P12/13"},
+  {id:303,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:303,anteckningar:"Visby AIK"},
+  {id:304,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:304,anteckningar:"Visby AK"},
+  {id:305,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:305,anteckningar:"Stånga IF"},
+  {id:306,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:306,anteckningar:"IF Hansa-Hoburg Gymnastik"},
+  {id:307,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:307,anteckningar:"P18 IK"},
+  {id:308,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:308,anteckningar:"Gotlands Bro OK"},
+  {id:309,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:309,anteckningar:"Väskinde AIS"},
+  {id:310,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:310,anteckningar:"Dalhem IF"},
+  {id:311,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:311,anteckningar:"MK Gutarna"},
+  {id:312,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:312,anteckningar:"IFK Visby"},
+  {id:313,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:313,anteckningar:"Föreningen TG Hästverksamhet"},
+  {id:314,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:314,anteckningar:"Mulde VK"},
+  {id:315,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:315,anteckningar:"Endre Skyttegille"},
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND];
 
 // ── Förifylld kampanjhistorik ─────────────────────────────────────────────────
 const INIT_CAMP=[
@@ -372,7 +412,7 @@ export default function App(){
   const [tab,setTab]=useState("oversikt");
   const [fr,setFr]=useState(INIT_FR);
   const [camp,setCamp]=useState(INIT_CAMP);
-  const [contacts,setContacts]=useState(INIT_CONTACTS);
+  const [contacts,setContacts]=useState(INIT_CONTACTS_ALL);
   const [cfg,setCfg]=useState({apiKey:"",senderName:"Marketing Guru",senderEmail:"",preferOrdf:false,proxyUrl:""});
   const [templates,setTemplates]=useState(TEMPLATES);
   const [kontexter,setKontexter]=useState(INIT_KONTEXTER);
@@ -383,7 +423,7 @@ export default function App(){
   useEffect(()=>{
     (async()=>{
       try{const r=await window.storage.get("bd5_fr");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(f=>f.id));setFr([...s,...INIT_FR.filter(f=>!ids.has(f.id))]);}else setFr(INIT_FR);}catch{setFr(INIT_FR);}
-      try{const r=await window.storage.get("bd5_contacts");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(c=>c.id));setContacts([...s,...INIT_CONTACTS.filter(c=>!ids.has(c.id))]);}else setContacts(INIT_CONTACTS);}catch{setContacts(INIT_CONTACTS);}
+      try{const r=await window.storage.get("bd5_contacts");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(c=>c.id));setContacts([...s,...INIT_CONTACTS_ALL.filter(c=>!ids.has(c.id))]);}else setContacts(INIT_CONTACTS_ALL);}catch{setContacts(INIT_CONTACTS_ALL);}
       try{const r=await window.storage.get("bd5_camp");if(r?.value)setCamp(JSON.parse(r.value));}catch{}
       try{const r=await window.storage.get("bd5_cfg");if(r?.value)setCfg(JSON.parse(r.value));}catch{}
       try{const r=await window.storage.get("bd5_kontexter");if(r?.value)setKontexter(JSON.parse(r.value));}catch{}
