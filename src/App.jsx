@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-// localStorage polyfill for window.storage (Claude.ai artifact API)
+// localStorage polyfill for window.storage
 if (typeof window !== 'undefined' && !window.storage) {
   window.storage = {
     get: async (key) => { const v=localStorage.getItem(key); return v!==null?{key,value:v}:null; },
@@ -159,12 +159,55 @@ Som partnerförening får {{namn}}:
 • 50% lägre abonnemangspris for life
 
 Ansök här: https://www.bottledrop.se/
-Mer information: https://www.bottledrop.se/
 
 Vi väljer partnerföreningar löpande.
 
 Allt gott,
-{{avsandare}}`
+{{avsandare}}`,
+    html:`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f4f4f5;font-family:Aptos,Arial,Helvetica,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07)">
+  <!-- Header -->
+  <tr><td style="background:#0f172a;padding:24px 32px;text-align:center">
+    <div style="color:#2dd4bf;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">BottleDROP</div>
+    <div style="color:#ffffff;font-size:22px;font-weight:700;line-height:1.3">Ge Pant — Pilotlansering</div>
+    <div style="color:#94a3b8;font-size:13px;margin-top:6px">Vi söker 5 partnerföreningar</div>
+  </td></tr>
+  <!-- Body -->
+  <tr><td style="padding:32px 32px 24px">
+    <p style="margin:0 0 16px;font-size:15px;color:#1e293b;line-height:1.6">Hej {{namn}}!</p>
+    <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.7">Vi lanserar just nu <strong>BottleDROP – Ge Pant</strong> — en ny plattform som gör det enklare för människor att ge sin pant till lokala föreningar.</p>
+    <p style="margin:0 0 20px;font-size:15px;color:#374151;line-height:1.7">Vi söker <strong>5 partnerföreningar</strong> som vill få tidig access till plattformen och vara med under pilotlanseringen.</p>
+    <!-- Benefits -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:8px;margin-bottom:24px">
+      <tr><td style="padding:20px 24px">
+        <div style="font-size:12px;font-weight:700;color:#2dd4bf;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">Som partnerförening får {{namn}}</div>
+        <table cellpadding="0" cellspacing="0">
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b">Kostnadsfri access under pilotlanseringen</span></td></tr>
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b">Möjlighet att påverka utvecklingen</span></td></tr>
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b">Prioriterad support</span></td></tr>
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b"><strong>50% lägre abonnemangspris for life</strong></span></td></tr>
+        </table>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 24px;font-size:14px;color:#64748b;line-height:1.6">Vi väljer partnerföreningar löpande — platserna är begränsade.</p>
+    <!-- CTA -->
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:28px">
+      <tr><td style="background:#2dd4bf;border-radius:8px;padding:14px 28px;text-align:center">
+        <a href="https://www.bottledrop.se/" style="color:#0f172a;font-size:15px;font-weight:700;text-decoration:none">Ansök om partnerskap →</a>
+      </td></tr>
+    </table>
+    <p style="margin:0;font-size:14px;color:#64748b;line-height:1.6">Mer information: <a href="https://www.bottledrop.se/" style="color:#2dd4bf">www.bottledrop.se</a></p>
+  </td></tr>
+  <!-- Footer -->
+  <tr><td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0">
+    <p style="margin:0;font-size:13px;color:#94a3b8">Allt gott,<br><strong style="color:#374151">{{avsandare}}</strong></p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`
   },
   {
     id:"mail2",
@@ -184,7 +227,38 @@ Platserna är begränsade och vi väljer löpande. Det här erbjudandet ges inte
 Ansök här: https://www.bottledrop.se/
 
 Allt gott,
-{{avsandare}}`
+{{avsandare}}`,
+    html:`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f4f4f5;font-family:Aptos,Arial,Helvetica,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07)">
+  <tr><td style="background:#0f172a;padding:20px 32px;text-align:center">
+    <div style="color:#2dd4bf;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase">BottleDROP – Ge Pant</div>
+  </td></tr>
+  <tr><td style="padding:32px 32px 24px">
+    <p style="margin:0 0 16px;font-size:15px;color:#1e293b;line-height:1.6">Hej {{namn}}!</p>
+    <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.7">Jag hörde av mig förra veckan angående Ge Pant. Ville bara följa upp kort.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border-left:3px solid #22c55e;border-radius:0 8px 8px 0;margin-bottom:20px">
+      <tr><td style="padding:16px 20px">
+        <div style="font-size:13px;font-weight:700;color:#16a34a;margin-bottom:8px">Kort om vad Ge Pant löser</div>
+        <p style="margin:0;font-size:14px;color:#374151;line-height:1.7">Idag missar många föreningar insamlingar för att det är för omständligt för givarna att bidra när de inte är på plats. Med Ge Pant kan föreningens givare ge sin pant direkt från mobilen, när som helst och var som helst.</p>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.7">Vi onboardar partnerföreningar löpande, <strong>en i taget</strong>, och erbjuder personlig hjälp under hela processen.</p>
+    <p style="margin:0 0 24px;font-size:14px;color:#64748b;line-height:1.6">Platserna är begränsade och vi väljer löpande. Det här erbjudandet ges inte igen efter lansering.</p>
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+      <tr><td style="background:#2dd4bf;border-radius:8px;padding:14px 28px">
+        <a href="https://www.bottledrop.se/" style="color:#0f172a;font-size:15px;font-weight:700;text-decoration:none">Ansök om partnerskap →</a>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0">
+    <p style="margin:0;font-size:13px;color:#94a3b8">Allt gott,<br><strong style="color:#374151">{{avsandare}}</strong></p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`
   },
   {
     id:"mail3",
@@ -207,16 +281,58 @@ Om {{namn}} är intresserade: ansök på https://www.bottledrop.se/ så återkom
 Vi väljer partnerföreningar löpande – villkoren efter lansering kommer att se annorlunda ut.
 
 Allt gott,
-{{avsandare}}`
+{{avsandare}}`,
+    html:`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f4f4f5;font-family:Aptos,Arial,Helvetica,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07)">
+  <tr><td style="background:#0f172a;padding:24px 32px;text-align:center">
+    <div style="color:#f59e0b;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Sista chansen</div>
+    <div style="color:#ffffff;font-size:20px;font-weight:700">BottleDROP – Ge Pant</div>
+    <div style="color:#94a3b8;font-size:13px;margin-top:6px">Pilotplatsen snart full</div>
+  </td></tr>
+  <!-- Urgency bar -->
+  <tr><td style="background:#fef3c7;padding:12px 32px;text-align:center;border-bottom:1px solid #fde68a">
+    <span style="font-size:13px;color:#92400e;font-weight:600">⚡ Platserna fylls löpande – begränsat antal kvar</span>
+  </td></tr>
+  <tr><td style="padding:32px 32px 24px">
+    <p style="margin:0 0 16px;font-size:15px;color:#1e293b;line-height:1.6">Hej {{namn}}!</p>
+    <p style="margin:0 0 20px;font-size:15px;color:#374151;line-height:1.7">Sista gången jag hör av mig om det här. De föreningar som är med nu låser in villkor som <strong>inte erbjuds igen</strong>:</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:8px;margin-bottom:24px">
+      <tr><td style="padding:20px 24px">
+        <table cellpadding="0" cellspacing="0">
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b">Kostnadsfri access under pilotlanseringen</span></td></tr>
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b">Möjlighet att påverka utvecklingen</span></td></tr>
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b">Prioriterad support</span></td></tr>
+          <tr><td style="padding:5px 0"><span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span><span style="font-size:14px;color:#1e293b"><strong>50% lägre abonnemangspris for life</strong></span></td></tr>
+        </table>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 24px;font-size:14px;color:#374151;line-height:1.7">Om {{namn}} är intresserade: ansök nedan så återkommer vi direkt.</p>
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:20px">
+      <tr><td style="background:#f59e0b;border-radius:8px;padding:14px 28px">
+        <a href="https://www.bottledrop.se/" style="color:#0f172a;font-size:15px;font-weight:700;text-decoration:none">Ansök nu →</a>
+      </td></tr>
+    </table>
+    <p style="margin:0;font-size:13px;color:#94a3b8;line-height:1.6">Villkoren efter lansering kommer att se annorlunda ut.</p>
+  </td></tr>
+  <tr><td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0">
+    <p style="margin:0;font-size:13px;color:#94a3b8">Allt gott,<br><strong style="color:#374151">{{avsandare}}</strong></p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`
   },
   {
     id:"custom",
     namn:"✏️ Eget meddelande",
     steg:null,
     subject:"",
-    body:""
+    body:"",
+    html:""
   },
-];
+]
 
 const ROLLER=["Ordförande","Vice ordförande","Kassör","Sekreterare","Styrelseledamot","Tränare","Kansliansvarig","Kontakt","Annan"];
 
@@ -885,7 +1001,16 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     return fetch(url,{headers:{"accept":"application/json","api-key":cfg.apiKey}});
   };
 
-  const makeHtml=text=>`<div style="font-family:Aptos,Arial,sans-serif;max-width:580px;margin:auto;padding:28px;color:#1e293b;line-height:1.7">${text.split("\n").map(l=>l.trim()?`<p style="margin:0 0 10px">${l}</p>`:"<p style='margin:0 0 6px'></p>").join("")}</div>`;
+  const makeHtml=(text,htmlTmpl,f,senderName)=>{
+    if(htmlTmpl){
+      // Use rich HTML template with variable substitution
+      return fill(htmlTmpl,f,senderName);
+    }
+    // Fallback: convert plain text to simple HTML
+    return `<div style="font-family:Aptos,Arial,sans-serif;max-width:580px;margin:auto;padding:28px;color:#1e293b;line-height:1.7">${text.split("\n").map(l=>l.trim()?`<p style="margin:0 0 10px">${l}</p>`:"<p style='margin:0 0 6px'></p>").join("")}</div>`;
+  };
+  // Find active template's html field
+  const getHtmlTmpl=()=>{const t=activeTemplates.find(t=>t.id===tmpl);return t?.html||null;};
 
   const sendAll=async()=>{
     if(!cfg.apiKey||!cfg.senderEmail||!selList.length)return;
@@ -895,7 +1020,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
       const recs=getRecipients(f);
       if(!recs.length){res.push({id:f.id,namn:f.namn,ok:false,msg:"Ingen e-post"});continue;}
       try{
-        const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName)),textContent:fill(body,f,cfg.senderName)});
+        const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:fill(body,f,cfg.senderName)});
         if(r.ok){
           res.push({id:f.id,namn:f.namn,ok:true});
           const now=new Date().toLocaleDateString("sv-SE")+" "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
@@ -919,7 +1044,8 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     setTestSending(true);setTestResult(null);
     const f=selList[0];
     try{
-      const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:[{email:testEmail,name:"Test"}],subject:"[TEST] "+fill(subj,f,cfg.senderName),htmlContent:`<div style="background:#fff3cd;padding:8px 14px;font-family:sans-serif;font-size:11px;color:#856404">⚠️ Testmail – data från: ${f.namn}</div>`+makeHtml(fill(body,f,cfg.senderName)),textContent:"[TEST] "+fill(body,f,cfg.senderName)});
+      const testBanner=`<div style="background:#fff3cd;padding:8px 14px;font-family:sans-serif;font-size:11px;color:#856404;border-bottom:2px solid #ffc107">⚠️ TESTMAIL – personaliserat med data från: <strong>${f.namn}</strong></div>`;
+      const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:[{email:testEmail,name:"Test"}],subject:"[TEST] "+fill(subj,f,cfg.senderName),htmlContent:testBanner+makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:"[TEST] "+fill(body,f,cfg.senderName)});
       if(r.ok)setTestResult({ok:true,msg:"✓ Testmail skickat till "+testEmail});
       else{const e=await r.json().catch(()=>({}));setTestResult({ok:false,msg:e.message||"HTTP "+r.status});}
     }catch(e){setTestResult({ok:false,msg:e.message});}
