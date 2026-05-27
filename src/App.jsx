@@ -1169,7 +1169,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
           <Sidebar/>
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
             {/* Preview list */}
-            <MailPreviewList selList={selList} subj={subj} body={body} cfg={cfg} getRecipients={getRecipients} hasDual={hasDual} M={M}/>
+            <MailPreviewList selList={selList} subj={subj} body={body} htmlTmpl={getHtmlTmpl()} cfg={cfg} getRecipients={getRecipients} hasDual={hasDual} M={M}/>
 
             {/* Testmail */}
             <div style={{...card({borderColor:C.amber+"44",background:"rgba(245,158,11,0.03)"})}}>
@@ -1216,33 +1216,46 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
 }
 
 // ── MailPreviewList ────────────────────────────────────────────────────────────
-function MailPreviewList({selList,subj,body,cfg,getRecipients,hasDual,M}){
+function MailPreviewList({selList,subj,body,htmlTmpl,cfg,getRecipients,hasDual,M}){
   const [expanded,setExpanded]=useState({});
+  const [previewMode,setPreviewMode]=useState(htmlTmpl?"html":"text"); // html | text
   const [showAll,setShowAll]=useState(false);
   const visible=showAll?selList:selList.slice(0,6);
   const toggleAll=()=>{const allOpen=visible.every(f=>expanded[f.id]);const n={};selList.forEach(f=>{n[f.id]=!allOpen;});setExpanded(n);};
   return(
     <div style={{...card({padding:0,overflow:"hidden"})}}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",background:"rgba(59,130,246,0.07)",borderBottom:`1px solid ${C.border}`}}>
-        <div style={{fontWeight:600,fontSize:13}}>📋 {selList.length} mottagare – klicka för förhandsgranskning</div>
-        <button onClick={toggleAll} style={{...btn("ghost"),padding:"3px 10px",fontSize:11,minHeight:28}}>
-          {visible.every(f=>expanded[f.id])?"Fäll ihop alla":"Expandera alla"}
-        </button>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",background:"rgba(59,130,246,0.07)",borderBottom:`1px solid ${C.border}`,flexWrap:"wrap",gap:8}}>
+        <div style={{fontWeight:600,fontSize:13}}>📋 {selList.length} mottagare</div>
+        <div style={{display:"flex",gap:6,alignItems:"center"}}>
+          {htmlTmpl&&(
+            <div style={{display:"flex",border:`1px solid ${C.border}`,borderRadius:7,overflow:"hidden"}}>
+              {[["html","🌐 HTML"],["text","📝 Text"]].map(([v,l])=>(
+                <button key={v} onClick={()=>setPreviewMode(v)} style={{background:previewMode===v?C.blue:"transparent",border:"none",color:previewMode===v?"#fff":C.muted,padding:"4px 12px",cursor:"pointer",fontFamily:"inherit",fontSize:11,fontWeight:600,WebkitTapHighlightColor:"transparent"}}>{l}</button>
+              ))}
+            </div>
+          )}
+          <button onClick={toggleAll} style={{...btn("ghost"),padding:"3px 10px",fontSize:11,minHeight:28}}>
+            {visible.every(f=>expanded[f.id])?"Fäll ihop":"Expandera alla"}
+          </button>
+        </div>
       </div>
-      <div style={{maxHeight:M?500:560,overflowY:"auto"}}>
+      <div style={{maxHeight:M?500:580,overflowY:"auto"}}>
         {visible.map((f,i)=>{
           const isOpen=expanded[f.id];
           const recs=getRecipients(f);
-          const pSubj=fill(subj,f,cfg.senderName||"Marketing Guru");
-          const pBody=fill(body,f,cfg.senderName||"Marketing Guru");
+          const sn=cfg.senderName||"Marketing Guru";
+          const pSubj=fill(subj,f,sn);
+          const pBody=fill(body,f,sn);
+          const pHtml=htmlTmpl?fill(htmlTmpl,f,sn):null;
           return(
             <div key={f.id} style={{borderBottom:i<visible.length-1?`1px solid ${C.border}`:"none"}}>
+              {/* Row header */}
               <div onClick={()=>setExpanded(e=>({...e,[f.id]:!e[f.id]}))} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",cursor:"pointer",background:isOpen?"rgba(59,130,246,0.05)":"transparent",WebkitTapHighlightColor:"transparent"}}>
                 <span style={{color:isOpen?C.blue:C.muted,fontSize:11,width:12,flexShrink:0,fontWeight:700}}>{isOpen?"▼":"▶"}</span>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontWeight:600,fontSize:13,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</div>
                   <div style={{fontSize:11,color:hasDual(f)?C.teal:C.muted,marginTop:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
-                    {hasDual(f)?<>✉️ {f.epost} <span style={{color:C.border}}>+</span> {f.epostOrdf}</>:recs[0]?.email||"—"}
+                    {hasDual(f)?<>✉️ {f.epost} + {f.epostOrdf}</>:recs[0]?.email||"—"}
                   </div>
                 </div>
                 <div style={{display:"flex",gap:4,flexShrink:0}}>
@@ -1250,13 +1263,40 @@ function MailPreviewList({selList,subj,body,cfg,getRecipients,hasDual,M}){
                   {(f.skickadeMail||0)>0&&<Chip color={C.blue} sm>M{f.skickadeMail}</Chip>}
                 </div>
               </div>
+
+              {/* Expanded preview */}
               {isOpen&&(
-                <div style={{margin:"0 14px 12px",borderRadius:9,overflow:"hidden",border:"1px solid #e2e8f0",background:"#fff"}}>
-                  <div style={{background:"#f1f5f9",padding:"9px 14px",borderBottom:"1px solid #e2e8f0"}}>
-                    <div style={{fontSize:10,color:"#64748b",marginBottom:3}}>Från: {cfg.senderName||"Marketing Guru"} &lt;{cfg.senderEmail||"..."}&gt; → {recs.map(r=>r.email).join(", ")}</div>
-                    <div style={{fontSize:13,fontWeight:700,color:"#1e293b"}}>{pSubj}</div>
+                <div style={{margin:"0 14px 14px",borderRadius:9,overflow:"hidden",border:"1px solid #e2e8f0"}}>
+                  {/* Header */}
+                  <div style={{background:"#f1f5f9",padding:"9px 14px",borderBottom:"1px solid #e2e8f0",display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8,flexWrap:"wrap"}}>
+                    <div>
+                      <div style={{fontSize:10,color:"#64748b",marginBottom:2}}>
+                        Från: <strong>{cfg.senderName||"Marketing Guru"}</strong> &lt;{cfg.senderEmail||"..."}&gt; → {recs.map(r=>r.email).join(", ")}
+                      </div>
+                      <div style={{fontSize:13,fontWeight:700,color:"#1e293b"}}>{pSubj}</div>
+                    </div>
+                    {pHtml&&(
+                      <div style={{display:"flex",border:"1px solid #e2e8f0",borderRadius:6,overflow:"hidden",flexShrink:0}}>
+                        {[["html","🌐 HTML"],["text","📝 Text"]].map(([v,l])=>(
+                          <button key={v} onClick={e=>{e.stopPropagation();setPreviewMode(v);}} style={{background:previewMode===v?"#3b82f6":"transparent",border:"none",color:previewMode===v?"#fff":"#64748b",padding:"3px 10px",cursor:"pointer",fontFamily:"inherit",fontSize:10,fontWeight:600}}>{l}</button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div style={{padding:"14px",color:"#1e293b",fontSize:12,lineHeight:1.8,fontFamily:"Georgia,serif",maxHeight:220,overflowY:"auto"}} dangerouslySetInnerHTML={{__html:pBody.split("\n").map(l=>l.trim()?`<p style="margin:0 0 8px">${l}</p>`:"<p style='margin:0 0 4px'></p>").join("")}}/>
+
+                  {/* Content */}
+                  {previewMode==="html"&&pHtml?(
+                    <iframe
+                      srcDoc={pHtml}
+                      style={{width:"100%",height:M?360:420,border:"none",background:"#fff",display:"block"}}
+                      title={`HTML preview – ${f.namn}`}
+                      sandbox="allow-same-origin"
+                    />
+                  ):(
+                    <div style={{padding:"16px 18px",color:"#1e293b",fontSize:13,lineHeight:1.8,fontFamily:"Georgia,serif",maxHeight:300,overflowY:"auto",background:"#fff",whiteSpace:"pre-wrap"}}>
+                      {pBody||"(tomt)"}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
