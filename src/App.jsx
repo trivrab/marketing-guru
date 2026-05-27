@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 
-// localStorage polyfill for window.storage
-if (typeof window !== 'undefined' && !window.storage) {
-  window.storage = {
-    get: async (key) => { const v=localStorage.getItem(key); return v!==null?{key,value:v}:null; },
-    set: async (key,value) => { localStorage.setItem(key,value); return {key,value}; },
-    delete: async (key) => { localStorage.removeItem(key); return {key,deleted:true}; },
-    list: async (prefix) => { const keys=Object.keys(localStorage).filter(k=>!prefix||k.startsWith(prefix)); return {keys}; },
-  };
-}
+// localStorage polyfill
+if(typeof window!=='undefined'&&!window.storage){window.storage={get:async k=>{const v=localStorage.getItem(k);return v!==null?{key:k,value:v}:null;},set:async(k,v)=>{localStorage.setItem(k,v);return{key:k,value:v};},delete:async k=>{localStorage.removeItem(k);return{key:k,deleted:true};},list:async p=>{const keys=Object.keys(localStorage).filter(k=>!p||k.startsWith(p));return{keys};}}}
 
 
 const INIT_KONTEXTER=[
@@ -1010,7 +1003,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     return `<div style="font-family:Aptos,Arial,sans-serif;max-width:580px;margin:auto;padding:28px;color:#1e293b;line-height:1.7">${text.split("\n").map(l=>l.trim()?`<p style="margin:0 0 10px">${l}</p>`:"<p style='margin:0 0 6px'></p>").join("")}</div>`;
   };
   // Find active template's html field
-  const getHtmlTmpl=()=>{const t=activeTemplates.find(t=>t.id===tmpl);return t?.html||null;};
+  const getHtmlTmpl=()=>{const t=T.find(t=>t.id===tmpl);return t?.html||null;};
 
   const sendAll=async()=>{
     if(!cfg.apiKey||!cfg.senderEmail||!selList.length)return;
