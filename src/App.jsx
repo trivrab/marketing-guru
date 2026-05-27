@@ -3,22 +3,10 @@ import { useState, useEffect } from "react";
 // localStorage polyfill for window.storage (Claude.ai artifact API)
 if (typeof window !== 'undefined' && !window.storage) {
   window.storage = {
-    get: async (key) => {
-      const value = localStorage.getItem(key);
-      return value !== null ? { key, value } : null;
-    },
-    set: async (key, value) => {
-      localStorage.setItem(key, value);
-      return { key, value };
-    },
-    delete: async (key) => {
-      localStorage.removeItem(key);
-      return { key, deleted: true };
-    },
-    list: async (prefix) => {
-      const keys = Object.keys(localStorage).filter(k => !prefix || k.startsWith(prefix));
-      return { keys };
-    },
+    get: async (key) => { const v=localStorage.getItem(key); return v!==null?{key,value:v}:null; },
+    set: async (key,value) => { localStorage.setItem(key,value); return {key,value}; },
+    delete: async (key) => { localStorage.removeItem(key); return {key,deleted:true}; },
+    list: async (prefix) => { const keys=Object.keys(localStorage).filter(k=>!prefix||k.startsWith(prefix)); return {keys}; },
   };
 }
 
@@ -1452,7 +1440,7 @@ function Installningar({cfg,saveCfg,templates:tmplsProp,saveTemplates,kontexter,
 
       {tab==="brevo"&&(
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
-          <BrevoStatus cfg={cfg} brevoGet={brevoGet}/>
+          <BrevoStatus cfg={cfg}/>
           <div style={{...card({borderColor:C.blue+"44"})}}>
             <div style={{fontWeight:600,fontSize:13,marginBottom:12}}>🔑 API-nyckel</div>
             <label style={lbl}>Brevo API-nyckel</label>
@@ -1639,6 +1627,69 @@ function KontexterEditor({kontexter,saveKontexter,aktivKontextId,saveAktivKontex
 }
 
 // ── BrevoStatus ───────────────────────────────────────────────────────────────
+function BrevoStatus({cfg,brevoGet}){
+  const [status,setStatus]=useState(null);
+  const check=async()=>{
+    if(!cfg.apiKey){setStatus({ok:false,msg:"Ingen API-nyckel angiven"});return;}
+    setStatus("checking");
+    const doGet=brevoGet||(async p=>fetch("https://api.brevo.com"+p,{headers:{"accept":"application/json","api-key":cfg.apiKey}}));
+    try{
+      const r=await doGet("/v3/account");
+      if(!r.ok){const e=await r.json().catch(()=>({}));setStatus({ok:false,msg:e.message||"HTTP "+r.status});return;}
+      const acct=await r.json();
+      const r2=await doGet("/v3/senders");
+      const senders=(r2.ok?(await r2.json()).senders||[]:[]).filter(s=>s.active);
+      setStatus({ok:true,name:acct.firstName+" "+acct.lastName,plan:acct.plan?.[0]?.type,senders});
+    }catch(e){setStatus({ok:false,msg:e.message});}
+  };
+  const match=status?.ok&&cfg.senderEmail&&status.senders?.some(s=>s.email===cfg.senderEmail);
+  return(
+    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+        <div style={{...card({borderColor:(cfg.apiKey?C.green:C.red)+"44",padding:"8px 12px",flex:1,minWidth:120})}}>
+          <div style={{fontSize:10,color:C.muted,marginBottom:2}}>🔑 API-nyckel</div>
+          <div style={{fontSize:12,fontWeight:600,color:cfg.apiKey?C.green:C.red}}>{cfg.apiKey?"Inlagd ✓":"Saknas ✗"}</div>
+          {cfg.apiKey&&<div style={{fontSize:10,color:C.muted,fontFamily:"monospace",marginTop:2}}>{cfg.apiKey.slice(0,14)}…</div>}
+        </div>
+        <div style={{...card({borderColor:(cfg.senderEmail?C.green:C.red)+"44",padding:"8px 12px",flex:1,minWidth:120})}}>
+          <div style={{fontSize:10,color:C.muted,marginBottom:2}}>✉️ Avsändare</div>
+          <div style={{fontSize:12,fontWeight:600,color:cfg.senderEmail?C.green:C.red,wordBreak:"break-all"}}>{cfg.senderEmail||"Saknas ✗"}</div>
+          {cfg.senderName&&<div style={{fontSize:10,color:C.muted,marginTop:2}}>{cfg.senderName}</div>}
+        </div>
+        {status?.ok&&<div style={{...card({borderColor:C.blue+"44",padding:"8px 12px",flex:1,minWidth:120})}}>
+          <div style={{fontSize:10,color:C.muted,marginBottom:2}}>👤 Konto</div>
+          <div style={{fontSize:12,fontWeight:600,color:C.blue}}>{status.name}</div>
+          {status.plan&&<div style={{fontSize:10,color:C.muted,marginTop:2}}>{status.plan}</div>}
+        </div>}
+      </div>
+      <button onClick={check} disabled={status==="checking"||!cfg.apiKey} style={{...btn(status?.ok?"ghost":"primary"),justifyContent:"center",minHeight:40,opacity:!cfg.apiKey?0.5:1,borderColor:status?.ok?C.green+"55":"",color:status?.ok?C.green:""}}>
+        {status==="checking"?"⏳ Kontrollerar…":status?.ok?"✓ Verifierad – kontrollera igen":"🔍 Verifiera anslutning"}
+      </button>
+      {status&&status!=="checking"&&(
+        <div style={{...card({borderColor:(status.ok?C.green:C.red)+"44",padding:"12px 14px",background:status.ok?"rgba(34,197,94,0.05)":"rgba(239,68,68,0.05)"})}}>
+          {status.ok?(
+            <div>
+              <div style={{fontWeight:600,fontSize:13,color:C.green,marginBottom:8}}>✓ Anslutning OK</div>
+              {status.senders?.length>0&&<div>
+                <div style={{fontSize:10,color:C.muted,fontWeight:700,textTransform:"uppercase",marginBottom:6}}>Verifierade avsändare</div>
+                {status.senders.map(s=>{const isA=s.email===cfg.senderEmail;return(
+                  <div key={s.id||s.email} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 8px",borderRadius:7,background:isA?"rgba(34,197,94,0.08)":"transparent",marginBottom:3,border:isA?`1px solid ${C.green}44`:"1px solid transparent"}}>
+                    <span style={{color:C.green}}>✓</span>
+                    <div style={{flex:1}}><div style={{fontSize:12,fontWeight:isA?600:400}}>{s.email}</div>{s.name&&<div style={{fontSize:10,color:C.muted}}>{s.name}</div>}</div>
+                    {isA&&<span style={{fontSize:10,fontWeight:700,color:C.green,background:"rgba(34,197,94,0.15)",padding:"2px 7px",borderRadius:8}}>Aktiv ✓</span>}
+                  </div>
+                );})}
+                {cfg.senderEmail&&!match&&<div style={{marginTop:6,fontSize:11,color:C.amber,padding:"6px 8px",background:"rgba(245,158,11,0.07)",borderRadius:7}}>⚠️ {cfg.senderEmail} ej bland verifierade avsändare</div>}
+              </div>}
+            </div>
+          ):(
+            <div style={{color:C.red,fontSize:12}}>✗ {status.msg}</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ── WorkerCopyButton – Cloudflare Worker script copy ─────────────────────────
 const WORKER_SCRIPT=`export default {
