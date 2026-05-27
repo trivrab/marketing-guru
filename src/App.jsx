@@ -1287,6 +1287,7 @@ function MallarAI({templates:rawT,saveTemplates,cfg,fr,M}){
   const [editIdx,setEditIdx]=useState(null);
   const [editDraft,setEditDraft]=useState(null);
   const [previewFr,setPreviewFr]=useState("");
+  const [editMode,setEditMode]=useState("text"); // text | html
   const [genStep,setGenStep]=useState(1);
   const [genForening,setGenForening]=useState("");
   const [genExtra,setGenExtra]=useState("");
@@ -1397,31 +1398,126 @@ function MallarAI({templates:rawT,saveTemplates,cfg,fr,M}){
   );
 
   if(view==="edit"&&editDraft&&editDraft.namn!==undefined)return(
-    <div style={{maxWidth:760}}>
+    <div style={{maxWidth:900}}>
       <BackBar onBack={()=>setView("list")} title={`✎ ${editDraft.namn||"mall"}`} actions={<span style={{color:C.green,fontSize:12}}>{flash}</span>}/>
       <div style={{padding:M?"12px 0":"14px 0",display:"flex",flexDirection:"column",gap:10}}>
+
+        {/* Meta */}
         <div style={card()}>
-          <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr",gap:8,marginBottom:10}}>
+          <div style={{display:"grid",gridTemplateColumns:M?"1fr":"1fr 1fr 1fr",gap:8,marginBottom:10}}>
             <div><label style={lbl}>Mallnamn</label><input value={editDraft.namn||""} onChange={e=>setEditDraft(p=>({...p,namn:e.target.value}))} style={{...I(),minHeight:M?46:42}}/></div>
             <div><label style={lbl}>Steg</label><select value={editDraft.steg||""} onChange={e=>setEditDraft(p=>({...p,steg:e.target.value?parseInt(e.target.value):null}))} style={{...I(),minHeight:M?46:42}}><option value="">Ingen</option><option value="1">Steg 1</option><option value="2">Steg 2</option><option value="3">Steg 3</option></select></div>
+            <div><label style={lbl}>Ämnesrad</label><input value={editDraft.subject||""} onChange={e=>setEditDraft(p=>({...p,subject:e.target.value}))} style={{...I(),minHeight:M?46:42}}/></div>
           </div>
-          <label style={lbl}>Ämnesrad</label>
-          <input value={editDraft.subject||""} onChange={e=>setEditDraft(p=>({...p,subject:e.target.value}))} style={{...I(),marginBottom:10,minHeight:M?46:42}}/>
-          <label style={lbl}>Mailtext</label>
-          <textarea value={editDraft.body||""} onChange={e=>setEditDraft(p=>({...p,body:e.target.value}))} rows={M?14:16} style={{...I(),resize:"vertical",lineHeight:1.7,marginBottom:8}}/>
-          <div style={{marginBottom:12,display:"flex",gap:4,flexWrap:"wrap"}}>{VARS.map(v=><button key={v} onClick={()=>setEditDraft(p=>({...p,body:(p.body||"")+v}))} style={{background:"rgba(59,130,246,0.1)",border:"none",borderRadius:6,padding:"2px 8px",fontSize:10,fontFamily:"monospace",color:C.blue,cursor:"pointer"}}>{v}</button>)}</div>
-          <div style={{display:"flex",gap:8}}>
+        </div>
+
+        {/* Editor tabs: Text | HTML | Preview */}
+        <div style={card()}>
+          <div style={{display:"flex",borderBottom:`1px solid ${C.border}`,marginBottom:12,gap:0}}>
+            {[["text","📝 Plaintext"],["html","🌐 HTML"],["preview","👁 Förhandsgranskning"]].map(([v,l])=>(
+              <button key={v} onClick={()=>setEditMode(v)} style={{background:"none",border:"none",borderBottom:`2px solid ${editMode===v?C.blue:"transparent"}`,cursor:"pointer",fontFamily:"inherit",padding:"8px 14px",fontSize:12,fontWeight:editMode===v?600:400,color:editMode===v?C.text:C.muted}}>
+                {l}
+              </button>
+            ))}
+            <div style={{flex:1}}/>
+            <div style={{display:"flex",gap:4,alignItems:"center",paddingRight:4,flexWrap:"wrap"}}>
+              {VARS.map(v=>(
+                <button key={v} onClick={()=>{
+                  if(editMode==="html")setEditDraft(p=>({...p,html:(p.html||"")+v}));
+                  else setEditDraft(p=>({...p,body:(p.body||"")+v}));
+                }} style={{background:"rgba(59,130,246,0.1)",border:"none",borderRadius:5,padding:"2px 7px",fontSize:9,fontFamily:"monospace",color:C.blue,cursor:"pointer"}}>{v}</button>
+              ))}
+            </div>
+          </div>
+
+          {editMode==="text"&&(
+            <div>
+              <div style={{fontSize:11,color:C.muted,marginBottom:6}}>Ren text – används som fallback och i textbaserade e-postklienter</div>
+              <textarea value={editDraft.body||""} onChange={e=>setEditDraft(p=>({...p,body:e.target.value}))} rows={M?14:18} style={{...I({fontFamily:"monospace",fontSize:12}),resize:"vertical",lineHeight:1.7}}/>
+            </div>
+          )}
+
+          {editMode==="html"&&(
+            <div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,flexWrap:"wrap",gap:6}}>
+                <div style={{fontSize:11,color:C.muted}}>HTML – renderas i moderna e-postklienter</div>
+                <div style={{display:"flex",gap:6}}>
+                  {!editDraft.html&&(
+                    <button onClick={()=>{
+                      // Generate HTML from body text as starting point
+                      const bodyHtml=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f4f4f5;font-family:Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px"><tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07)">
+  <tr><td style="background:#0f172a;padding:20px 32px;text-align:center"><div style="color:#2dd4bf;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase">BottleDROP – Ge Pant</div></td></tr>
+  <tr><td style="padding:32px">${(editDraft.body||"").split("\n").map(l=>l.trim()?`<p style="margin:0 0 14px;font-size:15px;color:#374151;line-height:1.7">${l}</p>`:"").join("")}</td></tr>
+  <tr><td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0"><p style="margin:0;font-size:13px;color:#94a3b8">Allt gott,<br><strong style="color:#374151">{{avsandare}}</strong></p></td></tr>
+</table></td></tr></table></body></html>`;
+                      setEditDraft(p=>({...p,html:bodyHtml}));
+                    }} style={{...btn("ghost"),fontSize:11,minHeight:30,padding:"0 10px",color:C.teal,borderColor:C.teal+"44"}}>
+                      ✨ Generera från text
+                    </button>
+                  )}
+                  {editDraft.html&&(
+                    <button onClick={()=>setEditDraft(p=>({...p,html:""}))} style={{...btn("ghost"),fontSize:11,minHeight:30,padding:"0 10px",color:C.red,borderColor:C.red+"33"}}>
+                      🗑 Rensa HTML
+                    </button>
+                  )}
+                </div>
+              </div>
+              <textarea
+                value={editDraft.html||""}
+                onChange={e=>setEditDraft(p=>({...p,html:e.target.value}))}
+                rows={M?16:22}
+                spellCheck={false}
+                style={{...I({fontFamily:"'Courier New',monospace",fontSize:11,color:"#58a6ff",background:"#0d1117",border:"1px solid #30363d"}),resize:"vertical",lineHeight:1.6,tabSize:2}}
+              />
+              <div style={{fontSize:10,color:C.muted,marginTop:4}}>Använd {"{{namn}}"} {"{{mottagare}}"} {"{{avsandare}}"} {"{{ort}}"} {"{{idrott}}"} som variabler</div>
+            </div>
+          )}
+
+          {editMode==="preview"&&(()=>{
+            const pf=previewFr?fr.find(f=>String(f.id)===previewFr):null;
+            const pd=pf||{namn:"Testföreningen",ordforande:"Mottagaren",ort:"Testorten",idrott:"Idrott",burkar:0};
+            const htmlSrc=editDraft.html?fill(editDraft.html,pd,cfg.senderName||"Marketing Guru"):null;
+            const textSrc=fill(editDraft.body||"",pd,cfg.senderName||"Marketing Guru");
+            return(
+              <div>
+                <div style={{display:"flex",gap:8,marginBottom:10,alignItems:"center",flexWrap:"wrap"}}>
+                  <select value={previewFr} onChange={e=>setPreviewFr(e.target.value)} style={{...I({fontSize:12,padding:"5px 8px",minHeight:36,flex:1,maxWidth:280})}}>
+                    <option value="">Generisk testdata</option>
+                    {fr.filter(f=>hasEmail(f)).slice(0,20).map(f=><option key={f.id} value={f.id}>{f.namn}</option>)}
+                  </select>
+                  {editDraft.html&&(
+                    <div style={{display:"flex",border:`1px solid ${C.border}`,borderRadius:7,overflow:"hidden"}}>
+                      {[["html","🌐 HTML"],["text","📝 Text"]].map(([v,l])=>(
+                        <button key={v} onClick={()=>setEditMode("preview_"+v)} style={{background:editMode==="preview_"+v||(!editMode.includes("_")&&v==="html")?C.blue:"transparent",border:"none",color:editMode==="preview_"+v||(!editMode.includes("_")&&v==="html")?"#fff":C.muted,padding:"5px 12px",cursor:"pointer",fontFamily:"inherit",fontSize:11,fontWeight:600}}>{l}</button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div style={{fontWeight:600,fontSize:12,marginBottom:6,color:C.muted}}>
+                  Ämne: <span style={{color:C.text}}>{fill(editDraft.subject||"",pd,cfg.senderName||"Marketing Guru")}</span>
+                </div>
+                {(htmlSrc&&editMode!=="preview_text")?(
+                  <iframe
+                    srcDoc={htmlSrc}
+                    style={{width:"100%",height:M?400:500,border:`1px solid ${C.border}`,borderRadius:8,background:"#fff"}}
+                    title="HTML preview"
+                    sandbox="allow-same-origin"
+                  />
+                ):(
+                  <div style={{background:"#fff",borderRadius:8,border:`1px solid ${C.border}`,padding:"20px 24px",color:"#1e293b",fontSize:13,lineHeight:1.8,fontFamily:"Georgia,serif",minHeight:200,whiteSpace:"pre-wrap"}}>{textSrc||"(tomt)"}</div>
+                )}
+              </div>
+            );
+          })()}
+
+          <div style={{display:"flex",gap:8,marginTop:14}}>
             <button onClick={saveEdit} style={{...btn("primary",M),flex:2,justifyContent:"center",minHeight:M?50:44}}>💾 Spara</button>
             <button onClick={()=>setView("list")} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:M?50:44}}>Avbryt</button>
           </div>
         </div>
-        <div style={{...card({borderColor:C.amber+"44"})}}>
-          <div style={{fontWeight:600,fontSize:12,marginBottom:8,color:C.amber}}>👁 Förhandsgranskning</div>
-          <select value={previewFr} onChange={e=>setPreviewFr(e.target.value)} style={{...I({fontSize:12}),marginBottom:8}}>
-            <option value="">Generisk</option>{fr.filter(f=>hasEmail(f)).slice(0,15).map(f=><option key={f.id} value={f.id}>{f.namn} – {f.ort}</option>)}
-          </select>
-          {(()=>{const pf=previewFr?fr.find(f=>String(f.id)===previewFr):null;const pd=pf||{namn:"Föreningen",ordforande:"Mottagaren",ort:"Orten",idrott:"Idrott",burkar:0};return(<div style={{background:"#fff",borderRadius:8,overflow:"hidden"}}>{pf&&<div style={{background:"#eef4ff",padding:"5px 12px",fontSize:11,color:"#3b82f6"}}>{pf.namn}</div>}<div style={{background:"#f8fafc",padding:"8px 12px",borderBottom:"1px solid #e2e8f0"}}><div style={{fontSize:12,fontWeight:700,color:"#1e293b"}}>{fill(editDraft.subject||"",pd,cfg.senderName||"Marketing Guru")}</div></div><div style={{padding:"12px",color:"#1e293b",fontSize:12,lineHeight:1.8,fontFamily:"Georgia,serif",maxHeight:200,overflowY:"auto"}} dangerouslySetInnerHTML={{__html:fill(editDraft.body||"",pd,cfg.senderName||"Marketing Guru").split("\n").map(l=>l.trim()?`<p style="margin:0 0 8px">${l}</p>`:"<p style='margin:0 0 4px'></p>").join("")}}/></div>);})()}
-        </div>
+
       </div>
     </div>
   );
