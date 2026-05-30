@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 if(typeof window!=='undefined'&&!window.storage){window.storage={get:async k=>{const v=localStorage.getItem(k);return v!==null?{key:k,value:v}:null;},set:async(k,v)=>{localStorage.setItem(k,v);return{key:k,value:v};},delete:async k=>{localStorage.removeItem(k);return{key:k,deleted:true};},list:async p=>{const keys=Object.keys(localStorage).filter(k=>!p||k.startsWith(p));return{keys};}}}
 
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS];
-
 const INIT_KONTEXTER=[
   {id:"gepant",namn:"Ge Pant",farg:"#2dd4bf",beskrivning:"Pilotlansering – partnerföreningar ger sin pant digitalt.",metricLabel:"Pantade burkar",senderName:"Marketing Guru",senderEmail:"",aktiv:true},
   {id:"saljpant",namn:"Sälja Pant",farg:"#22c55e",beskrivning:"Föreningar säljer pant och tjänar pengar.",metricLabel:"Såld pant (kr)",senderName:"Marketing Guru",senderEmail:"",aktiv:false},
@@ -171,6 +169,9 @@ const INIT_CONTACTS=[
   // Borlänge Flygklubb
   {id:215,fornamn:"Kontakt",efternamn:"",epost:"bfk@bfk.nu",telefon:"",roll:"Kontakt",foreningId:114,anteckningar:"Borlänge Flygklubb"},
 ];
+
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS];
 
 const TEMPLATES=[
   {
