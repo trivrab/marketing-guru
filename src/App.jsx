@@ -846,17 +846,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
             </div>
           ))}
           {detTab==="mail"&&(
-            <div>
-              {(sel.mailLog||[]).length===0?<div style={{textAlign:"center",padding:"32px 0",color:C.muted}}>Inga mail skickade</div>:[...(sel.mailLog||[])].reverse().map((m,i)=>(
-                <div key={i} style={{padding:"10px 0",borderBottom:`1px solid ${C.border}`}}>
-                  <div style={{display:"flex",justifyContent:"space-between",gap:8,marginBottom:3}}>
-                    <span style={{fontSize:12,fontWeight:500,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.subject||"Utskick"}</span>
-                    <Chip color={m.status==="sent"?C.green:C.red} sm>{m.status==="sent"?"✓":"✗"}</Chip>
-                  </div>
-                  <div style={{fontSize:11,color:C.muted}}>{m.date} · {m.toEmail}</div>
-                </div>
-              ))}
-            </div>
+            <MailLogEditor f={sel} fr={fr} saveFr={saveFr}/>
           )}
           {detTab==="kontakter"&&<LinkedContacts f={sel} contacts={contacts} saveFr={saveFr} fr={fr}/>}
         </div>
@@ -2123,6 +2113,141 @@ function WorkerCopyButton(){
       <button onClick={copy} style={{marginTop:8,...btn(copied?"ghost":"primary"),padding:"4px 14px",fontSize:11,minHeight:28,background:copied?"rgba(34,197,94,0.15)":C.blue,border:copied?`1px solid ${C.green}`:"none",color:copied?C.green:"#fff"}}>
         {copied?"✓ Kopierat!":"📋 Kopiera Worker-koden"}
       </button>
+    </div>
+  );
+}
+
+// ── MailLogEditor ─────────────────────────────────────────────────────────────
+function MailLogEditor({f,fr,saveFr}){
+  const [editIdx,setEditIdx]=useState(null);
+  const [editDraft,setEditDraft]=useState(null);
+  const [adding,setAdding]=useState(false);
+  const blankEntry={date:new Date().toLocaleDateString("sv-SE")+" "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"}),subject:"",toEmail:f.epost||f.epostOrdf||"",status:"sent"};
+  const [newEntry,setNewEntry]=useState(blankEntry);
+
+  const log=[...(f.mailLog||[])].reverse();
+  const realIdx=i=>((f.mailLog||[]).length-1)-i;
+
+  const save=(idx,entry)=>{
+    const newLog=(f.mailLog||[]).map((m,i)=>i===idx?entry:m);
+    // Recalculate skickadeMail from sent entries
+    const sentCount=newLog.filter(m=>m.status==="sent").length;
+    saveFr(fr.map(x=>x.id===f.id?{...x,mailLog:newLog,skickadeMail:sentCount}:x));
+    setEditIdx(null);setEditDraft(null);
+  };
+
+  const del=(idx)=>{
+    if(!confirm("Ta bort detta utskick ur loggen?"))return;
+    const newLog=(f.mailLog||[]).filter((_,i)=>i!==idx);
+    const sentCount=newLog.filter(m=>m.status==="sent").length;
+    saveFr(fr.map(x=>x.id===f.id?{...x,mailLog:newLog,skickadeMail:sentCount}:x));
+  };
+
+  const addEntry=()=>{
+    if(!newEntry.subject||!newEntry.date)return;
+    const newLog=[...(f.mailLog||[]),{...newEntry,id:"manual_"+Date.now()}];
+    const sentCount=newLog.filter(m=>m.status==="sent").length;
+    saveFr(fr.map(x=>x.id===f.id?{...x,mailLog:newLog,skickadeMail:sentCount}:x));
+    setAdding(false);setNewEntry(blankEntry);
+  };
+
+  const statusColor=s=>s==="sent"?C.green:s==="failed"?C.red:C.amber;
+  const statusLabel=s=>s==="sent"?"✓ Skickat":s==="failed"?"✗ Misslyckades":"⏳ Pågår";
+
+  return(
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <div style={{fontSize:11,color:C.muted}}>{(f.mailLog||[]).length} utskick · <span style={{color:C.blue,fontWeight:600}}>{(f.mailLog||[]).filter(m=>m.status==="sent").length} skickade</span></div>
+        <button onClick={()=>{setAdding(v=>!v);setEditIdx(null);}} style={{...btn("ghost"),padding:"4px 10px",fontSize:11,minHeight:28,color:adding?C.red:C.blue,borderColor:adding?C.red+"44":C.blue+"44"}}>
+          {adding?"✕ Avbryt":"+ Lägg till"}
+        </button>
+      </div>
+
+      {/* Add entry form */}
+      {adding&&(
+        <div style={{...card({marginBottom:12,borderColor:C.blue+"44",background:"rgba(59,130,246,0.04)"})}}>
+          <div style={{fontWeight:600,fontSize:12,marginBottom:10,color:C.blue}}>Nytt utskick</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+            <div style={{gridColumn:"1/-1"}}>
+              <label style={lbl}>Ämne</label>
+              <input value={newEntry.subject} onChange={e=>setNewEntry(p=>({...p,subject:e.target.value}))} placeholder="Ämnesrad…" style={{...I(),minHeight:40}}/>
+            </div>
+            <div>
+              <label style={lbl}>Datum (YYYY-MM-DD HH:MM)</label>
+              <input value={newEntry.date} onChange={e=>setNewEntry(p=>({...p,date:e.target.value}))} style={{...I(),minHeight:40}}/>
+            </div>
+            <div>
+              <label style={lbl}>E-post</label>
+              <input value={newEntry.toEmail} onChange={e=>setNewEntry(p=>({...p,toEmail:e.target.value}))} style={{...I(),minHeight:40}}/>
+            </div>
+            <div>
+              <label style={lbl}>Status</label>
+              <select value={newEntry.status} onChange={e=>setNewEntry(p=>({...p,status:e.target.value}))} style={{...I(),minHeight:40}}>
+                <option value="sent">✓ Skickat</option>
+                <option value="failed">✗ Misslyckades</option>
+              </select>
+            </div>
+          </div>
+          <button onClick={addEntry} disabled={!newEntry.subject} style={{...btn("primary"),width:"100%",justifyContent:"center",minHeight:38}}>Spara utskick</button>
+        </div>
+      )}
+
+      {/* Log list */}
+      {log.length===0&&!adding&&(
+        <div style={{textAlign:"center",padding:"32px 0",color:C.muted,fontSize:13}}>Inga utskick ännu</div>
+      )}
+
+      {log.map((m,i)=>{
+        const origIdx=realIdx(i);
+        const isEditing=editIdx===origIdx;
+        return(
+          <div key={m.id||i} style={{borderBottom:`1px solid ${C.border}`,padding:"10px 0"}}>
+            {isEditing&&editDraft?(
+              <div style={{background:C.bg4,borderRadius:8,padding:"10px 12px",marginBottom:2}}>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+                  <div style={{gridColumn:"1/-1"}}>
+                    <label style={lbl}>Ämne</label>
+                    <input value={editDraft.subject||""} onChange={e=>setEditDraft(p=>({...p,subject:e.target.value}))} style={{...I(),minHeight:38}}/>
+                  </div>
+                  <div>
+                    <label style={lbl}>Datum</label>
+                    <input value={editDraft.date||""} onChange={e=>setEditDraft(p=>({...p,date:e.target.value}))} style={{...I(),minHeight:38}}/>
+                  </div>
+                  <div>
+                    <label style={lbl}>E-post</label>
+                    <input value={editDraft.toEmail||""} onChange={e=>setEditDraft(p=>({...p,toEmail:e.target.value}))} style={{...I(),minHeight:38}}/>
+                  </div>
+                  <div>
+                    <label style={lbl}>Status</label>
+                    <select value={editDraft.status||"sent"} onChange={e=>setEditDraft(p=>({...p,status:e.target.value}))} style={{...I(),minHeight:38}}>
+                      <option value="sent">✓ Skickat</option>
+                      <option value="failed">✗ Misslyckades</option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:6}}>
+                  <button onClick={()=>save(origIdx,editDraft)} style={{...btn("primary"),flex:2,justifyContent:"center",minHeight:34,fontSize:12}}>💾 Spara</button>
+                  <button onClick={()=>{setEditIdx(null);setEditDraft(null);}} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:34,fontSize:12}}>Avbryt</button>
+                </div>
+              </div>
+            ):(
+              <div style={{display:"flex",alignItems:"flex-start",gap:8}}>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3,flexWrap:"wrap"}}>
+                    <span style={{fontSize:12,fontWeight:500,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",maxWidth:260}}>{m.subject||"Utskick"}</span>
+                    <span style={{fontSize:10,fontWeight:700,color:statusColor(m.status),background:statusColor(m.status)+"15",padding:"1px 7px",borderRadius:8,flexShrink:0}}>{statusLabel(m.status)}</span>
+                  </div>
+                  <div style={{fontSize:11,color:C.muted}}>{m.date}{m.toEmail?" · "+m.toEmail:""}</div>
+                </div>
+                <div style={{display:"flex",gap:4,flexShrink:0}}>
+                  <button onClick={()=>{setEditIdx(origIdx);setEditDraft({...m});setAdding(false);}} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:6,color:C.muted,cursor:"pointer",fontSize:11,padding:"2px 8px",fontFamily:"inherit"}}>✎</button>
+                  <button onClick={()=>del(origIdx)} style={{background:"none",border:`1px solid rgba(239,68,68,0.3)`,borderRadius:6,color:C.red,cursor:"pointer",fontSize:11,padding:"2px 8px",fontFamily:"inherit"}}>✕</button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
