@@ -492,7 +492,12 @@ export default function App(){
 
   if(!ready)return <div style={{background:C.bg,height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",color:C.muted,fontFamily:"Aptos,Calibri,system-ui,sans-serif"}}>Laddar…</div>;
 
-  const TABS=[{id:"oversikt",icon:"📊",short:"Övers."},{id:"pipeline",icon:"🎯",short:"Pipeline"},{id:"foreningar",icon:"🏆",short:"Fören."},{id:"utskick",icon:"📧",short:"Utskick"},{id:"mallar",icon:"🤖",short:"Mallar"},{id:"kontakter",icon:"👥",short:"Kont."},{id:"installningar",icon:"⚙️",short:"Inställn."}];
+  // Count ready for each mail step
+  const readyM1=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===0).length;
+  const readyM2=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===1).length;
+  const readyM3=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===2).length;
+  const utskickBadge=readyM1+readyM2+readyM3;
+  const TABS=[{id:"oversikt",icon:"📊",short:"Övers."},{id:"pipeline",icon:"🎯",short:"Pipeline"},{id:"foreningar",icon:"🏆",short:"Fören."},{id:"utskick",icon:"📧",short:"Utskick",badge:utskickBadge},{id:"mallar",icon:"🤖",short:"Mallar"},{id:"kontakter",icon:"👥",short:"Kont."},{id:"installningar",icon:"⚙️",short:"Inställn."}];
   const aktivK=kontexter.find(k=>k.id===aktivKontextId);
 
   return(
@@ -513,6 +518,7 @@ export default function App(){
           {TABS.map(t=>(
             <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",padding:M?"12px 10px":"11px 14px",fontSize:M?11:12,fontWeight:tab===t.id?600:400,color:tab===t.id?C.text:C.muted,borderBottom:`2px solid ${tab===t.id?C.blue:"transparent"}`,whiteSpace:"nowrap",flexShrink:0}}>
               {t.icon} {t.short}
+              {t.badge>0&&<span style={{background:C.blue,color:"#fff",fontSize:9,fontWeight:800,borderRadius:10,padding:"1px 5px",marginLeft:2,lineHeight:"14px",display:"inline-block"}}>{t.badge}</span>}
             </button>
           ))}
         </div>
@@ -1048,9 +1054,9 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
   const [seqActive,setSeqActive]=useState(null); // id of locked sequence step, or null
   const [subj,setSubj]=useState(T[0]?.subject||"");
   const [body,setBody]=useState(T[0]?.body||"");
-  const [sel,setSel]=useState(()=>{const s={};const steg0=(T[0]?.steg??1)-1;fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===steg0).forEach(f=>{s[f.id]=true;});return s;});
+  const [sel,setSel]=useState(()=>{const s={};fr.filter(f=>hasEmail(f)).forEach(f=>{s[f.id]=true;});return s;});
   const [lanFilt,setLanFilt]=useState("Dalarna");
-  const [mailFilt,setMailFilt]=useState(()=>{const t=T[0];return t?.steg!=null?String(t.steg-1):"all";});
+  const [mailFilt,setMailFilt]=useState("all");
   const [kontFilt,setKontFilt]=useState("");
   const [daysFilt,setDaysFilt]=useState("all"); // all | 7 | 14 | 30 | never
   const [cfgOpen,setCfgOpen]=useState(!cfg.apiKey||!cfg.senderEmail);
