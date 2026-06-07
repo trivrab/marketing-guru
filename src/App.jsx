@@ -606,6 +606,8 @@ function Pipeline({fr,pipelineOverrides,savePipe,kontexter,M}){
   const [filterLan,setFilterLan]=useState("");
   const [selected,setSelected]=useState(null);
   const [view,setView]=useState("kanban");
+  const [dragId,setDragId]=useState(null);
+  const [dragOver,setDragOver]=useState(null);
   const laner=uniq(fr.map(f=>f.lan));
   const leads=fr.filter(f=>!filterLan||f.lan===filterLan);
   const stageOf=f=>getAutoStage(f,pipelineOverrides);
@@ -643,7 +645,11 @@ function Pipeline({fr,pipelineOverrides,savePipe,kontexter,M}){
           {PIPE_STAGES.map(s=>{
             const items=byStage(s.id);
             return(
-              <div key={s.id} style={{background:C.bg3,borderRadius:12,overflow:"hidden",minWidth:M?"auto":140}}>
+              <div key={s.id}
+                onDragOver={e=>{e.preventDefault();setDragOver(s.id);}}
+                onDragLeave={()=>setDragOver(null)}
+                onDrop={e=>{e.preventDefault();if(dragId&&dragId!==s.id+"_"){setStage(dragId,s.id);setDragId(null);}setDragOver(null);}}
+                style={{background:dragOver===s.id?"rgba(59,130,246,0.08)":C.bg3,borderRadius:12,overflow:"hidden",minWidth:M?"auto":140,outline:dragOver===s.id?`2px dashed ${s.color}`:"none",transition:"background 0.15s"}}>
                 <div style={{background:s.bg,borderBottom:`2px solid ${s.color}`,padding:"9px 10px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                   <div style={{fontSize:M?13:11,fontWeight:700,color:s.color}}>{s.icon} {s.label}</div>
                   <div style={{background:s.color,borderRadius:"50%",width:19,height:19,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,color:"#fff"}}>{items.length}</div>
@@ -653,7 +659,12 @@ function Pipeline({fr,pipelineOverrides,savePipe,kontexter,M}){
                     const isSel=selected===f.id;
                     const cardStgIdx=PIPE_STAGES.findIndex(x=>x.id===stageOf(f));
                     return(
-                      <div key={f.id} onClick={()=>setSelected(isSel?null:f.id)} style={{background:isSel?"rgba(59,130,246,0.15)":C.bg,border:`1px solid ${isSel?C.blue:s.color+"33"}`,borderRadius:9,padding:"9px 10px",marginBottom:5,cursor:"pointer",userSelect:"none"}}>
+                      <div key={f.id}
+                        draggable
+                        onDragStart={e=>{e.dataTransfer.effectAllowed="move";setDragId(f.id);setSelected(null);}}
+                        onDragEnd={()=>{setDragId(null);setDragOver(null);}}
+                        onClick={()=>setSelected(isSel?null:f.id)}
+                        style={{background:dragId===f.id?"rgba(59,130,246,0.3)":isSel?"rgba(59,130,246,0.15)":C.bg,border:`1px solid ${dragId===f.id?C.blue:isSel?C.blue:s.color+"33"}`,borderRadius:9,padding:"9px 10px",marginBottom:5,cursor:"grab",userSelect:"none",opacity:dragId===f.id?0.5:1,transition:"opacity 0.15s"}}>
                         <div style={{fontWeight:600,fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</div>
                         <div style={{fontSize:9,color:C.muted,marginBottom:4}}>{f.idrott} · {f.ort}</div>
                         <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>
@@ -936,14 +947,24 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
           {PIPE_STAGES.map(s=>{
             const items=shown.filter(f=>stageOf(f)===s.id);
             return(
-              <div key={s.id} style={{background:C.bg3,borderRadius:12,overflow:"hidden"}}>
+              <div key={s.id}
+                onDragOver={e=>{e.preventDefault();}}
+                onDrop={e=>{e.preventDefault();const fid=parseInt(e.dataTransfer.getData("text/plain"));if(fid)savePipe({...pipelineOverrides,[fid]:s.id});}}
+                style={{background:C.bg3,borderRadius:12,overflow:"hidden",outline:"2px dashed transparent",transition:"all 0.15s"}}
+                onDragEnter={e=>{e.currentTarget.style.outline=`2px dashed ${s.color}`;e.currentTarget.style.background="rgba(59,130,246,0.06)";}}
+                onDragLeave={e=>{e.currentTarget.style.outline="2px dashed transparent";e.currentTarget.style.background=C.bg3;}}>
                 <div style={{background:s.bg,borderBottom:`2px solid ${s.color}`,padding:"8px 10px",display:"flex",justifyContent:"space-between"}}>
                   <div style={{fontSize:11,fontWeight:700,color:s.color}}>{s.icon} {s.label}</div>
                   <div style={{background:s.color,borderRadius:"50%",width:18,height:18,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:"#fff"}}>{items.length}</div>
                 </div>
                 <div style={{padding:"6px",minHeight:50}}>
                   {items.map(f=>(
-                    <div key={f.id} onClick={()=>{setSelectedId(f.id);setDetTab("info");setEditing(false);setViewMode("list");}} style={{background:C.bg,border:`1px solid ${s.color+"33"}`,borderRadius:9,padding:"8px 10px",marginBottom:5,cursor:"pointer"}}>
+                    <div key={f.id}
+                      draggable
+                      onDragStart={e=>{e.dataTransfer.setData("text/plain",String(f.id));e.dataTransfer.effectAllowed="move";e.currentTarget.style.opacity="0.4";}}
+                      onDragEnd={e=>{e.currentTarget.style.opacity="1";}}
+                      onClick={()=>{setSelectedId(f.id);setDetTab("info");setEditing(false);setViewMode("list");}}
+                      style={{background:C.bg,border:`1px solid ${s.color+"33"}`,borderRadius:9,padding:"8px 10px",marginBottom:5,cursor:"grab"}}>
                       <div style={{fontSize:11,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.namn}</div>
                       <div style={{fontSize:9,color:C.muted}}>{f.idrott}</div>
                       <div style={{display:"flex",gap:3,marginTop:3}}>
