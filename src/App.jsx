@@ -1012,6 +1012,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
   const [lanFilt,setLanFilt]=useState("Dalarna");
   const [mailFilt,setMailFilt]=useState("all");
   const [kontFilt,setKontFilt]=useState("");
+  const [daysFilt,setDaysFilt]=useState("all"); // all | 7 | 14 | 30 | never
   const [cfgOpen,setCfgOpen]=useState(!cfg.apiKey||!cfg.senderEmail);
   const [view,setView]=useState("compose"); // compose | preview | history
   const [sending,setSending]=useState(false);
@@ -1030,6 +1031,17 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     if(mailFilt==="2"&&m!==2)return false;
     if(mailFilt==="3+"&&m<3)return false;
     if(kontFilt&&!(f.taggar||[]).includes(kontFilt))return false;
+    if(daysFilt!=="all"){
+      const ls=lastSent(f);
+      if(daysFilt==="never"&&ls)return false;
+      if(daysFilt!=="never"){
+        if(!ls)return false;
+        // Parse date string "YYYY-MM-DD HH:MM" or "YYYY-MM-DD"
+        const sentDate=new Date(ls.replace(" ","T"));
+        const daysAgo=(Date.now()-sentDate.getTime())/(1000*60*60*24);
+        if(daysAgo<parseInt(daysFilt))return false;
+      }
+    }
     return true;
   });
   const selList=withE.filter(f=>sel[f.id]);
@@ -1143,6 +1155,14 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
             <button key={v} onClick={()=>{setMailFilt(v);setSel({});}} style={{background:mailFilt===v?co+"22":"transparent",border:`1px solid ${mailFilt===v?co:C.border}`,borderRadius:7,padding:"4px 8px",cursor:"pointer",fontFamily:"inherit",fontSize:10,fontWeight:mailFilt===v?700:400,color:mailFilt===v?co:C.muted,textAlign:"left"}}>{l}</button>
           ))}
         </div>
+        <div style={{marginBottom:8}}>
+          <label style={lbl}>Sedan senaste mail</label>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:4}}>
+            {[["all","Oavsett",C.muted],["never","Aldrig skickat",C.muted],["7","7+ dagar",C.blue],["14","14+ dagar",C.teal],["30","30+ dagar",C.amber],["60","60+ dagar",C.red]].map(([v,l,co])=>(
+              <button key={v} onClick={()=>{setDaysFilt(v);setSel({});}} style={{background:daysFilt===v?co+"22":"transparent",border:`1px solid ${daysFilt===v?co:C.border}`,borderRadius:7,padding:"4px 8px",cursor:"pointer",fontFamily:"inherit",fontSize:10,fontWeight:daysFilt===v?700:400,color:daysFilt===v?co:C.muted,textAlign:"left"}}>{l}</button>
+            ))}
+          </div>
+        </div>
         {kontexter.length>0&&<div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:8}}>
           {[{id:"",namn:"Alla",farg:C.muted},...kontexter].map(k=>(
             <button key={k.id} onClick={()=>setKontFilt(k.id)} style={{background:kontFilt===k.id?k.farg+"22":"transparent",border:`1px solid ${kontFilt===k.id?k.farg:C.border}`,borderRadius:14,padding:"3px 9px",cursor:"pointer",fontFamily:"inherit",fontSize:10,fontWeight:kontFilt===k.id?700:400,color:kontFilt===k.id?k.farg:C.muted}}>{k.namn}</button>
@@ -1178,7 +1198,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
             const ready=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).length;
             const isAct=tmpl===t.id;
             return(
-              <button key={t.id} onClick={()=>{pickTmpl(t.id);setMailFilt(String(t.steg-1));const n={};fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).forEach(f=>{n[f.id]=true;});setSel(n);setView("compose");setResults(null);}} style={{background:isAct?co+"22":"rgba(255,255,255,0.03)",border:`2px solid ${isAct?co:C.border}`,borderRadius:10,padding:"9px 13px",cursor:"pointer",fontFamily:"inherit",flexShrink:0,textAlign:"left",minWidth:M?160:185}}>
+              <button key={t.id} onClick={()=>{pickTmpl(t.id);setMailFilt(String(t.steg-1));const n={};fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).forEach(f=>{n[f.id]=true;});setSel(n);setView("compose");setResults(null);setDaysFilt("all");}} style={{background:isAct?co+"22":"rgba(255,255,255,0.03)",border:`2px solid ${isAct?co:C.border}`,borderRadius:10,padding:"9px 13px",cursor:"pointer",fontFamily:"inherit",flexShrink:0,textAlign:"left",minWidth:M?160:185}}>
                 <div style={{fontSize:12,fontWeight:600,color:isAct?co:C.text,marginBottom:3}}>{t.namn}</div>
                 <div style={{display:"flex",justifyContent:"space-between",fontSize:10,marginBottom:3}}><span style={{color:C.muted}}>{sent}/{total} skickat</span>{ready>0&&<span style={{color:co,fontWeight:700}}>{ready} redo →</span>}</div>
                 <div style={{height:3,background:C.bg4,borderRadius:2}}><div style={{height:"100%",width:total>0?`${Math.round(sent/total*100)}%`:"0%",background:co,borderRadius:2}}/></div>
