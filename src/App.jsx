@@ -1006,6 +1006,7 @@ function InlineMetricEdit({f,fr,saveFr}){
 function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
   const T=Array.isArray(templates)&&templates.length>0?templates:TEMPLATES;
   const [tmpl,setTmpl]=useState(T[0]?.id||"mail1");
+  const [seqActive,setSeqActive]=useState(null); // id of locked sequence step, or null
   const [subj,setSubj]=useState(T[0]?.subject||"");
   const [body,setBody]=useState(T[0]?.body||"");
   const [sel,setSel]=useState(()=>{const s={};fr.filter(f=>f.lan==="Dalarna"&&hasEmail(f)).forEach(f=>{s[f.id]=true;});return s;});
@@ -1045,7 +1046,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     return true;
   });
   const selList=withE.filter(f=>sel[f.id]);
-  const pickTmpl=id=>{const t=T.find(t=>t.id===id);if(t){setSubj(t.subject||"");setBody(t.body||"");}setTmpl(id);};
+  const pickTmpl=(id,fromSeq=false)=>{const t=T.find(t=>t.id===id);if(t){setSubj(t.subject||"");setBody(t.body||"");}setTmpl(id);if(!fromSeq)setSeqActive(null);};
   const getRecipients=f=>{if(hasDual(f))return[{email:f.epost,name:f.namn},{email:f.epostOrdf,name:f.namn}];const email=getEmail(f,cfg.preferOrdf);return email?[{email,name:f.namn}]:[];};
 
   const brevoPost=async(payload)=>{
@@ -1198,7 +1199,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
             const ready=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).length;
             const isAct=tmpl===t.id;
             return(
-              <button key={t.id} onClick={()=>{pickTmpl(t.id);setMailFilt(String(t.steg-1));const n={};fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).forEach(f=>{n[f.id]=true;});setSel(n);setView("compose");setResults(null);setDaysFilt("all");}} style={{background:isAct?co+"22":"rgba(255,255,255,0.03)",border:`2px solid ${isAct?co:C.border}`,borderRadius:10,padding:"9px 13px",cursor:"pointer",fontFamily:"inherit",flexShrink:0,textAlign:"left",minWidth:M?160:185}}>
+              <button key={t.id} onClick={()=>{pickTmpl(t.id,true);setSeqActive(t.id);setMailFilt(String(t.steg-1));const n={};fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).forEach(f=>{n[f.id]=true;});setSel(n);setView("compose");setResults(null);setDaysFilt("all");}} style={{background:isAct?co+"22":"rgba(255,255,255,0.03)",border:`2px solid ${isAct?co:C.border}`,borderRadius:10,padding:"9px 13px",cursor:"pointer",fontFamily:"inherit",flexShrink:0,textAlign:"left",minWidth:M?160:185}}>
                 <div style={{fontSize:12,fontWeight:600,color:isAct?co:C.text,marginBottom:3}}>{t.namn}</div>
                 <div style={{display:"flex",justifyContent:"space-between",fontSize:10,marginBottom:3}}><span style={{color:C.muted}}>{sent}/{total} skickat</span>{ready>0&&<span style={{color:co,fontWeight:700}}>{ready} redo →</span>}</div>
                 <div style={{height:3,background:C.bg4,borderRadius:2}}><div style={{height:"100%",width:total>0?`${Math.round(sent/total*100)}%`:"0%",background:co,borderRadius:2}}/></div>
@@ -1234,8 +1235,18 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
           <Sidebar/>
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
             <div style={card()}>
-              <label style={lbl}>Mall</label>
-              <select value={tmpl} onChange={e=>pickTmpl(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:40}}>{T.map(t=><option key={t.id} value={t.id}>{t.namn}</option>)}</select>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+                <label style={{...lbl,margin:0}}>Mall</label>
+                {seqActive&&<span style={{fontSize:10,color:C.amber,fontWeight:600}}>🔒 Låst av sekvens – <button onClick={()=>setSeqActive(null)} style={{background:"none",border:"none",color:C.blue,cursor:"pointer",fontSize:10,fontFamily:"inherit",fontWeight:600,padding:0}}>lås upp</button></span>}
+              </div>
+              {seqActive?(
+                <div style={{...I({marginBottom:10,minHeight:M?46:40,display:"flex",alignItems:"center",gap:8,opacity:0.8})}}>
+                  <span style={{flex:1}}>{T.find(t=>t.id===tmpl)?.namn||tmpl}</span>
+                  <span style={{fontSize:11,color:C.muted}}>🔒</span>
+                </div>
+              ):(
+                <select value={tmpl} onChange={e=>pickTmpl(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:40}}>{T.map(t=><option key={t.id} value={t.id}>{t.namn}</option>)}</select>
+              )}
               <label style={lbl}>Ämnesrad</label>
               <input value={subj} onChange={e=>setSubj(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:40}}/>
               <label style={lbl}>Meddelande</label>
