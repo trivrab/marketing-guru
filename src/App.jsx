@@ -178,7 +178,7 @@ const TEMPLATES=[
     id:"mail1",
     namn:"📬 Mail 1 – Introduktion",
     steg:1,
-    subject:"Vi söker 5 partnerföreningar till Ge Pant – är {{namn}} intresserade?",
+    subject:"{{namn}} – vet ni hur mycket pant ni missar?",
     body:`Hej {{namn}}!
 
 Vi lanserar just nu BottleDROP – Ge Pant — en ny plattform som gör det enklare för människor att ge sin pant till lokala föreningar.
@@ -247,7 +247,7 @@ Allt gott,
     id:"mail2",
     namn:"🤝 Mail 2 – Uppföljning",
     steg:2,
-    subject:"{{namn}} – en snabb följdfråga om Ge Pant",
+    subject:"De flesta föreningar vet inte om det här",
     body:`Hej {{namn}}!
 
 Jag hörde av mig förra veckan angående Ge Pant och pilotlanseringen. Ville bara följa upp kort.
@@ -298,7 +298,7 @@ Allt gott,
     id:"mail3",
     namn:"⏰ Mail 3 – Sista chansen",
     steg:3,
-    subject:"{{namn}} – sista platsen i piloten snart fylld",
+    subject:"{{namn}} – vi går vidare utan er om ni inte hör av er",
     body:`Hej {{namn}}!
 
 Sista gången jag hör av mig om det här.
