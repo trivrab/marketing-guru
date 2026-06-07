@@ -380,6 +380,12 @@ const hasEmail=f=>!!(f.epost||f.epostOrdf);
 const hasDual=f=>!!(f.epost&&f.epostOrdf&&f.epost!==f.epostOrdf);
 const getEmail=(f,pref)=>(pref&&f.epostOrdf)?f.epostOrdf:(f.epost||f.epostOrdf||"");
 const uniq=arr=>[...new Set(arr.filter(Boolean))].sort();
+const lastSent=f=>{
+  const log=(f.mailLog||[]).filter(m=>m.status==="sent");
+  if(!log.length)return null;
+  return log[log.length-1].date;
+};
+
 const fill=(t,f,s)=>(t||"").replace(/{{namn}}/g,(f&&f.namn)||"").replace(/{{mottagare}}/g,(f&&(f.ordforande||f.namn))||"föreningen").replace(/{{ordforande}}/g,(f&&(f.ordforande||f.namn))||"föreningen").replace(/{{burkar}}/g,fmtN(f&&f.burkar)).replace(/{{ort}}/g,(f&&f.ort)||"").replace(/{{idrott}}/g,(f&&f.idrott)||"").replace(/{{avsandare}}/g,s||"Marketing Guru");
 
 const PIPE_STAGES=[
@@ -762,7 +768,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
           ):(
             <div>
               {hasDual(sel)&&<div style={{...card({padding:"8px 12px",marginBottom:8,borderColor:C.teal+"66"}),background:"rgba(45,212,191,0.06)"}}><span style={{fontSize:11,color:C.teal}}>✉️ Dubbel mottagare</span></div>}
-              {[["Idrott",sel.idrott],["Ort",sel.ort],["Mottagare",sel.ordforande],["E-post",sel.epost],["E-post 2",hasDual(sel)?sel.epostOrdf:""],["Telefon",sel.telefon],["Lan",sel.lan],["Mätvärde",sel.burkar>0?fmtN(sel.burkar):null],["Mail skickade",sel.skickadeMail||0],["Anteckningar",sel.ant]].filter(([,v])=>v).map(([l,v])=>(
+              {[["Idrott",sel.idrott],["Ort",sel.ort],["Mottagare",sel.ordforande],["E-post",sel.epost],["E-post 2",hasDual(sel)?sel.epostOrdf:""],["Telefon",sel.telefon],["Lan",sel.lan],["Mätvärde",sel.burkar>0?fmtN(sel.burkar):null],["Mail skickade",sel.skickadeMail||0],["Senast skickat",lastSent(sel)||"—"],["Anteckningar",sel.ant]].filter(([,v])=>v).map(([l,v])=>(
                 <div key={l} style={{display:"flex",gap:8,padding:"9px 0",borderBottom:`1px solid ${C.border}`}}>
                   <span style={{color:C.muted,fontSize:11,minWidth:110,flexShrink:0}}>{l}</span>
                   <span style={{fontSize:13,wordBreak:"break-all"}}>{v}</span>
@@ -896,9 +902,10 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
             <div key={f.id} onClick={()=>{setSelectedId(f.id);setDetTab("info");setEditing(false);}} style={{...card({cursor:"pointer",padding:"14px 16px",borderColor:f.lan==="Dalarna"?C.teal+"44":C.border})}}>
               <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><div style={{fontWeight:600,fontSize:14,flex:1}}>{f.namn}</div><span style={{color:C.muted}}>›</span></div>
               <div style={{fontSize:12,color:C.muted,marginBottom:5}}>{f.idrott} · {f.ort} · <span style={{color:f.lan==="Dalarna"?C.teal:C.muted}}>{f.lan}</span></div>
-              <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+              <div style={{display:"flex",gap:5,flexWrap:"wrap",alignItems:"center"}}>
                 {f.burkar>0&&<Chip color={C.green} sm>♻️ {fmtN(f.burkar)}</Chip>}
                 {(f.skickadeMail||0)>0&&<Chip color={C.blue} sm>✉️ {f.skickadeMail}</Chip>}
+                {lastSent(f)&&<span style={{fontSize:10,color:C.muted}}>Senast {lastSent(f)}</span>}
                 {(f.taggar||[]).map(tid=>{const k=kontexter.find(x=>x.id===tid);return k?<Chip key={tid} color={k.farg} sm>{k.namn}</Chip>:null;})}
               </div>
             </div>
@@ -923,7 +930,12 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
                       <td style={{padding:"9px 12px",fontSize:11}}>{hasDual(f)?<Chip color={C.teal} sm>2</Chip>:hasEmail(f)?<span style={{color:C.green}}>✓</span>:<span style={{color:C.red}}>✗</span>}</td>
                       <td style={{padding:"9px 12px",color:C.muted,fontSize:11,maxWidth:100,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.ordforande||"—"}</td>
                       <td style={{padding:"9px 12px",color:C.green,fontWeight:500}}>{f.burkar>0?fmtN(f.burkar):"—"}</td>
-                      <td style={{padding:"9px 12px"}}>{(f.skickadeMail||0)>0?<Chip color={C.blue} sm>{f.skickadeMail}</Chip>:<span style={{color:C.muted}}>0</span>}</td>
+                      <td style={{padding:"9px 12px"}}>
+                      <div style={{display:"flex",flexDirection:"column",gap:1}}>
+                        {(f.skickadeMail||0)>0?<Chip color={C.blue} sm>✉️ {f.skickadeMail}</Chip>:<span style={{color:C.muted,fontSize:11}}>0</span>}
+                        {lastSent(f)&&<span style={{fontSize:9,color:C.muted,whiteSpace:"nowrap"}}>{lastSent(f)}</span>}
+                      </div>
+                    </td>
                       <td style={{padding:"9px 12px"}}><div style={{display:"flex",gap:3}}>{(f.taggar||[]).map(tid=>{const k=kontexter.find(x=>x.id===tid);return k?<Chip key={tid} color={k.farg} sm>{k.namn}</Chip>:null;})}</div></td>
                       <td style={{padding:"9px 12px"}}><button onClick={e=>{e.stopPropagation();del(f.id);}} style={{background:"none",border:"none",color:C.muted,cursor:"pointer",fontSize:14}}>✕</button></td>
                     </tr>
@@ -1312,6 +1324,7 @@ function MailPreviewList({selList,subj,body,htmlTmpl,cfg,getRecipients,hasDual,M
                 <div style={{display:"flex",gap:4,flexShrink:0}}>
                   {hasDual(f)&&<Chip color={C.teal} sm>×2</Chip>}
                   {(f.skickadeMail||0)>0&&<Chip color={C.blue} sm>M{f.skickadeMail}</Chip>}
+                  {lastSent(f)&&<span style={{fontSize:9,color:C.muted,whiteSpace:"nowrap"}}>{lastSent(f)}</span>}
                 </div>
               </div>
 
