@@ -1009,9 +1009,9 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
   const [seqActive,setSeqActive]=useState(null); // id of locked sequence step, or null
   const [subj,setSubj]=useState(T[0]?.subject||"");
   const [body,setBody]=useState(T[0]?.body||"");
-  const [sel,setSel]=useState(()=>{const s={};fr.filter(f=>f.lan==="Dalarna"&&hasEmail(f)).forEach(f=>{s[f.id]=true;});return s;});
+  const [sel,setSel]=useState(()=>{const s={};const steg0=(T[0]?.steg??1)-1;fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===steg0).forEach(f=>{s[f.id]=true;});return s;});
   const [lanFilt,setLanFilt]=useState("Dalarna");
-  const [mailFilt,setMailFilt]=useState("all");
+  const [mailFilt,setMailFilt]=useState(()=>{const t=T[0];return t?.steg!=null?String(t.steg-1):"all";});
   const [kontFilt,setKontFilt]=useState("");
   const [daysFilt,setDaysFilt]=useState("all"); // all | 7 | 14 | 30 | never
   const [cfgOpen,setCfgOpen]=useState(!cfg.apiKey||!cfg.senderEmail);
@@ -1046,7 +1046,24 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     return true;
   });
   const selList=withE.filter(f=>sel[f.id]);
-  const pickTmpl=(id,fromSeq=false)=>{const t=T.find(t=>t.id===id);if(t){setSubj(t.subject||"");setBody(t.body||"");}setTmpl(id);if(!fromSeq)setSeqActive(null);};
+  const pickTmpl=(id,fromSeq=false)=>{
+    const t=T.find(t=>t.id===id);
+    if(t){
+      setSubj(t.subject||"");
+      setBody(t.body||"");
+      // Auto-set recipient filter based on template step
+      if(t.steg!=null){
+        const newFilt=String(t.steg-1); // steg 1→"0", steg 2→"1", steg 3→"2"
+        setMailFilt(newFilt);
+        // Auto-select matching recipients
+        const matched=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===parseInt(newFilt));
+        const n={};matched.forEach(f=>{n[f.id]=true;});
+        setSel(n);
+      }
+    }
+    setTmpl(id);
+    if(!fromSeq)setSeqActive(null);
+  };
   const getRecipients=f=>{if(hasDual(f))return[{email:f.epost,name:f.namn},{email:f.epostOrdf,name:f.namn}];const email=getEmail(f,cfg.preferOrdf);return email?[{email,name:f.namn}]:[];};
 
   const brevoPost=async(payload)=>{
