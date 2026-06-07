@@ -1206,25 +1206,6 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
 
   return(
     <div>
-      {/* Sekvensbanderoll */}
-      <div style={{...card({marginBottom:12,borderColor:C.teal+"44",background:"rgba(45,212,191,0.04)"})}}>
-        <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:2}}>
-          {T.filter(t=>t.steg).map(t=>{
-            const co=[C.blue,C.teal,C.amber][t.steg-1]||C.blue;
-            const sent=fr.filter(f=>f.lan==="Dalarna"&&(f.skickadeMail||0)>=t.steg).length;
-            const total=fr.filter(f=>f.lan==="Dalarna"&&hasEmail(f)).length;
-            const ready=fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).length;
-            const isAct=tmpl===t.id;
-            return(
-              <button key={t.id} onClick={()=>{pickTmpl(t.id,true);setSeqActive(t.id);setMailFilt(String(t.steg-1));const n={};fr.filter(f=>hasEmail(f)&&(f.skickadeMail||0)===(t.steg-1)).forEach(f=>{n[f.id]=true;});setSel(n);setView("compose");setResults(null);setDaysFilt("all");}} style={{background:isAct?co+"22":"rgba(255,255,255,0.03)",border:`2px solid ${isAct?co:C.border}`,borderRadius:10,padding:"9px 13px",cursor:"pointer",fontFamily:"inherit",flexShrink:0,textAlign:"left",minWidth:M?160:185}}>
-                <div style={{fontSize:12,fontWeight:600,color:isAct?co:C.text,marginBottom:3}}>{t.namn}</div>
-                <div style={{display:"flex",justifyContent:"space-between",fontSize:10,marginBottom:3}}><span style={{color:C.muted}}>{sent}/{total} skickat</span>{ready>0&&<span style={{color:co,fontWeight:700}}>{ready} redo →</span>}</div>
-                <div style={{height:3,background:C.bg4,borderRadius:2}}><div style={{height:"100%",width:total>0?`${Math.round(sent/total*100)}%`:"0%",background:co,borderRadius:2}}/></div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
       {/* View switcher */}
       <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
