@@ -1154,7 +1154,10 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
               <input type="checkbox" checked={!!sel[f.id]} onChange={e=>setSel(p=>({...p,[f.id]:e.target.checked}))} style={{accentColor:C.blue,width:15,height:15,flexShrink:0}}/>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontSize:12,fontWeight:500}}>{f.namn}</div>
-                <div style={{display:"flex",gap:2}}>{[1,2,3].map(n=><span key={n} style={{fontSize:8,padding:"0 3px",borderRadius:3,fontWeight:700,background:(f.skickadeMail||0)>=n?C.blue+"33":C.bg3,color:(f.skickadeMail||0)>=n?C.blue:C.muted}}>M{n}</span>)}</div>
+                <div style={{display:"flex",gap:4,alignItems:"center"}}>
+                  <div style={{display:"flex",gap:2}}>{[1,2,3].map(n=><span key={n} style={{fontSize:8,padding:"0 3px",borderRadius:3,fontWeight:700,background:(f.skickadeMail||0)>=n?C.blue+"33":C.bg3,color:(f.skickadeMail||0)>=n?C.blue:C.muted}}>M{n}</span>)}</div>
+                  {lastSent(f)&&<span style={{fontSize:9,color:C.muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{lastSent(f).split(" ")[0]}</span>}
+                </div>
               </div>
             </label>
           ))}
