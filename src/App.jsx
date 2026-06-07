@@ -250,13 +250,15 @@ Allt gott,
     subject:"De flesta föreningar vet inte om det här",
     body:`Hej {{namn}}!
 
-Jag hörde av mig förra veckan angående Ge Pant och pilotlanseringen. Ville bara följa upp kort.
+Följer upp mitt förra mail – och tänkte dela en sak som ofta förvånar föreningar.
 
-Kort om vad Ge Pant löser: idag missar många föreningar insamlingar för att det är för omständligt för givarna att bidra när de inte är på plats. Med Ge Pant kan föreningens givare ge sin pant direkt från mobilen, när som helst och var som helst.
+Problemet ser ut så här: ett hushåll vill ge sin pant till {{namn}}, men vet inte riktigt hur. De samlar på sig tills nästa insamlingsrunda – men glömmer, eller orkar inte köra dit. Föreningen å sin sida vet inte när det är värt att köra en runda, för de vet inte hur mycket som väntar.
 
-Vi onboardar partnerföreningar löpande, en i taget, och erbjuder personlig hjälp under hela processen.
+Resultatet: pengarna stannar hos butiken i stället.
 
-Platserna är begränsade och vi väljer löpande. Det här erbjudandet ges inte igen efter lansering.
+Ge Pant löser det. Hushållet pantar när det passar dem – och summan går direkt till {{namn}} via appen. Inga rundor att planera. Inga påminnelser att skicka. Ingen logistik.
+
+Vill ni vara med och testa det under piloten?
 
 Ansök här: https://www.bottledrop.se/
 
@@ -269,18 +271,55 @@ Allt gott,
   <tr><td style="background:#0f172a;padding:20px 32px;text-align:center">
     <div style="color:#2dd4bf;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase">BottleDROP – Ge Pant</div>
   </td></tr>
-  <tr><td style="padding:32px 32px 24px">
-    <p style="margin:0 0 16px;font-size:15px;color:#1e293b;line-height:1.6">Hej {{namn}}!</p>
-    <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.7">Jag hörde av mig förra veckan angående Ge Pant. Ville bara följa upp kort.</p>
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border-left:3px solid #22c55e;border-radius:0 8px 8px 0;margin-bottom:20px">
-      <tr><td style="padding:16px 20px">
-        <div style="font-size:13px;font-weight:700;color:#16a34a;margin-bottom:8px">Kort om vad Ge Pant löser</div>
-        <p style="margin:0;font-size:14px;color:#374151;line-height:1.7">Idag missar många föreningar insamlingar för att det är för omständligt för givarna att bidra när de inte är på plats. Med Ge Pant kan föreningens givare ge sin pant direkt från mobilen, när som helst och var som helst.</p>
+  <tr><td style="padding:32px 32px 8px">
+    <p style="margin:0 0 20px;font-size:15px;color:#1e293b;line-height:1.6">Hej {{namn}}!</p>
+    <p style="margin:0 0 20px;font-size:15px;color:#374151;line-height:1.7">Följer upp mitt förra mail – och tänkte dela en sak som ofta förvånar föreningar.</p>
+    <!-- Problem box -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fafafa;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:24px">
+      <tr><td style="padding:20px 24px">
+        <div style="font-size:12px;font-weight:700;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">Hur det ser ut idag</div>
+        <table cellpadding="0" cellspacing="0" style="width:100%">
+          <tr><td style="padding:7px 0;border-bottom:1px solid #f1f5f9">
+            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
+            <span style="font-size:14px;color:#374151">Hushållet vill ge sin pant till {{namn}} – men vet inte hur</span>
+          </td></tr>
+          <tr><td style="padding:7px 0;border-bottom:1px solid #f1f5f9">
+            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
+            <span style="font-size:14px;color:#374151">De samlar på sig, glömmer bort, orkar inte köra</span>
+          </td></tr>
+          <tr><td style="padding:7px 0;border-bottom:1px solid #f1f5f9">
+            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
+            <span style="font-size:14px;color:#374151">{{namn}} vet inte när det är värt att köra en runda</span>
+          </td></tr>
+          <tr><td style="padding:7px 0">
+            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
+            <span style="font-size:14px;color:#374151">Pengarna stannar hos butiken i stället</span>
+          </td></tr>
+        </table>
       </td></tr>
     </table>
-    <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.7">Vi onboardar partnerföreningar löpande, <strong>en i taget</strong>, och erbjuder personlig hjälp under hela processen.</p>
-    <p style="margin:0 0 24px;font-size:14px;color:#64748b;line-height:1.6">Platserna är begränsade och vi väljer löpande. Det här erbjudandet ges inte igen efter lansering.</p>
-    <table cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+    <!-- Solution box -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;margin-bottom:24px">
+      <tr><td style="padding:20px 24px">
+        <div style="font-size:12px;font-weight:700;color:#16a34a;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">Ge Pant löser det</div>
+        <table cellpadding="0" cellspacing="0" style="width:100%">
+          <tr><td style="padding:7px 0;border-bottom:1px solid #dcfce7">
+            <span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span>
+            <span style="font-size:14px;color:#374151">Hushållet pantar när det passar dem – direkt via appen</span>
+          </td></tr>
+          <tr><td style="padding:7px 0;border-bottom:1px solid #dcfce7">
+            <span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span>
+            <span style="font-size:14px;color:#374151">Summan går direkt till {{namn}} – automatiskt</span>
+          </td></tr>
+          <tr><td style="padding:7px 0">
+            <span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span>
+            <span style="font-size:14px;color:#374151">Inga rundor att planera. Ingen logistik.</span>
+          </td></tr>
+        </table>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 28px;font-size:14px;color:#64748b;line-height:1.6">Vill ni vara med och testa det under piloten?</p>
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:8px">
       <tr><td style="background:#2dd4bf;border-radius:8px;padding:14px 28px">
         <a href="https://www.bottledrop.se/" style="color:#0f172a;font-size:15px;font-weight:700;text-decoration:none">Ansök om partnerskap →</a>
       </td></tr>
