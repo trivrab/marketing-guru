@@ -1050,6 +1050,10 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     if(!cfg.apiKey||!cfg.senderEmail||!selList.length)return;
     setSending(true);setResults(null);setView("preview");
     const res=[];
+    const campId=Date.now();
+    const now=new Date().toLocaleDateString("sv-SE")+" "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
+    // Accumulate all fr updates – apply once at end to avoid stale closure overwrites
+    const frUpdates={}; // id → updated forening object
     for(const f of selList){
       const recs=getRecipients(f);
       if(!recs.length){res.push({id:f.id,namn:f.namn,ok:false,msg:"Ingen e-post"});continue;}
@@ -1057,9 +1061,11 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
         const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:fill(body,f,cfg.senderName)});
         if(r.ok){
           res.push({id:f.id,namn:f.namn,ok:true});
-          const now=new Date().toLocaleDateString("sv-SE")+" "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
           const email=recs.map(r=>r.email).join(" + ");
-          saveFr(fr.map(x=>x.id===f.id?{...x,skickadeMail:(x.skickadeMail||0)+1,mailLog:[...(x.mailLog||[]),{id:Date.now()+"_"+f.id,campaignId:0,date:now,subject:fill(subj,f,cfg.senderName),toEmail:email,status:"sent"}]}:x));
+          const logEntry={id:campId+"_"+f.id,campaignId:campId,date:now,subject:fill(subj,f,cfg.senderName),toEmail:email,status:"sent"};
+          // Build on top of any earlier update in this batch, not stale fr
+          const base=frUpdates[f.id]||f;
+          frUpdates[f.id]={...base,skickadeMail:(base.skickadeMail||0)+1,mailLog:[...(base.mailLog||[]),logEntry]};
         }else{
           const err=await r.json().catch(()=>({}));
           res.push({id:f.id,namn:f.namn,ok:false,msg:err.message||"HTTP "+r.status});
@@ -1068,8 +1074,12 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
       setResults([...res]);
       await new Promise(r=>setTimeout(r,150));
     }
+    // Single saveFr with all updates applied
+    if(Object.keys(frUpdates).length>0){
+      saveFr(fr.map(x=>frUpdates[x.id]||x));
+    }
     const sent=res.filter(r=>r.ok).length;
-    if(sent>0)saveCamp([...camp,{id:Date.now(),date:new Date().toLocaleDateString("sv-SE"),subject:fill(subj,selList[0]||{},cfg.senderName),recipients:selList.length,sent,failed:res.length-sent}]);
+    if(sent>0)saveCamp([...camp,{id:campId,date:new Date().toLocaleDateString("sv-SE"),subject:fill(subj,selList[0]||{},cfg.senderName),recipients:selList.length,sent,failed:res.length-sent}]);
     setSending(false);
   };
 
