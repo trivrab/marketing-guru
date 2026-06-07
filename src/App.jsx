@@ -757,6 +757,9 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
   const [editVals,setEditVals]=useState({});
   const [adding,setAdding]=useState(false);
   const [viewMode,setViewMode]=useState("list");
+  const [bulkMode,setBulkMode]=useState(false);
+  const [bulkSel,setBulkSel]=useState({});
+  const [bulkPanel,setBulkPanel]=useState(false);
   const blank={namn:"",epost:"",epostOrdf:"",ort:"",kommun:"",idrott:"",burkar:"",ordforande:"",telefon:"",ant:"",lan:"Blekinge",skickadeMail:0,mailLog:[],kontaktIds:[],taggar:[]};
   const [nw,setNw]=useState(blank);
   const orter=uniq(fr.map(f=>f.ort));
@@ -873,12 +876,36 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       <div style={{display:"flex",gap:8,marginBottom:showFilt?8:12,alignItems:"stretch"}}>
         <input value={filters.q} onChange={e=>setFilters(p=>({...p,q:e.target.value}))} placeholder="Sök förening…" style={{...I(),flex:1,minHeight:44}}/>
         <button onClick={()=>setShowFilt(v=>!v)} style={{...btn(activeF>0?"primary":"ghost"),padding:"0 14px",minHeight:44,flexShrink:0}}>🔽{activeF>0?` (${activeF})`:""}</button>
+        <button onClick={()=>{setBulkMode(v=>!v);setBulkSel({});setBulkPanel(false);}} title="Massredigera" style={{...btn(bulkMode?"primary":"ghost"),padding:"0 14px",minHeight:44,flexShrink:0,borderColor:bulkMode?C.blue:C.border}}>☑</button>
         <div style={{display:"flex",border:`1px solid ${C.border}`,borderRadius:9,overflow:"hidden",flexShrink:0}}>
           <button onClick={()=>setViewMode("list")} style={{background:viewMode==="list"?C.blue:"transparent",border:"none",color:viewMode==="list"?"#fff":C.muted,padding:"0 13px",minHeight:44,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:600}}>≡</button>
           <button onClick={()=>setViewMode("kanban")} style={{background:viewMode==="kanban"?C.blue:"transparent",border:"none",color:viewMode==="kanban"?"#fff":C.muted,padding:"0 13px",minHeight:44,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:600}}>☰</button>
         </div>
         <button onClick={()=>setAdding(true)} style={{...btn("primary"),padding:"0 14px",minHeight:44,flexShrink:0}}>+</button>
       </div>
+      {/* Bulk toolbar */}
+      {bulkMode&&(
+        <div style={{...card({marginBottom:10,borderColor:C.blue+"44",background:"rgba(59,130,246,0.04)",padding:"10px 14px"}),display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+          <div style={{fontSize:12,fontWeight:600,color:C.blue}}>☑ Massredigera</div>
+          <div style={{display:"flex",gap:5}}>
+            <button onClick={()=>{const n={};shown.forEach(f=>{n[f.id]=true;});setBulkSel(n);}} style={{...btn("ghost"),fontSize:11,minHeight:30,padding:"0 10px"}}>Välj alla ({shown.length})</button>
+            <button onClick={()=>setBulkSel({})} style={{...btn("ghost"),fontSize:11,minHeight:30,padding:"0 10px"}}>Rensa</button>
+          </div>
+          {Object.values(bulkSel).filter(Boolean).length>0&&(
+            <button onClick={()=>setBulkPanel(v=>!v)} style={{...btn(bulkPanel?"primary":"ghost"),fontSize:11,minHeight:30,padding:"0 12px",marginLeft:"auto",borderColor:C.amber+"66",color:bulkPanel?"#fff":C.amber,background:bulkPanel?C.amber:"transparent"}}>
+              ✎ Redigera {Object.values(bulkSel).filter(Boolean).length} st
+            </button>
+          )}
+        </div>
+      )}
+      {/* Bulk edit panel */}
+      {bulkMode&&bulkPanel&&(
+        <BulkMailEditor
+          selectedIds={Object.entries(bulkSel).filter(([,v])=>v).map(([k])=>parseInt(k))}
+          fr={fr} saveFr={saveFr}
+          onDone={()=>{setBulkPanel(false);setBulkMode(false);setBulkSel({});}}
+        />
+      )}
       {showFilt&&(
         <div style={{...card({marginBottom:12})}}>
           <div style={{display:"grid",gridTemplateColumns:M?"1fr 1fr":"repeat(4,1fr)",gap:8,marginBottom:10}}>
@@ -2248,6 +2275,131 @@ function MailLogEditor({f,fr,saveFr}){
           </div>
         );
       })}
+    </div>
+  );
+}
+
+// ── BulkMailEditor ─────────────────────────────────────────────────────────────
+function BulkMailEditor({selectedIds,fr,saveFr,onDone}){
+  const selected=fr.filter(f=>selectedIds.includes(f.id));
+  const [action,setAction]=useState("add"); // add | set | reset
+  const [entry,setEntry]=useState({
+    date:new Date().toLocaleDateString("sv-SE")+" "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"}),
+    subject:"",
+    status:"sent",
+  });
+  const [setTo,setSetTo]=useState("1");
+  const [saving,setSaving]=useState(false);
+
+  const apply=()=>{
+    setSaving(true);
+    let updated=fr.map(f=>{
+      if(!selectedIds.includes(f.id))return f;
+      if(action==="reset"){
+        return{...f,mailLog:[],skickadeMail:0};
+      }
+      if(action==="set"){
+        const n=parseInt(setTo)||0;
+        return{...f,skickadeMail:n};
+      }
+      if(action==="add"){
+        if(!entry.subject)return f;
+        const newLog=[...(f.mailLog||[]),{
+          id:"bulk_"+Date.now()+"_"+f.id,
+          campaignId:99990000,
+          date:entry.date,
+          subject:entry.subject.replace("{{namn}}",f.namn),
+          toEmail:f.epost||f.epostOrdf||"",
+          status:entry.status,
+        }];
+        const sentCount=newLog.filter(m=>m.status==="sent").length;
+        return{...f,mailLog:newLog,skickadeMail:sentCount};
+      }
+      return f;
+    });
+    saveFr(updated);
+    setSaving(false);
+    onDone();
+  };
+
+  return(
+    <div style={{...card({marginBottom:12,borderColor:C.amber+"44",background:"rgba(245,158,11,0.04)"})}}>
+      <div style={{fontWeight:600,fontSize:13,marginBottom:12,color:C.amber}}>✎ Massredigera {selected.length} föreningar</div>
+
+      {/* Selected preview */}
+      <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:12}}>
+        {selected.slice(0,8).map(f=>(
+          <span key={f.id} style={{fontSize:10,background:C.bg4,border:`1px solid ${C.border}`,borderRadius:6,padding:"2px 8px",color:C.muted}}>{f.namn}</span>
+        ))}
+        {selected.length>8&&<span style={{fontSize:10,color:C.muted,padding:"2px 4px"}}>+{selected.length-8} till</span>}
+      </div>
+
+      {/* Action selector */}
+      <label style={lbl}>Åtgärd</label>
+      <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
+        {[["add","+ Lägg till utskick",C.blue],["set","≡ Sätt antal skickade",C.teal],["reset","⊘ Nollställ utskick",C.red]].map(([v,l,co])=>(
+          <button key={v} onClick={()=>setAction(v)} style={{background:action===v?co+"22":"transparent",border:`1px solid ${action===v?co:C.border}`,borderRadius:8,padding:"6px 14px",cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:action===v?700:400,color:action===v?co:C.muted}}>
+            {l}
+          </button>
+        ))}
+      </div>
+
+      {/* Action-specific fields */}
+      {action==="add"&&(
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
+          <div style={{gridColumn:"1/-1"}}>
+            <label style={lbl}>Ämne (använd {"{{namn}}"} för föreningsnamn)</label>
+            <input value={entry.subject} onChange={e=>setEntry(p=>({...p,subject:e.target.value}))} placeholder="{{namn}} – vet ni hur mycket pant ni missar?" style={{...I(),minHeight:42}}/>
+          </div>
+          <div>
+            <label style={lbl}>Datum</label>
+            <input value={entry.date} onChange={e=>setEntry(p=>({...p,date:e.target.value}))} style={{...I(),minHeight:42}}/>
+          </div>
+          <div>
+            <label style={lbl}>Status</label>
+            <select value={entry.status} onChange={e=>setEntry(p=>({...p,status:e.target.value}))} style={{...I(),minHeight:42}}>
+              <option value="sent">✓ Skickat</option>
+              <option value="failed">✗ Misslyckades</option>
+            </select>
+          </div>
+          <div style={{gridColumn:"1/-1",fontSize:11,color:C.muted,padding:"6px 10px",background:C.bg4,borderRadius:7}}>
+            Mailet läggs till i loggen för varje vald förening. skickadeMail räknas om automatiskt.
+          </div>
+        </div>
+      )}
+
+      {action==="set"&&(
+        <div style={{marginBottom:12}}>
+          <label style={lbl}>Antal mail skickade (0–3)</label>
+          <div style={{display:"flex",gap:6}}>
+            {["0","1","2","3"].map(n=>(
+              <button key={n} onClick={()=>setSetTo(n)} style={{background:setTo===n?C.teal+"22":"transparent",border:`1px solid ${setTo===n?C.teal:C.border}`,borderRadius:8,padding:"8px 18px",cursor:"pointer",fontFamily:"inherit",fontSize:14,fontWeight:setTo===n?700:400,color:setTo===n?C.teal:C.muted}}>
+                {n}
+              </button>
+            ))}
+          </div>
+          <div style={{fontSize:11,color:C.muted,marginTop:6}}>Påverkar bara räknaren – mailloggen ändras inte.</div>
+        </div>
+      )}
+
+      {action==="reset"&&(
+        <div style={{marginBottom:12,padding:"10px 14px",background:"rgba(239,68,68,0.07)",border:`1px solid ${C.red}44`,borderRadius:8}}>
+          <div style={{fontSize:12,color:C.red,fontWeight:600,marginBottom:4}}>⚠️ Varning</div>
+          <div style={{fontSize:12,color:C.muted}}>Raderar hela mailloggen och sätter skickadeMail till 0 för alla {selected.length} valda föreningar. Kan inte ångras.</div>
+        </div>
+      )}
+
+      {/* Apply */}
+      <div style={{display:"flex",gap:8}}>
+        <button
+          onClick={apply}
+          disabled={saving||(action==="add"&&!entry.subject)}
+          style={{...btn(action==="reset"?"danger":"primary"),flex:2,justifyContent:"center",minHeight:44,opacity:action==="add"&&!entry.subject?0.4:1}}
+        >
+          {saving?"Sparar…":action==="reset"?"⊘ Nollställ "+selected.length+" föreningar":action==="set"?"≡ Sätt skickadeMail="+setTo:"+ Lägg till i "+selected.length+" loggar"}
+        </button>
+        <button onClick={onDone} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:44}}>Avbryt</button>
+      </div>
     </div>
   );
 }
