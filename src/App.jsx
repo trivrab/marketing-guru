@@ -126,7 +126,6 @@ const GOTLAND_CONTACTS=[
   {id:315,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:315,anteckningar:"Endre Skyttegille"},
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG];
 
 // ── Förifylld kampanjhistorik ─────────────────────────────────────────────────
 const INIT_CAMP=[
@@ -310,6 +309,8 @@ const GAVLEBORG_CONTACTS=[
   {id:465,fornamn:"Kansli",efternamn:"",epost:"kansli@nasvikensik.se",telefon:"0650-30560",roll:"Kontakt",foreningId:465,anteckningar:"Näsvikens IK"},
   {id:466,fornamn:"Kansli",efternamn:"",epost:"kansliet@hudikhockey.se",telefon:"0650-933 50",roll:"Kontakt",foreningId:466,anteckningar:"Hudik Hockey"}
 ];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG];
 
 const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS];
 
