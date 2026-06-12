@@ -890,7 +890,7 @@ export default function App(){
   const [fr,setFr]=useState(INIT_FR);
   const [camp,setCamp]=useState(INIT_CAMP);
   const [contacts,setContacts]=useState(INIT_CONTACTS_ALL);
-  const [cfg,setCfg]=useState({apiKey:"",senderName:"Marketing Guru",senderEmail:"",preferOrdf:false,proxyUrl:""});
+  const [cfg,setCfg]=useState({apiKey:"",senderName:"Marketing Guru",senderEmail:"",preferOrdf:false,proxyUrl:"",brevoTag:"Marketingguru - BottleDROP"});
   const [templates,setTemplates]=useState(TEMPLATES);
   const [kontexter,setKontexter]=useState(INIT_KONTEXTER);
   const [aktivKontextId,setAktivKontextId]=useState("gepant");
@@ -1629,7 +1629,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
       const recs=getRecipients(f);
       if(!recs.length){res.push({id:f.id,namn:f.namn,ok:false,msg:"Ingen e-post"});continue;}
       try{
-        const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:fill(body,f,cfg.senderName),tags:["Marketingguru - BottleDROP"]});
+        const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:fill(body,f,cfg.senderName),tags:cfg.brevoTag?[cfg.brevoTag]:[]});
         if(r.ok){
           res.push({id:f.id,namn:f.namn,ok:true});
           const email=recs.map(r=>r.email).join(" + ");
@@ -1660,7 +1660,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     const f=selList[0];
     try{
       const testBanner=`<div style="background:#fff3cd;padding:8px 14px;font-family:sans-serif;font-size:11px;color:#856404;border-bottom:2px solid #ffc107">⚠️ TESTMAIL – personaliserat med data från: <strong>${f.namn}</strong></div>`;
-      const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:[{email:testEmail,name:"Test"}],subject:"[TEST] "+fill(subj,f,cfg.senderName),htmlContent:testBanner+makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:"[TEST] "+fill(body,f,cfg.senderName),tags:["Marketingguru - BottleDROP"]});
+      const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:[{email:testEmail,name:"Test"}],subject:"[TEST] "+fill(subj,f,cfg.senderName),htmlContent:testBanner+makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:"[TEST] "+fill(body,f,cfg.senderName),tags:cfg.brevoTag?[cfg.brevoTag]:[]});
       if(r.ok)setTestResult({ok:true,msg:"✓ Testmail skickat till "+testEmail});
       else{const e=await r.json().catch(()=>({}));setTestResult({ok:false,msg:e.message||"HTTP "+r.status});}
     }catch(e){setTestResult({ok:false,msg:e.message});}
@@ -2358,6 +2358,11 @@ function Installningar({cfg,saveCfg,templates:tmplsProp,saveTemplates,kontexter,
               Prioritera ordförandemail framför generell e-post
             </label>
             {!cfg.senderEmail&&<div style={{fontSize:11,color:C.red,padding:"6px 10px",background:"rgba(239,68,68,0.07)",borderRadius:7}}>⚠️ E-postadressen måste vara verifierad i Brevo under Senders & IP.</div>}
+            <div style={{marginTop:10}}>
+              <label style={lbl}>Brevo-tagg (valfritt)</label>
+              <input value={cfg.brevoTag||""} onChange={e=>saveCfg({...cfg,brevoTag:e.target.value})} placeholder="Marketingguru - BottleDROP" style={{...I(),minHeight:M?46:42}}/>
+              <div style={{fontSize:10,color:C.muted,marginTop:4}}>Taggen läggs på alla mail som skickas och syns i Brevo under Transactional → Logs. Lämna tomt för ingen tagg.</div>
+            </div>
           </div>
         </div>
       )}
