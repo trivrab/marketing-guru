@@ -658,9 +658,23 @@ const HALLAND_CONTACTS=[
   {id:741,fornamn:"Kansli",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:741,anteckningar:"Föreningen Varbergs SIM"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND];
+const JAMTLAND=[
+  {id:742,namn:"Alsens IF",epost:"alsensif@gmail.com",epostOrdf:"bertil@friaskog.se",ort:"Alsen",kommun:"Krokom",idrott:"Fotboll",burkar:8243,skickadeMail:0,ordforande:"Bertil Johansson",telefon:"0640-421 89",lan:"Jämtland",ant:"",mailLog:[],kontaktIds:[742],taggar:[]},
+  {id:743,namn:"Krokoms Motorklubb",epost:"",epostOrdf:"",ort:"Krokom",kommun:"Krokom",idrott:"Motorsport",burkar:400,skickadeMail:0,ordforande:"Kenneth Andersson",telefon:"0640-624 33",lan:"Jämtland",ant:"",mailLog:[],kontaktIds:[743],taggar:[]},
+  {id:744,namn:"Bräcke Ridklubb",epost:"info@brackeridklubb.se",epostOrdf:"info@brackeridklubb.se",ort:"Bräcke",kommun:"Bräcke",idrott:"Ridsport",burkar:22,skickadeMail:0,ordforande:"Styrelsen",telefon:"0693-716 14",lan:"Jämtland",ant:"",mailLog:[],kontaktIds:[744],taggar:[]},
+  {id:745,namn:"Bergs IK Fotboll",epost:"bergsik@telia.com",epostOrdf:"bergsik@telia.com",ort:"Svenstavik",kommun:"Berg",idrott:"Fotboll",burkar:9,skickadeMail:0,ordforande:"Anneli Prestberg",telefon:"0687-10020",lan:"Jämtland",ant:"",mailLog:[],kontaktIds:[745],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS];
+const JAMTLAND_CONTACTS=[
+  {id:742,fornamn:"Kansli",efternamn:"",epost:"alsensif@gmail.com",telefon:"0640-421 89",roll:"Kontakt",foreningId:742,anteckningar:"Alsens IF"},
+  {id:743,fornamn:"Kansli",efternamn:"",epost:"",telefon:"0640-624 33",roll:"Kontakt",foreningId:743,anteckningar:"Krokoms Motorklubb"},
+  {id:744,fornamn:"Kansli",efternamn:"",epost:"info@brackeridklubb.se",telefon:"0693-716 14",roll:"Kontakt",foreningId:744,anteckningar:"Bräcke Ridklubb"},
+  {id:745,fornamn:"Kansli",efternamn:"",epost:"bergsik@telia.com",telefon:"0687-10020",roll:"Kontakt",foreningId:745,anteckningar:"Bergs IK Fotboll"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS];
 
 const TEMPLATES=[
   {
@@ -1409,7 +1423,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
