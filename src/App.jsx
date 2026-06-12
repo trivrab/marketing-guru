@@ -2112,15 +2112,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
 
       {/* Historik */}
       {view==="history"&&(
-        <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          {camp.length===0?<div style={{...card({textAlign:"center",padding:40,color:C.muted})}}>Inga kampanjer</div>:
-          [...camp].reverse().map((c2,i)=>(
-            <div key={c2.id||i} style={card()}>
-              <div style={{fontWeight:500,marginBottom:4,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c2.subject||"Utskick"}</div>
-              <div style={{display:"flex",gap:12,fontSize:12,color:C.muted,flexWrap:"wrap"}}><span>{c2.date}</span><span>{c2.recipients} mottagare</span><span style={{color:C.green}}>{c2.sent}✓</span>{c2.failed>0&&<span style={{color:C.red}}>{c2.failed}✗</span>}</div>
-            </div>
-          ))}
-        </div>
+        <HistoryList camp={camp} M={M}/>
       )}
 
       {/* Komponera */}
