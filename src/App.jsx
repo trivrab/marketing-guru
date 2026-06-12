@@ -1,60 +1,22 @@
 import { useState, useEffect } from "react";
 
-// Supabase-backed storage with localStorage fallback
+// Supabase-only storage
 (function(){
   const SB_URL="https://pzegudkacuzyhpwpqqcd.supabase.co";
   const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6ZWd1ZGthY3V6eWhwd3BxcWNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNDY2NjgsImV4cCI6MjA5NjgyMjY2OH0.KXk1DA4m8_wE1_MfBj-ceBNKvG8bYcpY__pbyuuxi4s";
-  const HEADERS={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"};
-
-  const sbGet=async(key)=>{
-    try{
-      const r=await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(key)+"&select=key,value",{headers:HEADERS});
-      if(!r.ok)return null;
-      const rows=await r.json();
-      return rows.length?{key,value:rows[0].value}:null;
-    }catch{return null;}
-  };
-  const sbSet=async(key,value)=>{
-    try{
-      const r=await fetch(SB_URL+"/rest/v1/storage",{method:"POST",headers:HEADERS,body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});
-      return r.ok?{key,value}:null;
-    }catch{return null;}
-  };
-  const sbDelete=async(key)=>{
-    try{
-      const r=await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(key),{method:"DELETE",headers:HEADERS});
-      return{key,deleted:r.ok};
-    }catch{return{key,deleted:false};}
-  };
-  const sbList=async(prefix)=>{
-    try{
-      const url=SB_URL+"/rest/v1/storage?select=key"+(prefix?"&key=like."+encodeURIComponent(prefix+"%"):"");
-      const r=await fetch(url,{headers:HEADERS});
-      if(!r.ok)return{keys:[]};
-      const rows=await r.json();
-      return{keys:rows.map(r=>r.key)};
-    }catch{return{keys:[]};}
-  };
-
-  // localStorage fallback
-  const lsGet=async k=>{const v=localStorage.getItem(k);return v!==null?{key:k,value:v}:null;};
-  const lsSet=async(k,v)=>{localStorage.setItem(k,v);return{key:k,value:v};};
-  const lsDelete=async k=>{localStorage.removeItem(k);return{key:k,deleted:true};};
-  const lsList=async p=>{const keys=Object.keys(localStorage).filter(k=>!p||k.startsWith(p));return{keys};};
-
-  // Try Supabase, fall back to localStorage
+  const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"};
   window.storage={
-    get:async k=>{const r=await sbGet(k);return r!==null?r:lsGet(k);},
-    set:async(k,v)=>{
-      // Write to both for offline resilience
-      lsSet(k,v);
-      const r=await sbSet(k,v);
-      return r||{key:k,value:v};
+    get:async k=>{
+      try{const r=await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(k)+"&select=key,value",{headers:H});if(!r.ok)return null;const rows=await r.json();return rows.length?{key:k,value:rows[0].value}:null;}catch{return null;}
     },
-    delete:async k=>{lsDelete(k);return sbDelete(k);},
+    set:async(k,v)=>{
+      try{const r=await fetch(SB_URL+"/rest/v1/storage",{method:"POST",headers:H,body:JSON.stringify({key:k,value:v,updated_at:new Date().toISOString()})});return r.ok?{key:k,value:v}:null;}catch{return null;}
+    },
+    delete:async k=>{
+      try{const r=await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(k),{method:"DELETE",headers:H});return{key:k,deleted:r.ok};}catch{return{key:k,deleted:false};}
+    },
     list:async p=>{
-      const r=await sbList(p);
-      return r.keys.length?r:lsList(p);
+      try{const url=SB_URL+"/rest/v1/storage?select=key"+(p?"&key=like."+encodeURIComponent(p+"%"):"");const r=await fetch(url,{headers:H});if(!r.ok)return{keys:[]};const rows=await r.json();return{keys:rows.map(r=>r.key)};}catch{return{keys:[]};}
     },
   };
   window._supabaseUrl=SB_URL;
@@ -857,6 +819,9 @@ const SMALAND_CONTACTS=[
 const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND];
 
 const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS];
+// Expose for Supabase sync
+window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
+window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
 
 const TEMPLATES=[
   {
@@ -1153,7 +1118,7 @@ export default function App(){
 
   useEffect(()=>{
     (async()=>{
-      try{const r=await window.storage.get("bd5_fr");if(r?.value){const s=JSON.parse(r.value);const initMap=Object.fromEntries(INIT_FR.map(f=>[f.id,f]));const ids=new Set(s.map(f=>f.id));const merged=[...s.map(f=>{if(!initMap[f.id])return f;const src=initMap[f.id];return {...f,lan:src.lan,idrott:f.idrott||src.idrott,epost:f.epost||src.epost,epostOrdf:f.epostOrdf||src.epostOrdf,ordforande:f.ordforande||src.ordforande,telefon:f.telefon||src.telefon};}), ...INIT_FR.filter(f=>!ids.has(f.id))];setFr(merged);}else setFr(INIT_FR);}catch{setFr(INIT_FR);}
+      try{const r=await window.storage.get("bd5_fr");if(r?.value){const s=JSON.parse(r.value);const initMap=Object.fromEntries(INIT_FR.map(f=>[f.id,f]));const ids=new Set(s.map(f=>f.id));const merged=[...s.map(f=>{if(!initMap[f.id])return f;const src=initMap[f.id];return {...f,lan:src.lan,idrott:f.idrott||src.idrott,namn:src.namn,epost:src.epost||f.epost,epostOrdf:src.epostOrdf||f.epostOrdf,ordforande:src.ordforande||f.ordforande,telefon:src.telefon||f.telefon};}), ...INIT_FR.filter(f=>!ids.has(f.id))];setFr(merged);await window.storage.set("bd5_fr",JSON.stringify(merged));}else{setFr(INIT_FR);await window.storage.set("bd5_fr",JSON.stringify(INIT_FR));}}catch{setFr(INIT_FR);}
       try{const r=await window.storage.get("bd5_contacts");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(c=>c.id));setContacts([...s,...INIT_CONTACTS_ALL.filter(c=>!ids.has(c.id))]);}else setContacts(INIT_CONTACTS_ALL);}catch{setContacts(INIT_CONTACTS_ALL);}
       try{const r=await window.storage.get("bd5_camp");if(r?.value)setCamp(JSON.parse(r.value));}catch{}
       try{const r=await window.storage.get("bd5_cfg");if(r?.value)setCfg(JSON.parse(r.value));}catch{}
@@ -3163,26 +3128,24 @@ function DatabasPanel(){
   const migrate=async()=>{
     setStatus("running");
     const done=[];const failed=[];
+    // Write current code data directly to Supabase
+    const codeData={"bd5_fr":window.__INIT_FR_JSON||JSON.stringify([]),"bd5_contacts":window.__INIT_CONTACTS_JSON||JSON.stringify([])};
     for(const key of KEYS){
-      const ls=localStorage.getItem(key);
-      if(!ls){continue;}
+      const val=codeData[key]||null;
+      if(!val)continue;
       try{
-        const r=await fetch(SB_URL+"/rest/v1/storage",{
-          method:"POST",
-          headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},
-          body:JSON.stringify({key,value:ls,updated_at:new Date().toISOString()})
-        });
-        if(r.ok)done.push(key);
+        const r=await window.storage.set(key,val);
+        if(r)done.push(key);
         else failed.push(key);
       }catch{failed.push(key);}
     }
     setStatus({done,failed});
-    if(done.length>0){setFlash("✓ "+done.length+" nycklar migrerade");setTimeout(()=>setFlash(""),3000);}
+    if(done.length>0){setFlash("✓ "+done.length+" nycklar synkade");setTimeout(()=>setFlash(""),3000);}
     checkDb();
   };
 
   const clearDb=async()=>{
-    if(!confirm("Rensa ALL data från Supabase? localStorage påverkas inte."))return;
+    if(!confirm("Rensa ALL data från Supabase?"))return;
     for(const key of KEYS){
       await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(key),{
         method:"DELETE",
@@ -3221,7 +3184,7 @@ function DatabasPanel(){
                 <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
                   {KEYS.map(k=>{
                     const inDb=dbStatus.appKeys?.includes(k);
-                    const inLs=!!localStorage.getItem(k);
+                    const inLs=inDb;
                     return(
                       <div key={k} style={{fontSize:10,padding:"3px 8px",borderRadius:6,background:inDb?"rgba(34,197,94,0.1)":"rgba(239,68,68,0.08)",border:`1px solid ${inDb?C.green+"44":C.red+"33"}`,color:inDb?C.green:C.muted}}>
                         {inDb?"☁️":"💾"} {KEY_LABELS[k]}
@@ -3240,9 +3203,9 @@ function DatabasPanel(){
 
       {/* Migration */}
       <div style={{...card({borderColor:C.blue+"44",background:"rgba(59,130,246,0.03)"})}}>
-        <div style={{fontWeight:600,fontSize:13,marginBottom:6}}>📤 Migrera från localStorage → Supabase</div>
+        <div style={{fontWeight:600,fontSize:13,marginBottom:6}}>📤 Synkronisera kod → Supabase</div>
         <div style={{fontSize:12,color:C.muted,marginBottom:12,lineHeight:1.6}}>
-          Kopierar all sparad data från din webbläsares localStorage till Supabase. Gör detta en gång för att komma igång — sedan synkas allt automatiskt.
+          Skriver aktuell föreningsdata från koden till Supabase. Kör detta efter varje deploy för att synkronisera nya e-postadresser och föreningar.
         </div>
         <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:12}}>
           {KEYS.map(k=>{
@@ -3251,7 +3214,7 @@ function DatabasPanel(){
           })}
         </div>
         <button onClick={migrate} disabled={status==="running"||!SB_URL} style={{...btn("primary"),width:"100%",justifyContent:"center",minHeight:44}}>
-          {status==="running"?"⏳ Migrerar…":"📤 Kopiera localStorage → Supabase"}
+          {status==="running"?"⏳ Migrerar…":"📤 Synkronisera kod → Supabase"}
         </button>
         {status&&status!=="running"&&(
           <div style={{marginTop:10}}>
