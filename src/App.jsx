@@ -1153,7 +1153,7 @@ export default function App(){
 
   useEffect(()=>{
     (async()=>{
-      try{const r=await window.storage.get("bd5_fr");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(f=>f.id));setFr([...s,...INIT_FR.filter(f=>!ids.has(f.id))]);}else setFr(INIT_FR);}catch{setFr(INIT_FR);}
+      try{const r=await window.storage.get("bd5_fr");if(r?.value){const s=JSON.parse(r.value);const initMap=Object.fromEntries(INIT_FR.map(f=>[f.id,f]));const ids=new Set(s.map(f=>f.id));const merged=[...s.map(f=>initMap[f.id]?{...f,lan:initMap[f.id].lan,idrott:f.idrott||initMap[f.id].idrott}:f),...INIT_FR.filter(f=>!ids.has(f.id))];setFr(merged);}else setFr(INIT_FR);}catch{setFr(INIT_FR);}
       try{const r=await window.storage.get("bd5_contacts");if(r?.value){const s=JSON.parse(r.value);const ids=new Set(s.map(c=>c.id));setContacts([...s,...INIT_CONTACTS_ALL.filter(c=>!ids.has(c.id))]);}else setContacts(INIT_CONTACTS_ALL);}catch{setContacts(INIT_CONTACTS_ALL);}
       try{const r=await window.storage.get("bd5_camp");if(r?.value)setCamp(JSON.parse(r.value));}catch{}
       try{const r=await window.storage.get("bd5_cfg");if(r?.value)setCfg(JSON.parse(r.value));}catch{}
