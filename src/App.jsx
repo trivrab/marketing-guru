@@ -1226,7 +1226,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
     return true;
   };
 
-  const shown=fr.filter(applyF).sort((a,b)=>{if(a.lan!==b.lan)return a.lan==="Dalarna"?-1:1;return b.burkar-a.burkar;});
+  const shown=fr.filter(applyF).sort((a,b)=>{if(a.lan!==b.lan)return a.lan.localeCompare(b.lan,"sv");return b.burkar-a.burkar;});
   const sel=selectedId?fr.find(f=>f.id===selectedId):null;
   const activeF=Object.entries(filters).filter(([k,v])=>v&&v!=="all"&&k!=="q").length+(filters.q?1:0);
   const saveEdit=()=>{saveFr(fr.map(f=>f.id===sel.id?{...f,...editVals,burkar:parseInt(editVals.burkar)||0}:f));setEditing(false);};
@@ -1348,10 +1348,25 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
           onDone={()=>{setBulkPanel(false);setBulkMode(false);setBulkSel({});}}
         />
       )}
+      {/* Region quick-filter */}
+      <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
+        <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"]].map(([v,l])=>{
+          const active=filters.lan===v;
+          const count=v?fr.filter(f=>f.lan===v).length:fr.length;
+          return(
+            <button key={v} onClick={()=>setFilters(p=>({...p,lan:v,ort:""}))} style={{background:active?C.blue+"22":"transparent",border:`1px solid ${active?C.blue:C.border}`,borderRadius:20,padding:"4px 12px",cursor:"pointer",fontFamily:"inherit",fontSize:11,fontWeight:active?700:400,color:active?C.blue:C.muted,whiteSpace:"nowrap"}}>
+              {l}
+              <span style={{marginLeft:4,fontSize:9,color:active?C.blue:C.muted,fontWeight:400}}>({count})</span>
+            </button>
+          );
+        })}
+      </div>
+
       {showFilt&&(
         <div style={{...card({marginBottom:12})}}>
           <div style={{display:"grid",gridTemplateColumns:M?"1fr 1fr":"repeat(4,1fr)",gap:8,marginBottom:10}}>
-            {[["Lan","lan",[["","Alla"],[...laner.map(l=>[l,l])]]],["Ort","ort",[["","Alla orter"],...orter.map(o=>[o,o])]],["Idrott","idrott",[["","Alla"],...idrotts.map(i=>[i,i])]],["E-post","epost",[["all","Alla"],["yes","Ja"],["no","Nej"]]],["Mail","mail",[["all","Alla"],["0","Ej kontaktad"],["1","Mail 1"],["2","Mail 1–2"],["3+","Alla 3"]]],["Kontext","kontext",[["","Alla"],...kontexter.map(k=>[k.id,k.namn])]]].map(([l,k,opts])=>(
+            {[["Ort","ort",[["","Alla orter"],...orter.map(o=>[o,o])]],["Idrott","idrott",[["","Alla"],...idrotts.map(i=>[i,i])]],["E-post","epost",[["all","Alla"],["yes","Ja"],["no","Nej"]]],["Mail","mail",[["all","Alla"],["0","Ej kontaktad"],["1","Mail 1"],["2","Mail 1–2"],["3+","Alla 3"]]],["Kontext","kontext",[["","Alla"],...kontexter.map(k=>[k.id,k.namn])]]].map(([l,k,opts])=>(
               <div key={k}><label style={lbl}>{l}</label><select value={filters[k]} onChange={e=>setFilters(p=>({...p,[k]:e.target.value}))} style={{...I(),minHeight:M?46:40}}>{opts.map(([v,t])=><option key={v} value={v}>{t}</option>)}</select></div>
             ))}
           </div>
