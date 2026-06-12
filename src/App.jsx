@@ -1722,7 +1722,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
       saveFr(fr.map(x=>frUpdates[x.id]||x));
     }
     const sent=res.filter(r=>r.ok).length;
-    if(sent>0)saveCamp([...camp,{id:campId,date:new Date().toLocaleDateString("sv-SE"),subject:fill(subj,selList[0]||{},cfg.senderName),recipients:selList.length,sent,failed:res.length-sent}]);
+    if(sent>0)saveCamp([...camp,{id:campId,date:new Date().toLocaleDateString("sv-SE"),subject:fill(subj,selList[0]||{},cfg.senderName),recipients:selList.length,sent,failed:res.length-sent,mottagare:res.map(r=>({id:r.id,namn:r.namn,ok:r.ok}))}]);
     setSending(false);
   };
 
@@ -3087,6 +3087,86 @@ function DatabasPanel(){
       </div>
 
       {flash&&<div style={{fontSize:13,color:C.green,fontWeight:500,textAlign:"center"}}>{flash}</div>}
+    </div>
+  );
+}
+
+// ── HistoryList – expandable campaign history ─────────────────────────────────
+function HistoryList({camp,M}){
+  const [open,setOpen]=useState({});
+  if(!camp.length)return <div style={{...card({textAlign:"center",padding:40,color:C.muted})}}>Inga kampanjer</div>;
+  return(
+    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+      {[...camp].reverse().map((c2,i)=>{
+        const isOpen=open[c2.id||i];
+        const mottagare=c2.mottagare||[];
+        const sent=mottagare.filter(m=>m.ok);
+        const failed=mottagare.filter(m=>!m.ok);
+        return(
+          <div key={c2.id||i} style={{...card({padding:0,overflow:"hidden"})}}>
+            {/* Header row */}
+            <div
+              onClick={()=>mottagare.length>0&&setOpen(p=>({...p,[c2.id||i]:!p[c2.id||i]}))}
+              style={{padding:"12px 14px",cursor:mottagare.length>0?"pointer":"default",display:"flex",alignItems:"flex-start",gap:10}}
+            >
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontWeight:500,marginBottom:5,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c2.subject||"Utskick"}</div>
+                <div style={{display:"flex",gap:10,fontSize:12,color:C.muted,flexWrap:"wrap",alignItems:"center"}}>
+                  <span>{c2.date}</span>
+                  <span>{c2.recipients||mottagare.length} mottagare</span>
+                  <span style={{color:C.green,fontWeight:600}}>{c2.sent}✓</span>
+                  {c2.failed>0&&<span style={{color:C.red,fontWeight:600}}>{c2.failed}✗</span>}
+                </div>
+              </div>
+              {mottagare.length>0&&(
+                <span style={{color:C.muted,fontSize:12,flexShrink:0,marginTop:2}}>{isOpen?"▲":"▼"}</span>
+              )}
+            </div>
+
+            {/* Expanded mottagarlista */}
+            {isOpen&&mottagare.length>0&&(
+              <div style={{borderTop:`1px solid ${C.border}`,background:C.bg4}}>
+                {/* Summary chips */}
+                <div style={{padding:"8px 14px",display:"flex",gap:8,flexWrap:"wrap",borderBottom:`1px solid ${C.border}`}}>
+                  <span style={{fontSize:11,color:C.green,background:"rgba(34,197,94,0.1)",padding:"2px 8px",borderRadius:8,fontWeight:600}}>✓ {sent.length} skickade</span>
+                  {failed.length>0&&<span style={{fontSize:11,color:C.red,background:"rgba(239,68,68,0.08)",padding:"2px 8px",borderRadius:8,fontWeight:600}}>✗ {failed.length} misslyckades</span>}
+                </div>
+
+                {/* Recipient rows */}
+                <div style={{maxHeight:M?300:400,overflowY:"auto"}}>
+                  {/* Sent */}
+                  {sent.length>0&&(
+                    <div>
+                      {sent.map((m,j)=>(
+                        <div key={m.id||j} style={{display:"flex",alignItems:"center",gap:8,padding:"7px 14px",borderBottom:`1px solid ${C.border}`,fontSize:12}}>
+                          <span style={{color:C.green,width:14,flexShrink:0}}>✓</span>
+                          <span style={{flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{m.namn}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {/* Failed */}
+                  {failed.length>0&&(
+                    <div>
+                      {failed.map((m,j)=>(
+                        <div key={m.id||j} style={{display:"flex",alignItems:"center",gap:8,padding:"7px 14px",borderBottom:`1px solid ${C.border}`,fontSize:12,background:"rgba(239,68,68,0.04)"}}>
+                          <span style={{color:C.red,width:14,flexShrink:0}}>✗</span>
+                          <span style={{flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:C.muted}}>{m.namn}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* No detail available */}
+            {!mottagare.length&&(
+              <div style={{padding:"4px 14px 10px",fontSize:11,color:C.muted}}>Detaljinfo ej tillgänglig för äldre utskick</div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
