@@ -1629,7 +1629,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
       const recs=getRecipients(f);
       if(!recs.length){res.push({id:f.id,namn:f.namn,ok:false,msg:"Ingen e-post"});continue;}
       try{
-        const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:fill(body,f,cfg.senderName)});
+        const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:fill(body,f,cfg.senderName),tags:["Marketingguru - BottleDROP"]});
         if(r.ok){
           res.push({id:f.id,namn:f.namn,ok:true});
           const email=recs.map(r=>r.email).join(" + ");
@@ -1660,7 +1660,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     const f=selList[0];
     try{
       const testBanner=`<div style="background:#fff3cd;padding:8px 14px;font-family:sans-serif;font-size:11px;color:#856404;border-bottom:2px solid #ffc107">⚠️ TESTMAIL – personaliserat med data från: <strong>${f.namn}</strong></div>`;
-      const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:[{email:testEmail,name:"Test"}],subject:"[TEST] "+fill(subj,f,cfg.senderName),htmlContent:testBanner+makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:"[TEST] "+fill(body,f,cfg.senderName)});
+      const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:[{email:testEmail,name:"Test"}],subject:"[TEST] "+fill(subj,f,cfg.senderName),htmlContent:testBanner+makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:"[TEST] "+fill(body,f,cfg.senderName),tags:["Marketingguru - BottleDROP"]});
       if(r.ok)setTestResult({ok:true,msg:"✓ Testmail skickat till "+testEmail});
       else{const e=await r.json().catch(()=>({}));setTestResult({ok:false,msg:e.message||"HTTP "+r.status});}
     }catch(e){setTestResult({ok:false,msg:e.message});}
