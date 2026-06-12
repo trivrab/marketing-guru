@@ -2359,7 +2359,7 @@ function Installningar({cfg,saveCfg,templates:tmplsProp,saveTemplates,kontexter,
   const [editDraft,setEditDraft]=useState(null);
   const [previewFr,setPreviewFr]=useState("");
   const [tmplFlash,setTmplFlash]=useState("");
-  const SUBTABS=[["kontexter","🎯 Kontexter"],["brevo","🔑 Brevo & Avsändare"],["mallar","📝 Mallar"],["statistik","📊 Statistik"],["maillog","📋 Alla mail"]];
+  const SUBTABS=[["kontexter","🎯 Kontexter"],["brevo","🔑 Brevo & Avsändare"],["mallar","📝 Mallar"],["statistik","📊 Statistik"],["maillog","📋 Alla mail"],["databas","☁️ Databas"]];
   const VARS=["{{namn}}","{{mottagare}}","{{ort}}","{{idrott}}","{{avsandare}}"];
   const startEditTmpl=i=>{if(!tmplList[i])return;setEditTmplIdx(i);setEditDraft({...tmplList[i]});setPreviewFr("");};
   const saveTmpl=()=>{const next=tmplList.map((t,i)=>i===editTmplIdx?{...t,...editDraft}:t);saveTemplates&&saveTemplates(next);setEditTmplIdx(null);setEditDraft(null);setTmplFlash("✓ Sparad!");setTimeout(()=>setTmplFlash(""),2000);};
@@ -2479,6 +2479,10 @@ function Installningar({cfg,saveCfg,templates:tmplsProp,saveTemplates,kontexter,
             </div>
           ))}
         </div>
+      )}
+
+      {tab==="databas"&&(
+        <DatabasPanel/>
       )}
 
       {tab==="maillog"&&(
@@ -2930,6 +2934,145 @@ function BulkMailEditor({selectedIds,fr,saveFr,onDone}){
         </button>
         <button onClick={onDone} style={{...btn("ghost"),flex:1,justifyContent:"center",minHeight:44}}>Avbryt</button>
       </div>
+    </div>
+  );
+}
+
+// ── DatabasPanel ──────────────────────────────────────────────────────────────
+function DatabasPanel(){
+  const SB_URL=window._supabaseUrl||"";
+  const SB_KEY=window._supabaseKey||"";
+  const KEYS=["bd5_fr","bd5_contacts","bd5_camp","bd5_cfg","bd5_kontexter","bd5_aktiv","bd5_pipe","bd5_templates"];
+  const KEY_LABELS={"bd5_fr":"Föreningar","bd5_contacts":"Kontakter","bd5_camp":"Kampanjer","bd5_cfg":"Inställningar","bd5_kontexter":"Kontexter","bd5_aktiv":"Aktiv kontext","bd5_pipe":"Pipeline","bd5_templates":"Mallar"};
+  const [status,setStatus]=useState(null);   // null | "running" | {done,failed,keys}
+  const [dbStatus,setDbStatus]=useState(null); // null | "checking" | {connected, rows}
+  const [flash,setFlash]=useState("");
+
+  const checkDb=async()=>{
+    if(!SB_URL){setDbStatus({connected:false,msg:"Ingen Supabase-URL konfigurerad"});return;}
+    setDbStatus("checking");
+    try{
+      const r=await fetch(SB_URL+"/rest/v1/storage?select=key&limit=100",{
+        headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}
+      });
+      if(!r.ok){setDbStatus({connected:false,msg:"HTTP "+r.status+" – tabellen kanske inte finns ännu"});return;}
+      const rows=await r.json();
+      const appKeys=rows.filter(r=>KEYS.includes(r.key)).map(r=>r.key);
+      setDbStatus({connected:true,rows:rows.length,appKeys});
+    }catch(e){
+      setDbStatus({connected:false,msg:e.message});
+    }
+  };
+
+  const migrate=async()=>{
+    setStatus("running");
+    const done=[];const failed=[];
+    for(const key of KEYS){
+      const ls=localStorage.getItem(key);
+      if(!ls){continue;}
+      try{
+        const r=await fetch(SB_URL+"/rest/v1/storage",{
+          method:"POST",
+          headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},
+          body:JSON.stringify({key,value:ls,updated_at:new Date().toISOString()})
+        });
+        if(r.ok)done.push(key);
+        else failed.push(key);
+      }catch{failed.push(key);}
+    }
+    setStatus({done,failed});
+    if(done.length>0){setFlash("✓ "+done.length+" nycklar migrerade");setTimeout(()=>setFlash(""),3000);}
+    checkDb();
+  };
+
+  const clearDb=async()=>{
+    if(!confirm("Rensa ALL data från Supabase? localStorage påverkas inte."))return;
+    for(const key of KEYS){
+      await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(key),{
+        method:"DELETE",
+        headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}
+      }).catch(()=>{});
+    }
+    setFlash("✓ Databasen rensad");setTimeout(()=>setFlash(""),2000);
+    checkDb();
+  };
+
+  return(
+    <div style={{maxWidth:600,display:"flex",flexDirection:"column",gap:12}}>
+      <div style={{fontWeight:700,fontSize:16,marginBottom:4}}>☁️ Supabase-databas</div>
+
+      {/* Connection status */}
+      <div style={card()}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+          <div style={{fontWeight:600,fontSize:13}}>Anslutningsstatus</div>
+          <button onClick={checkDb} disabled={dbStatus==="checking"} style={{...btn("ghost"),fontSize:11,minHeight:30,padding:"0 12px"}}>
+            {dbStatus==="checking"?"⏳ Kontrollerar…":"🔍 Kontrollera"}
+          </button>
+        </div>
+        {!dbStatus&&<div style={{fontSize:12,color:C.muted}}>Klicka Kontrollera för att se databasstatus</div>}
+        {dbStatus==="checking"&&<div style={{fontSize:12,color:C.muted}}>Ansluter till Supabase…</div>}
+        {dbStatus&&dbStatus!=="checking"&&(
+          <div>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:dbStatus.connected?10:0}}>
+              <div style={{width:10,height:10,borderRadius:"50%",background:dbStatus.connected?C.green:C.red,flexShrink:0}}/>
+              <span style={{fontSize:13,fontWeight:600,color:dbStatus.connected?C.green:C.red}}>
+                {dbStatus.connected?"Ansluten ✓":"Ej ansluten"}
+              </span>
+            </div>
+            {dbStatus.connected&&(
+              <div>
+                <div style={{fontSize:12,color:C.muted,marginBottom:8}}>{dbStatus.rows} rader i databasen</div>
+                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+                  {KEYS.map(k=>{
+                    const inDb=dbStatus.appKeys?.includes(k);
+                    const inLs=!!localStorage.getItem(k);
+                    return(
+                      <div key={k} style={{fontSize:10,padding:"3px 8px",borderRadius:6,background:inDb?"rgba(34,197,94,0.1)":"rgba(239,68,68,0.08)",border:`1px solid ${inDb?C.green+"44":C.red+"33"}`,color:inDb?C.green:C.muted}}>
+                        {inDb?"☁️":"💾"} {KEY_LABELS[k]}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {!dbStatus.connected&&(
+              <div style={{fontSize:12,color:C.red,marginTop:4}}>{dbStatus.msg}</div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Migration */}
+      <div style={{...card({borderColor:C.blue+"44",background:"rgba(59,130,246,0.03)"})}}>
+        <div style={{fontWeight:600,fontSize:13,marginBottom:6}}>📤 Migrera från localStorage → Supabase</div>
+        <div style={{fontSize:12,color:C.muted,marginBottom:12,lineHeight:1.6}}>
+          Kopierar all sparad data från din webbläsares localStorage till Supabase. Gör detta en gång för att komma igång — sedan synkas allt automatiskt.
+        </div>
+        <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:12}}>
+          {KEYS.map(k=>{
+            const has=!!localStorage.getItem(k);
+            return <span key={k} style={{fontSize:10,padding:"2px 8px",borderRadius:6,background:has?"rgba(59,130,246,0.1)":"rgba(100,116,139,0.1)",color:has?C.blue:C.muted}}>{has?"✓":"–"} {KEY_LABELS[k]}</span>;
+          })}
+        </div>
+        <button onClick={migrate} disabled={status==="running"||!SB_URL} style={{...btn("primary"),width:"100%",justifyContent:"center",minHeight:44}}>
+          {status==="running"?"⏳ Migrerar…":"📤 Kopiera localStorage → Supabase"}
+        </button>
+        {status&&status!=="running"&&(
+          <div style={{marginTop:10}}>
+            {status.done.length>0&&<div style={{fontSize:12,color:C.green,marginBottom:4}}>✓ {status.done.map(k=>KEY_LABELS[k]).join(", ")}</div>}
+            {status.failed.length>0&&<div style={{fontSize:12,color:C.red}}>✗ Misslyckades: {status.failed.map(k=>KEY_LABELS[k]).join(", ")}</div>}
+          </div>
+        )}
+      </div>
+
+      {/* Danger zone */}
+      <div style={{...card({borderColor:C.red+"33",background:"rgba(239,68,68,0.02)"})}}>
+        <div style={{fontWeight:600,fontSize:13,marginBottom:6,color:C.red}}>⚠️ Rensa databas</div>
+        <div style={{fontSize:12,color:C.muted,marginBottom:10}}>Raderar all appdata från Supabase. localStorage påverkas inte — data finns kvar lokalt.</div>
+        <button onClick={clearDb} style={{...btn("ghost"),borderColor:C.red+"44",color:C.red,fontSize:12,minHeight:36}}>🗑 Rensa Supabase-data</button>
+      </div>
+
+      {flash&&<div style={{fontSize:13,color:C.green,fontWeight:500,textAlign:"center"}}>{flash}</div>}
     </div>
   );
 }
