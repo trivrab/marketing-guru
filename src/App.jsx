@@ -1,7 +1,65 @@
 import { useState, useEffect } from "react";
 
-// localStorage polyfill
-if(typeof window!=='undefined'&&!window.storage){window.storage={get:async k=>{const v=localStorage.getItem(k);return v!==null?{key:k,value:v}:null;},set:async(k,v)=>{localStorage.setItem(k,v);return{key:k,value:v};},delete:async k=>{localStorage.removeItem(k);return{key:k,deleted:true};},list:async p=>{const keys=Object.keys(localStorage).filter(k=>!p||k.startsWith(p));return{keys};}}}
+// Supabase-backed storage with localStorage fallback
+(function(){
+  const SB_URL="https://pzegudkacuzyhpwpqqcd.supabase.co";
+  const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6ZWd1ZGthY3V6eWhwd3BxcWNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyNDY2NjgsImV4cCI6MjA5NjgyMjY2OH0.KXk1DA4m8_wE1_MfBj-ceBNKvG8bYcpY__pbyuuxi4s";
+  const HEADERS={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"};
+
+  const sbGet=async(key)=>{
+    try{
+      const r=await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(key)+"&select=key,value",{headers:HEADERS});
+      if(!r.ok)return null;
+      const rows=await r.json();
+      return rows.length?{key,value:rows[0].value}:null;
+    }catch{return null;}
+  };
+  const sbSet=async(key,value)=>{
+    try{
+      const r=await fetch(SB_URL+"/rest/v1/storage",{method:"POST",headers:HEADERS,body:JSON.stringify({key,value,updated_at:new Date().toISOString()})});
+      return r.ok?{key,value}:null;
+    }catch{return null;}
+  };
+  const sbDelete=async(key)=>{
+    try{
+      const r=await fetch(SB_URL+"/rest/v1/storage?key=eq."+encodeURIComponent(key),{method:"DELETE",headers:HEADERS});
+      return{key,deleted:r.ok};
+    }catch{return{key,deleted:false};}
+  };
+  const sbList=async(prefix)=>{
+    try{
+      const url=SB_URL+"/rest/v1/storage?select=key"+(prefix?"&key=like."+encodeURIComponent(prefix+"%"):"");
+      const r=await fetch(url,{headers:HEADERS});
+      if(!r.ok)return{keys:[]};
+      const rows=await r.json();
+      return{keys:rows.map(r=>r.key)};
+    }catch{return{keys:[]};}
+  };
+
+  // localStorage fallback
+  const lsGet=async k=>{const v=localStorage.getItem(k);return v!==null?{key:k,value:v}:null;};
+  const lsSet=async(k,v)=>{localStorage.setItem(k,v);return{key:k,value:v};};
+  const lsDelete=async k=>{localStorage.removeItem(k);return{key:k,deleted:true};};
+  const lsList=async p=>{const keys=Object.keys(localStorage).filter(k=>!p||k.startsWith(p));return{keys};};
+
+  // Try Supabase, fall back to localStorage
+  window.storage={
+    get:async k=>{const r=await sbGet(k);return r!==null?r:lsGet(k);},
+    set:async(k,v)=>{
+      // Write to both for offline resilience
+      lsSet(k,v);
+      const r=await sbSet(k,v);
+      return r||{key:k,value:v};
+    },
+    delete:async k=>{lsDelete(k);return sbDelete(k);},
+    list:async p=>{
+      const r=await sbList(p);
+      return r.keys.length?r:lsList(p);
+    },
+  };
+  window._supabaseUrl=SB_URL;
+  window._supabaseKey=SB_KEY;
+})();
 
 
 const INIT_KONTEXTER=[
