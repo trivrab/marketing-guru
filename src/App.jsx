@@ -1606,9 +1606,103 @@ const VARMLAND_CONTACTS=[
   {id:1207,fornamn:"Kontakt",efternamn:"",epost:"hertzogabk@telia.com",telefon:"",roll:"Kontakt",foreningId:1207,anteckningar:"Hertzöga BK"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND];
+const VASTERBOTTEN=[
+  {id:1208,namn:"Sunnanå SK F-11",epost:"info@sunnanask.se",epostOrdf:"info@sunnanask.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:6734,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1208],taggar:[]},
+  {id:1209,namn:"Kågedalens Ryttarförening",epost:"info@kdrf.se",epostOrdf:"info@kdrf.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Ridsport",burkar:6444,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1209],taggar:[]},
+  {id:1210,namn:"KFUM Skellefteå Volleyboll Smash!",epost:"styrelsen.skelleftevolley@gmail.com",epostOrdf:"styrelsen.skelleftevolley@gmail.com",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Volleyboll",burkar:4499,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1210],taggar:[]},
+  {id:1211,namn:"Alpina Klubben Skellefteå",epost:"kansli@aks.nu",epostOrdf:"kansli@aks.nu",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Alpint",burkar:2760,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1211],taggar:[]},
+  {id:1212,namn:"Clemensnäs IF F09-11 IB",epost:"clemens.if@telia.se",epostOrdf:"clemens.if@telia.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Innebandy",burkar:2609,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1212],taggar:[]},
+  {id:1213,namn:"Umeå Triathlon Multisport",epost:"info@umeatri.se",epostOrdf:"info@umeatri.se",ort:"Umeå",kommun:"Umeå",idrott:"Triathlon",burkar:2526,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1213],taggar:[]},
+  {id:1214,namn:"KAIF Fotboll F13",epost:"kansli@kagedalensaif.se",epostOrdf:"kansli@kagedalensaif.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Fotboll",burkar:1844,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1214],taggar:[]},
+  {id:1215,namn:"Clemensnäs IF F12-13 IB",epost:"clemens.if@telia.se",epostOrdf:"clemens.if@telia.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Innebandy",burkar:1464,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1215],taggar:[]},
+  {id:1216,namn:"Umeå Unite Basket",epost:"",epostOrdf:"",ort:"Umeå",kommun:"Umeå",idrott:"Basket",burkar:957,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1216],taggar:[]},
+  {id:1217,namn:"Skellefteå FF/Ungdom",epost:"info@skellefteaff.se",epostOrdf:"info@skellefteaff.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Fotboll",burkar:886,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1217],taggar:[]},
+  {id:1218,namn:"IFK Umeå Fotboll Herr",epost:"kansliet@ifkumea.com",epostOrdf:"kansliet@ifkumea.com",ort:"Umeå",kommun:"Umeå",idrott:"Fotboll",burkar:860,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1218],taggar:[]},
+  {id:1219,namn:"Robertsfors IK Fotboll",epost:"info@rikfotboll.se",epostOrdf:"info@rikfotboll.se",ort:"Robertsfors",kommun:"Robertsfors",idrott:"Fotboll",burkar:800,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1219],taggar:[]},
+  {id:1220,namn:"KFUM Umeå Basket Ungdom Dam",epost:"basket@kfum.nu",epostOrdf:"basket@kfum.nu",ort:"Umeå",kommun:"Umeå",idrott:"Basket",burkar:795,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1220],taggar:[]},
+  {id:1221,namn:"KFUM Skellefteå Volley Damer A",epost:"styrelsen.skelleftevolley@gmail.com",epostOrdf:"styrelsen.skelleftevolley@gmail.com",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Volleyboll",burkar:696,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1221],taggar:[]},
+  {id:1222,namn:"KFUM Umeå FL 10/11",epost:"basket@kfum.nu",epostOrdf:"basket@kfum.nu",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:654,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1222],taggar:[]},
+  {id:1223,namn:"Umeå Skate & BMX-förening",epost:"info@umeaskate.se",epostOrdf:"info@umeaskate.se",ort:"Umeå",kommun:"Umeå",idrott:"Skateboard",burkar:387,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1223],taggar:[]},
+  {id:1224,namn:"Lövångers ryttarsällskap",epost:"lrs.fjalbyn@hotmail.se",epostOrdf:"lrs.fjalbyn@hotmail.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Ridsport",burkar:362,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1224],taggar:[]},
+  {id:1225,namn:"Gamla Stan IBK F14",epost:"info@gamlastanibk.se",epostOrdf:"info@gamlastanibk.se",ort:"Umeå",kommun:"Umeå",idrott:"Innebandy",burkar:326,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1225],taggar:[]},
+  {id:1226,namn:"Skellefteå AIK Hockey U9",epost:"info@skellefteaaik.se",epostOrdf:"info@skellefteaaik.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Ishockey",burkar:278,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1226],taggar:[]},
+  {id:1227,namn:"Bjurholms Golfklubb",epost:"kansliet@bjurholmsgk.se",epostOrdf:"kansliet@bjurholmsgk.se",ort:"Bjurholm",kommun:"Bjurholm",idrott:"Golf",burkar:254,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1227],taggar:[]},
+  {id:1228,namn:"Flurkmarks IK",epost:"flurkmarksik@flurkmark.se",epostOrdf:"flurkmarksik@flurkmark.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:250,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1228],taggar:[]},
+  {id:1229,namn:"UIF Flickor 2015",epost:"kansli@umedalensif.se",epostOrdf:"kansli@umedalensif.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:240,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1229],taggar:[]},
+  {id:1230,namn:"Umeå Brottning",epost:"umebrottning@gmail.com",epostOrdf:"umebrottning@gmail.com",ort:"Umeå",kommun:"Umeå",idrott:"Brottning",burkar:202,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1230],taggar:[]},
+  {id:1231,namn:"Hjälteföreningen",epost:"info@hjalteforeningen.se",epostOrdf:"info@hjalteforeningen.se",ort:"Västerbotten",kommun:"Västerbotten",idrott:"Fleridrott",burkar:201,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1231],taggar:[]},
+  {id:1232,namn:"Umeå Budoklubb",epost:"kansli@umeabudoklubb.se",epostOrdf:"kansli@umeabudoklubb.se",ort:"Umeå",kommun:"Umeå",idrott:"Kampsport",burkar:164,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1232],taggar:[]},
+  {id:1233,namn:"IF Björklöven Kiosken",epost:"info@bjorkloven.com",epostOrdf:"info@bjorkloven.com",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:163,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1233],taggar:[]},
+  {id:1234,namn:"Umeå IK",epost:"kansli@umeaik.se",epostOrdf:"kansli@umeaik.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:118,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1234],taggar:[]},
+  {id:1235,namn:"KFUM Umeå Damer div 1",epost:"basket@kfum.nu",epostOrdf:"basket@kfum.nu",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:106,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1235],taggar:[]},
+  {id:1236,namn:"Umedalens IF P08",epost:"kansli@umedalensif.se",epostOrdf:"kansli@umedalensif.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:94,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1236],taggar:[]},
+  {id:1237,namn:"Sandåkerns Sportklubb",epost:"kansli@sandakernssk.se",epostOrdf:"kansli@sandakernssk.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:83,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1237],taggar:[]},
+  {id:1238,namn:"Morön BK F2013",epost:"info@moron.se",epostOrdf:"info@moron.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:73,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1238],taggar:[]},
+  {id:1239,namn:"Ray Sportryttare",epost:"info@raysportryttare.se",epostOrdf:"info@raysportryttare.se",ort:"Umeå",kommun:"Umeå",idrott:"Ridsport",burkar:69,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1239],taggar:[]},
+  {id:1240,namn:"Gimonäs Umeå Idrottsförening",epost:"kansli@gimonasuif.se",epostOrdf:"kansli@gimonasuif.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:68,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1240],taggar:[]},
+  {id:1241,namn:"TegSödra Umeå Fotboll",epost:"kansliet@tsuif.se",epostOrdf:"kansliet@tsuif.se",ort:"Umeå",kommun:"Umeå",idrott:"Fotboll",burkar:40,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1241],taggar:[]},
+  {id:1242,namn:"Sunnanå SK Förening",epost:"info@sunnanask.se",epostOrdf:"info@sunnanask.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:28,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1242],taggar:[]},
+  {id:1243,namn:"KFUM Jupiter F12/13",epost:"basket@kfum.nu",epostOrdf:"basket@kfum.nu",ort:"Västerbotten",kommun:"Västerbotten",idrott:"Fleridrott",burkar:17,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1243],taggar:[]},
+  {id:1244,namn:"IFK Umeå Fotboll P08",epost:"kansliet@ifkumea.com",epostOrdf:"kansliet@ifkumea.com",ort:"Umeå",kommun:"Umeå",idrott:"Fotboll",burkar:13,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1244],taggar:[]},
+  {id:1245,namn:"Lycksele Motorklubb Karting",epost:"kansli@lyckselemk.nu",epostOrdf:"kansli@lyckselemk.nu",ort:"Lycksele",kommun:"Lycksele",idrott:"Motorsport",burkar:13,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1245],taggar:[]},
+  {id:1246,namn:"Betsele Tjejer 2012",epost:"kansliet@betseleif.se",epostOrdf:"kansliet@betseleif.se",ort:"Lycksele",kommun:"Lycksele",idrott:"Fleridrott",burkar:12,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1246],taggar:[]},
+  {id:1247,namn:"Skellefteå Discgolf",epost:"info@sdg.nu",epostOrdf:"info@sdg.nu",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Golf",burkar:11,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1247],taggar:[]},
+  {id:1248,namn:"Sävarådalens Hopprep & Gymnastik",epost:"info@savaradalen.se",epostOrdf:"info@savaradalen.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Gymnastik",burkar:10,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1248],taggar:[]},
+  {id:1249,namn:"Bureå IF",epost:"kansliet@bureaif.se",epostOrdf:"kansliet@bureaif.se",ort:"Skellefteå",kommun:"Skellefteå",idrott:"Fleridrott",burkar:10,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1249],taggar:[]},
+  {id:1250,namn:"Gimonäs Umeå IF HJ2 Max 16",epost:"kansli@gimonasuif.se",epostOrdf:"kansli@gimonasuif.se",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:5,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1250],taggar:[]},
+  {id:1251,namn:"Medle SK",epost:"info@medlesk.com",epostOrdf:"info@medlesk.com",ort:"Umeå",kommun:"Umeå",idrott:"Fleridrott",burkar:2,skickadeMail:0,ordforande:"",telefon:"",lan:"Västerbotten",ant:"",mailLog:[],kontaktIds:[1251],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS];
+const VASTERBOTTEN_CONTACTS=[
+  {id:1208,fornamn:"Info",efternamn:"",epost:"info@sunnanask.se",telefon:"",roll:"Info",foreningId:1208,anteckningar:"Sunnanå SK F-11"},
+  {id:1209,fornamn:"Info",efternamn:"",epost:"info@kdrf.se",telefon:"",roll:"Info",foreningId:1209,anteckningar:"Kågedalens Ryttarförening"},
+  {id:1210,fornamn:"Styrelsen",efternamn:"",epost:"styrelsen.skelleftevolley@gmail.com",telefon:"",roll:"Styrelsen",foreningId:1210,anteckningar:"KFUM Skellefteå Volleyboll Smash!"},
+  {id:1211,fornamn:"Kansli",efternamn:"",epost:"kansli@aks.nu",telefon:"",roll:"Kansli",foreningId:1211,anteckningar:"Alpina Klubben Skellefteå"},
+  {id:1212,fornamn:"Kontakt",efternamn:"",epost:"clemens.if@telia.se",telefon:"",roll:"Kontakt",foreningId:1212,anteckningar:"Clemensnäs IF F09-11 IB"},
+  {id:1213,fornamn:"Info",efternamn:"",epost:"info@umeatri.se",telefon:"",roll:"Info",foreningId:1213,anteckningar:"Umeå Triathlon Multisport"},
+  {id:1214,fornamn:"Kansli",efternamn:"",epost:"kansli@kagedalensaif.se",telefon:"",roll:"Kansli",foreningId:1214,anteckningar:"KAIF Fotboll F13"},
+  {id:1215,fornamn:"Kontakt",efternamn:"",epost:"clemens.if@telia.se",telefon:"",roll:"Kontakt",foreningId:1215,anteckningar:"Clemensnäs IF F12-13 IB"},
+  {id:1216,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1216,anteckningar:"Umeå Unite Basket"},
+  {id:1217,fornamn:"Info",efternamn:"",epost:"info@skellefteaff.se",telefon:"",roll:"Info",foreningId:1217,anteckningar:"Skellefteå FF/Ungdom"},
+  {id:1218,fornamn:"Kansli",efternamn:"",epost:"kansliet@ifkumea.com",telefon:"",roll:"Kansli",foreningId:1218,anteckningar:"IFK Umeå Fotboll Herr"},
+  {id:1219,fornamn:"Info",efternamn:"",epost:"info@rikfotboll.se",telefon:"",roll:"Info",foreningId:1219,anteckningar:"Robertsfors IK Fotboll"},
+  {id:1220,fornamn:"Kontakt",efternamn:"",epost:"basket@kfum.nu",telefon:"",roll:"Kontakt",foreningId:1220,anteckningar:"KFUM Umeå Basket Ungdom Dam"},
+  {id:1221,fornamn:"Styrelsen",efternamn:"",epost:"styrelsen.skelleftevolley@gmail.com",telefon:"",roll:"Styrelsen",foreningId:1221,anteckningar:"KFUM Skellefteå Volley Damer A"},
+  {id:1222,fornamn:"Kontakt",efternamn:"",epost:"basket@kfum.nu",telefon:"",roll:"Kontakt",foreningId:1222,anteckningar:"KFUM Umeå FL 10/11"},
+  {id:1223,fornamn:"Info",efternamn:"",epost:"info@umeaskate.se",telefon:"",roll:"Info",foreningId:1223,anteckningar:"Umeå Skate & BMX-förening"},
+  {id:1224,fornamn:"Kontakt",efternamn:"",epost:"lrs.fjalbyn@hotmail.se",telefon:"",roll:"Kontakt",foreningId:1224,anteckningar:"Lövångers ryttarsällskap"},
+  {id:1225,fornamn:"Info",efternamn:"",epost:"info@gamlastanibk.se",telefon:"",roll:"Info",foreningId:1225,anteckningar:"Gamla Stan IBK F14"},
+  {id:1226,fornamn:"Info",efternamn:"",epost:"info@skellefteaaik.se",telefon:"",roll:"Info",foreningId:1226,anteckningar:"Skellefteå AIK Hockey U9"},
+  {id:1227,fornamn:"Kansli",efternamn:"",epost:"kansliet@bjurholmsgk.se",telefon:"",roll:"Kansli",foreningId:1227,anteckningar:"Bjurholms Golfklubb"},
+  {id:1228,fornamn:"Kontakt",efternamn:"",epost:"flurkmarksik@flurkmark.se",telefon:"",roll:"Kontakt",foreningId:1228,anteckningar:"Flurkmarks IK"},
+  {id:1229,fornamn:"Kansli",efternamn:"",epost:"kansli@umedalensif.se",telefon:"",roll:"Kansli",foreningId:1229,anteckningar:"UIF Flickor 2015"},
+  {id:1230,fornamn:"Kontakt",efternamn:"",epost:"umebrottning@gmail.com",telefon:"",roll:"Kontakt",foreningId:1230,anteckningar:"Umeå Brottning"},
+  {id:1231,fornamn:"Info",efternamn:"",epost:"info@hjalteforeningen.se",telefon:"",roll:"Info",foreningId:1231,anteckningar:"Hjälteföreningen"},
+  {id:1232,fornamn:"Kansli",efternamn:"",epost:"kansli@umeabudoklubb.se",telefon:"",roll:"Kansli",foreningId:1232,anteckningar:"Umeå Budoklubb"},
+  {id:1233,fornamn:"Info",efternamn:"",epost:"info@bjorkloven.com",telefon:"",roll:"Info",foreningId:1233,anteckningar:"IF Björklöven Kiosken"},
+  {id:1234,fornamn:"Kansli",efternamn:"",epost:"kansli@umeaik.se",telefon:"",roll:"Kansli",foreningId:1234,anteckningar:"Umeå IK"},
+  {id:1235,fornamn:"Kontakt",efternamn:"",epost:"basket@kfum.nu",telefon:"",roll:"Kontakt",foreningId:1235,anteckningar:"KFUM Umeå Damer div 1"},
+  {id:1236,fornamn:"Kansli",efternamn:"",epost:"kansli@umedalensif.se",telefon:"",roll:"Kansli",foreningId:1236,anteckningar:"Umedalens IF P08"},
+  {id:1237,fornamn:"Kansli",efternamn:"",epost:"kansli@sandakernssk.se",telefon:"",roll:"Kansli",foreningId:1237,anteckningar:"Sandåkerns Sportklubb"},
+  {id:1238,fornamn:"Info",efternamn:"",epost:"info@moron.se",telefon:"",roll:"Info",foreningId:1238,anteckningar:"Morön BK F2013"},
+  {id:1239,fornamn:"Info",efternamn:"",epost:"info@raysportryttare.se",telefon:"",roll:"Info",foreningId:1239,anteckningar:"Ray Sportryttare"},
+  {id:1240,fornamn:"Kansli",efternamn:"",epost:"kansli@gimonasuif.se",telefon:"",roll:"Kansli",foreningId:1240,anteckningar:"Gimonäs Umeå Idrottsförening"},
+  {id:1241,fornamn:"Kansli",efternamn:"",epost:"kansliet@tsuif.se",telefon:"",roll:"Kansli",foreningId:1241,anteckningar:"TegSödra Umeå Fotboll"},
+  {id:1242,fornamn:"Info",efternamn:"",epost:"info@sunnanask.se",telefon:"",roll:"Info",foreningId:1242,anteckningar:"Sunnanå SK Förening"},
+  {id:1243,fornamn:"Kontakt",efternamn:"",epost:"basket@kfum.nu",telefon:"",roll:"Kontakt",foreningId:1243,anteckningar:"KFUM Jupiter F12/13"},
+  {id:1244,fornamn:"Kansli",efternamn:"",epost:"kansliet@ifkumea.com",telefon:"",roll:"Kansli",foreningId:1244,anteckningar:"IFK Umeå Fotboll P08"},
+  {id:1245,fornamn:"Kansli",efternamn:"",epost:"kansli@lyckselemk.nu",telefon:"",roll:"Kansli",foreningId:1245,anteckningar:"Lycksele Motorklubb Karting"},
+  {id:1246,fornamn:"Kansli",efternamn:"",epost:"kansliet@betseleif.se",telefon:"",roll:"Kansli",foreningId:1246,anteckningar:"Betsele Tjejer 2012"},
+  {id:1247,fornamn:"Info",efternamn:"",epost:"info@sdg.nu",telefon:"",roll:"Info",foreningId:1247,anteckningar:"Skellefteå Discgolf"},
+  {id:1248,fornamn:"Info",efternamn:"",epost:"info@savaradalen.se",telefon:"",roll:"Info",foreningId:1248,anteckningar:"Sävarådalens Hopprep & Gymnastik"},
+  {id:1249,fornamn:"Kansli",efternamn:"",epost:"kansliet@bureaif.se",telefon:"",roll:"Kansli",foreningId:1249,anteckningar:"Bureå IF"},
+  {id:1250,fornamn:"Kansli",efternamn:"",epost:"kansli@gimonasuif.se",telefon:"",roll:"Kansli",foreningId:1250,anteckningar:"Gimonäs Umeå IF HJ2 Max 16"},
+  {id:1251,fornamn:"Info",efternamn:"",epost:"info@medlesk.com",telefon:"",roll:"Info",foreningId:1251,anteckningar:"Medle SK"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -2360,7 +2454,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
