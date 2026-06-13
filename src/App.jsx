@@ -1010,9 +1010,115 @@ const NORRBOTTEN_CONTACTS=[
   {id:924,fornamn:"Kansli",efternamn:"",epost:"kansliet@sunderbysk.se",telefon:"",roll:"Kansli",foreningId:924,anteckningar:"Sunderby Sportklubb"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN];
+const SKANE=[
+  {id:925,namn:"Pingvin Rugby Klubb",epost:"info@pingvin.nu",epostOrdf:"info@pingvin.nu",ort:"Malmö",kommun:"Malmö",idrott:"Rugby",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[925],taggar:[]},
+  {id:926,namn:"Asmundtorps IF",epost:"asmundtorps_if@idrott.se",epostOrdf:"asmundtorps_if@idrott.se",ort:"Skåne",kommun:"Skåne",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[926],taggar:[]},
+  {id:927,namn:"Tyringe Hockey Team 1823",epost:"kansli@tsos.com",epostOrdf:"kansli@tsos.com",ort:"Hässleholm",kommun:"Hässleholm",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[927],taggar:[]},
+  {id:928,namn:"Broby IF",epost:"niclas.tydinge@telia.com",epostOrdf:"niclas.tydinge@telia.com",ort:"Skåne",kommun:"Skåne",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[928],taggar:[]},
+  {id:929,namn:"Furulunds IK P11",epost:"kansli@furulundsik.se",epostOrdf:"kansli@furulundsik.se",ort:"Kävlinge",kommun:"Kävlinge",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[929],taggar:[]},
+  {id:930,namn:"SOGK CHARLO",epost:"charlo@svarte.nu",epostOrdf:"charlo@svarte.nu",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[930],taggar:[]},
+  {id:931,namn:"Bjäre Bouleklubb U-avd.",epost:"",epostOrdf:"",ort:"Skåne",kommun:"Skåne",idrott:"Boule",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[931],taggar:[]},
+  {id:932,namn:"Loshults Skytteförening",epost:"",epostOrdf:"",ort:"Skåne",kommun:"Skåne",idrott:"Skytte",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[932],taggar:[]},
+  {id:933,namn:"Billesholms IK",epost:"info.bik@telia.com",epostOrdf:"info.bik@telia.com",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[933],taggar:[]},
+  {id:934,namn:"Treby IF",epost:"kontakt@treby.se",epostOrdf:"kontakt@treby.se",ort:"Vellinge",kommun:"Vellinge",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[934],taggar:[]},
+  {id:935,namn:"Engelholms Volleyboll Sällskap",epost:"engelholmsvolley@gmail.com",epostOrdf:"engelholmsvolley@gmail.com",ort:"Ängelholm",kommun:"Ängelholm",idrott:"Volleyboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[935],taggar:[]},
+  {id:936,namn:"Bjärnums GOIF",epost:"bgi1918@outlook.com",epostOrdf:"bgi1918@outlook.com",ort:"Hässleholm",kommun:"Hässleholm",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[936],taggar:[]},
+  {id:937,namn:"Vallgårdens GK Junior Sektion",epost:"junior@vallgardensgk.se",epostOrdf:"junior@vallgardensgk.se",ort:"Lund",kommun:"Lund",idrott:"Golf",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[937],taggar:[]},
+  {id:938,namn:"Södra Sandby P2012",epost:"info@ssif.se",epostOrdf:"info@ssif.se",ort:"Lund",kommun:"Lund",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[938],taggar:[]},
+  {id:939,namn:"Näsums IF",epost:"nifekonomi@gmail.com",epostOrdf:"nifekonomi@gmail.com",ort:"Skåne",kommun:"Skåne",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[939],taggar:[]},
+  {id:940,namn:"Uppåkra IF P2013",epost:"kansliet@uif.nu",epostOrdf:"kansliet@uif.nu",ort:"Lund",kommun:"Lund",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[940],taggar:[]},
+  {id:941,namn:"Ovesholms IF",epost:"info@ovesholmsif.se",epostOrdf:"info@ovesholmsif.se",ort:"Kristianstad",kommun:"Kristianstad",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[941],taggar:[]},
+  {id:942,namn:"Brösarps IF",epost:"brosarpsif@gmail.com",epostOrdf:"brosarpsif@gmail.com",ort:"Tomelilla",kommun:"Tomelilla",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[942],taggar:[]},
+  {id:943,namn:"Kävlinge Sportskytteklubb",epost:"fredrik.lofvander@gmail.com",epostOrdf:"fredrik.lofvander@gmail.com",ort:"Kävlinge",kommun:"Kävlinge",idrott:"Skytte",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[943],taggar:[]},
+  {id:944,namn:"Hässleholms IF",epost:"kansli.hassleholmsif@gmail.com",epostOrdf:"kansli.hassleholmsif@gmail.com",ort:"Hässleholm",kommun:"Hässleholm",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[944],taggar:[]},
+  {id:945,namn:"BK Ohm",epost:"andmag62@gmail.com",epostOrdf:"andmag62@gmail.com",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[945],taggar:[]},
+  {id:946,namn:"Önneköps IF Förening",epost:"onnekopsif@gmail.com",epostOrdf:"onnekopsif@gmail.com",ort:"Skåne",kommun:"Skåne",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[946],taggar:[]},
+  {id:947,namn:"IFK Rössjöholm",epost:"rickard@vaxtorpsnyagrustag.se",epostOrdf:"rickard@vaxtorpsnyagrustag.se",ort:"Ängelholm",kommun:"Ängelholm",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[947],taggar:[]},
+  {id:948,namn:"Ljungbyheds Idrottsförening",epost:"lif.kansli@gmail.com",epostOrdf:"lif.kansli@gmail.com",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[948],taggar:[]},
+  {id:949,namn:"Bowlingklubben Bjäre Seniorer",epost:"lrvpaulsson@gmail.com",epostOrdf:"lrvpaulsson@gmail.com",ort:"Skåne",kommun:"Skåne",idrott:"Bowling",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[949],taggar:[]},
+  {id:950,namn:"Billberga GIF",epost:"kansliet@billebergagif.se",epostOrdf:"kansliet@billebergagif.se",ort:"Svalöv",kommun:"Svalöv",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[950],taggar:[]},
+  {id:951,namn:"Bjärelaget DFF",epost:"bjarelaget.dff@bjarenet.com",epostOrdf:"bjarelaget.dff@bjarenet.com",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[951],taggar:[]},
+  {id:952,namn:"IK Eos",epost:"info@eoslund.se",epostOrdf:"info@eoslund.se",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[952],taggar:[]},
+  {id:953,namn:"Spjutstorps IF",epost:"spjutstorp@hotmail.se",epostOrdf:"spjutstorp@hotmail.se",ort:"Kristianstad",kommun:"Kristianstad",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[953],taggar:[]},
+  {id:954,namn:"Väsby Fotbollsklubb",epost:"vasbyfk@telia.com",epostOrdf:"vasbyfk@telia.com",ort:"Höganäs",kommun:"Höganäs",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[954],taggar:[]},
+  {id:955,namn:"IFK Hässleholm",epost:"kansli@ifkhassleholm.se",epostOrdf:"kansli@ifkhassleholm.se",ort:"Hässleholm",kommun:"Hässleholm",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[955],taggar:[]},
+  {id:956,namn:"Vegeholms IF",epost:"vegeholmsif@outlook.com",epostOrdf:"vegeholmsif@outlook.com",ort:"Ängelholm",kommun:"Ängelholm",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[956],taggar:[]},
+  {id:957,namn:"Österlens Ryttarförening",epost:"styrelsen@osterlensrf.se",epostOrdf:"styrelsen@osterlensrf.se",ort:"Tomelilla",kommun:"Tomelilla",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[957],taggar:[]},
+  {id:958,namn:"Fjälkinge IF",epost:"info@fjalkingeif.se",epostOrdf:"info@fjalkingeif.se",ort:"Kristianstad",kommun:"Kristianstad",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[958],taggar:[]},
+  {id:959,namn:"Bjärnums Biljard Klubb",epost:"bjarnum.biljardklubb@gmail.com",epostOrdf:"bjarnum.biljardklubb@gmail.com",ort:"Hässleholm",kommun:"Hässleholm",idrott:"Biljard",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[959],taggar:[]},
+  {id:960,namn:"Svalövs BK",epost:"kansli@svalovbk.org",epostOrdf:"kansli@svalovbk.org",ort:"Svalöv",kommun:"Svalöv",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[960],taggar:[]},
+  {id:961,namn:"VMA IK",epost:"info@vmaik.nu",epostOrdf:"info@vmaik.nu",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[961],taggar:[]},
+  {id:962,namn:"Kävlinge Handbollsklubb P-2012",epost:"khkkansli@gmail.com",epostOrdf:"khkkansli@gmail.com",ort:"Kävlinge",kommun:"Kävlinge",idrott:"Handboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[962],taggar:[]},
+  {id:963,namn:"Frosta Hockey",epost:"frosta.hockey@telia.com",epostOrdf:"frosta.hockey@telia.com",ort:"Eslöv",kommun:"Eslöv",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[963],taggar:[]},
+  {id:964,namn:"Kågeröds BTK",epost:"kbtkpingis@outlook.com",epostOrdf:"kbtkpingis@outlook.com",ort:"Svalöv",kommun:"Svalöv",idrott:"Bordtennis",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[964],taggar:[]},
+  {id:965,namn:"Halörs Fritidsfiskareförening",epost:"",epostOrdf:"",ort:"Skåne",kommun:"Skåne",idrott:"Fiske",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[965],taggar:[]},
+  {id:966,namn:"Genarps IF",epost:"kansli@genarpsif.se",epostOrdf:"kansli@genarpsif.se",ort:"Lund",kommun:"Lund",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[966],taggar:[]},
+  {id:967,namn:"Södra Gärds Skytteförening",epost:"sodragardsskf@outlook.com",epostOrdf:"sodragardsskf@outlook.com",ort:"Kristianstad",kommun:"Kristianstad",idrott:"Skytte",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[967],taggar:[]},
+  {id:968,namn:"Hörby FF F2012",epost:"kansli@horbyff.se",epostOrdf:"kansli@horbyff.se",ort:"Hörby",kommun:"Hörby",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[968],taggar:[]},
+  {id:969,namn:"Åsums BK",epost:"info@asumsbk.se",epostOrdf:"info@asumsbk.se",ort:"Kristianstad",kommun:"Kristianstad",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[969],taggar:[]},
+  {id:970,namn:"Sösdala Idrottsförening",epost:"info@sosdalaif.com",epostOrdf:"info@sosdalaif.com",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[970],taggar:[]},
+  {id:971,namn:"Jägersborgs IF Herrsektionen",epost:"jagersborgsif@outlook.com",epostOrdf:"jagersborgsif@outlook.com",ort:"Kristianstad",kommun:"Kristianstad",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[971],taggar:[]},
+  {id:972,namn:"Vanstads IF",epost:"eggelstad@hotmail.com",epostOrdf:"eggelstad@hotmail.com",ort:"Sjöbo",kommun:"Sjöbo",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[972],taggar:[]},
+  {id:973,namn:"Eslövs BK",epost:"kansli@eslovsbk.se",epostOrdf:"kansli@eslovsbk.se",ort:"Eslöv",kommun:"Eslöv",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[973],taggar:[]},
+  {id:974,namn:"RC Heroes U8-U16",epost:"",epostOrdf:"",ort:"Skåne",kommun:"Skåne",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Skåne",ant:"",mailLog:[],kontaktIds:[974],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS];
+const SKANE_CONTACTS=[
+  {id:925,fornamn:"Info",efternamn:"",epost:"info@pingvin.nu",telefon:"",roll:"Info",foreningId:925,anteckningar:"Pingvin Rugby Klubb"},
+  {id:926,fornamn:"Kontakt",efternamn:"",epost:"asmundtorps_if@idrott.se",telefon:"",roll:"Kontakt",foreningId:926,anteckningar:"Asmundtorps IF"},
+  {id:927,fornamn:"Kansli",efternamn:"",epost:"kansli@tsos.com",telefon:"",roll:"Kansli",foreningId:927,anteckningar:"Tyringe Hockey Team 1823"},
+  {id:928,fornamn:"Kontakt",efternamn:"",epost:"niclas.tydinge@telia.com",telefon:"",roll:"Kontakt",foreningId:928,anteckningar:"Broby IF"},
+  {id:929,fornamn:"Kansli",efternamn:"",epost:"kansli@furulundsik.se",telefon:"",roll:"Kansli",foreningId:929,anteckningar:"Furulunds IK P11"},
+  {id:930,fornamn:"Kontakt",efternamn:"",epost:"charlo@svarte.nu",telefon:"",roll:"Kontakt",foreningId:930,anteckningar:"SOGK CHARLO"},
+  {id:931,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:931,anteckningar:"Bjäre Bouleklubb U-avd."},
+  {id:932,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:932,anteckningar:"Loshults Skytteförening"},
+  {id:933,fornamn:"Kontakt",efternamn:"",epost:"info.bik@telia.com",telefon:"",roll:"Kontakt",foreningId:933,anteckningar:"Billesholms IK"},
+  {id:934,fornamn:"Kontakt",efternamn:"",epost:"kontakt@treby.se",telefon:"",roll:"Kontakt",foreningId:934,anteckningar:"Treby IF"},
+  {id:935,fornamn:"Kontakt",efternamn:"",epost:"engelholmsvolley@gmail.com",telefon:"",roll:"Kontakt",foreningId:935,anteckningar:"Engelholms Volleyboll Sällskap"},
+  {id:936,fornamn:"Kontakt",efternamn:"",epost:"bgi1918@outlook.com",telefon:"",roll:"Kontakt",foreningId:936,anteckningar:"Bjärnums GOIF"},
+  {id:937,fornamn:"Junioransvarig",efternamn:"",epost:"junior@vallgardensgk.se",telefon:"",roll:"Junioransvarig",foreningId:937,anteckningar:"Vallgårdens GK Junior Sektion"},
+  {id:938,fornamn:"Info",efternamn:"",epost:"info@ssif.se",telefon:"",roll:"Info",foreningId:938,anteckningar:"Södra Sandby P2012"},
+  {id:939,fornamn:"Kassör",efternamn:"",epost:"nifekonomi@gmail.com",telefon:"",roll:"Kassör",foreningId:939,anteckningar:"Näsums IF"},
+  {id:940,fornamn:"Kansli",efternamn:"",epost:"kansliet@uif.nu",telefon:"",roll:"Kansli",foreningId:940,anteckningar:"Uppåkra IF P2013"},
+  {id:941,fornamn:"Info",efternamn:"",epost:"info@ovesholmsif.se",telefon:"",roll:"Info",foreningId:941,anteckningar:"Ovesholms IF"},
+  {id:942,fornamn:"Kontakt",efternamn:"",epost:"brosarpsif@gmail.com",telefon:"",roll:"Kontakt",foreningId:942,anteckningar:"Brösarps IF"},
+  {id:943,fornamn:"Kontakt",efternamn:"",epost:"fredrik.lofvander@gmail.com",telefon:"",roll:"Kontakt",foreningId:943,anteckningar:"Kävlinge Sportskytteklubb"},
+  {id:944,fornamn:"Kansli",efternamn:"",epost:"kansli.hassleholmsif@gmail.com",telefon:"",roll:"Kansli",foreningId:944,anteckningar:"Hässleholms IF"},
+  {id:945,fornamn:"Kontakt",efternamn:"",epost:"andmag62@gmail.com",telefon:"",roll:"Kontakt",foreningId:945,anteckningar:"BK Ohm"},
+  {id:946,fornamn:"Kontakt",efternamn:"",epost:"onnekopsif@gmail.com",telefon:"",roll:"Kontakt",foreningId:946,anteckningar:"Önneköps IF Förening"},
+  {id:947,fornamn:"Kontakt",efternamn:"",epost:"rickard@vaxtorpsnyagrustag.se",telefon:"",roll:"Kontakt",foreningId:947,anteckningar:"IFK Rössjöholm"},
+  {id:948,fornamn:"Kansli",efternamn:"",epost:"lif.kansli@gmail.com",telefon:"",roll:"Kansli",foreningId:948,anteckningar:"Ljungbyheds Idrottsförening"},
+  {id:949,fornamn:"Kontakt",efternamn:"",epost:"lrvpaulsson@gmail.com",telefon:"",roll:"Kontakt",foreningId:949,anteckningar:"Bowlingklubben Bjäre Seniorer"},
+  {id:950,fornamn:"Kansli",efternamn:"",epost:"kansliet@billebergagif.se",telefon:"",roll:"Kansli",foreningId:950,anteckningar:"Billberga GIF"},
+  {id:951,fornamn:"Kontakt",efternamn:"",epost:"bjarelaget.dff@bjarenet.com",telefon:"",roll:"Kontakt",foreningId:951,anteckningar:"Bjärelaget DFF"},
+  {id:952,fornamn:"Info",efternamn:"",epost:"info@eoslund.se",telefon:"",roll:"Info",foreningId:952,anteckningar:"IK Eos"},
+  {id:953,fornamn:"Kontakt",efternamn:"",epost:"spjutstorp@hotmail.se",telefon:"",roll:"Kontakt",foreningId:953,anteckningar:"Spjutstorps IF"},
+  {id:954,fornamn:"Kontakt",efternamn:"",epost:"vasbyfk@telia.com",telefon:"",roll:"Kontakt",foreningId:954,anteckningar:"Väsby Fotbollsklubb"},
+  {id:955,fornamn:"Kansli",efternamn:"",epost:"kansli@ifkhassleholm.se",telefon:"",roll:"Kansli",foreningId:955,anteckningar:"IFK Hässleholm"},
+  {id:956,fornamn:"Kontakt",efternamn:"",epost:"vegeholmsif@outlook.com",telefon:"",roll:"Kontakt",foreningId:956,anteckningar:"Vegeholms IF"},
+  {id:957,fornamn:"Styrelsen",efternamn:"",epost:"styrelsen@osterlensrf.se",telefon:"",roll:"Styrelsen",foreningId:957,anteckningar:"Österlens Ryttarförening"},
+  {id:958,fornamn:"Info",efternamn:"",epost:"info@fjalkingeif.se",telefon:"",roll:"Info",foreningId:958,anteckningar:"Fjälkinge IF"},
+  {id:959,fornamn:"Kontakt",efternamn:"",epost:"bjarnum.biljardklubb@gmail.com",telefon:"",roll:"Kontakt",foreningId:959,anteckningar:"Bjärnums Biljard Klubb"},
+  {id:960,fornamn:"Kansli",efternamn:"",epost:"kansli@svalovbk.org",telefon:"",roll:"Kansli",foreningId:960,anteckningar:"Svalövs BK"},
+  {id:961,fornamn:"Info",efternamn:"",epost:"info@vmaik.nu",telefon:"",roll:"Info",foreningId:961,anteckningar:"VMA IK"},
+  {id:962,fornamn:"Kansli",efternamn:"",epost:"khkkansli@gmail.com",telefon:"",roll:"Kansli",foreningId:962,anteckningar:"Kävlinge Handbollsklubb P-2012"},
+  {id:963,fornamn:"Kontakt",efternamn:"",epost:"frosta.hockey@telia.com",telefon:"",roll:"Kontakt",foreningId:963,anteckningar:"Frosta Hockey"},
+  {id:964,fornamn:"Kontakt",efternamn:"",epost:"kbtkpingis@outlook.com",telefon:"",roll:"Kontakt",foreningId:964,anteckningar:"Kågeröds BTK"},
+  {id:965,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:965,anteckningar:"Halörs Fritidsfiskareförening"},
+  {id:966,fornamn:"Kansli",efternamn:"",epost:"kansli@genarpsif.se",telefon:"",roll:"Kansli",foreningId:966,anteckningar:"Genarps IF"},
+  {id:967,fornamn:"Kontakt",efternamn:"",epost:"sodragardsskf@outlook.com",telefon:"",roll:"Kontakt",foreningId:967,anteckningar:"Södra Gärds Skytteförening"},
+  {id:968,fornamn:"Kansli",efternamn:"",epost:"kansli@horbyff.se",telefon:"",roll:"Kansli",foreningId:968,anteckningar:"Hörby FF F2012"},
+  {id:969,fornamn:"Info",efternamn:"",epost:"info@asumsbk.se",telefon:"",roll:"Info",foreningId:969,anteckningar:"Åsums BK"},
+  {id:970,fornamn:"Info",efternamn:"",epost:"info@sosdalaif.com",telefon:"",roll:"Info",foreningId:970,anteckningar:"Sösdala Idrottsförening"},
+  {id:971,fornamn:"Kontakt",efternamn:"",epost:"jagersborgsif@outlook.com",telefon:"",roll:"Kontakt",foreningId:971,anteckningar:"Jägersborgs IF Herrsektionen"},
+  {id:972,fornamn:"Kontakt",efternamn:"",epost:"eggelstad@hotmail.com",telefon:"",roll:"Kontakt",foreningId:972,anteckningar:"Vanstads IF"},
+  {id:973,fornamn:"Kansli",efternamn:"",epost:"kansli@eslovsbk.se",telefon:"",roll:"Kansli",foreningId:973,anteckningar:"Eslövs BK"},
+  {id:974,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:974,anteckningar:"RC Heroes U8-U16"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -1764,7 +1870,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
