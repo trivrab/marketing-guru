@@ -964,9 +964,55 @@ const KALMAR_CONTACTS=[
   {id:904,fornamn:"Kontakt",efternamn:"",epost:"revsuddenss@gmail.com",telefon:"",roll:"Kontakt",foreningId:904,anteckningar:"Revsudden Runners"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR];
+const NORRBOTTEN=[
+  {id:905,namn:"Notvikens IK",epost:"info@notvikensik.se",epostOrdf:"info@notvikensik.se",ort:"Piteå",kommun:"Piteå",idrott:"Fleridrott",burkar:36370,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[905],taggar:[]},
+  {id:906,namn:"IFK Arvidsjaur Fotboll SKL",epost:"ifkarvidsjaurfotboll@hotmail.com",epostOrdf:"ifkarvidsjaurfotboll@hotmail.com",ort:"Arvidsjaur",kommun:"Arvidsjaur",idrott:"Fotboll",burkar:26945,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[906],taggar:[]},
+  {id:907,namn:"Piteå KK",epost:"info@piteakk.se",epostOrdf:"info@piteakk.se",ort:"Piteå",kommun:"Piteå",idrott:"Fleridrott",burkar:1910,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[907],taggar:[]},
+  {id:908,namn:"LSS grupp T1",epost:"lss.hemsida@gmail.com",epostOrdf:"lss.hemsida@gmail.com",ort:"Luleå",kommun:"Luleå",idrott:"Simning",burkar:1034,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[908],taggar:[]},
+  {id:909,namn:"Lulegymnasterna Trupp FT3",epost:"lulegymnasterna.trupp@gmail.com",epostOrdf:"lulegymnasterna.trupp@gmail.com",ort:"Luleå",kommun:"Luleå",idrott:"Gymnastik",burkar:364,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[909],taggar:[]},
+  {id:910,namn:"Nordic Cheer Athletics",epost:"nordiccheerathletics@gmail.com",epostOrdf:"nordiccheerathletics@gmail.com",ort:"Luleå",kommun:"Luleå",idrott:"Cheerleading",burkar:239,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[910],taggar:[]},
+  {id:911,namn:"Lira BK",epost:"kansli@lirabk.se",epostOrdf:"kansli@lirabk.se",ort:"Luleå",kommun:"Luleå",idrott:"Fotboll",burkar:198,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[911],taggar:[]},
+  {id:912,namn:"Luleå Cheerleadingförening LCD",epost:"lulea.cheerleading@gmail.com",epostOrdf:"lulea.cheerleading@gmail.com",ort:"Luleå",kommun:"Luleå",idrott:"Cheerleading",burkar:158,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[912],taggar:[]},
+  {id:913,namn:"Arctic Cheer Avalanches",epost:"info@acalulea.com",epostOrdf:"info@acalulea.com",ort:"Luleå",kommun:"Luleå",idrott:"Cheerleading",burkar:125,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[913],taggar:[]},
+  {id:914,namn:"Alviks IK Fotboll",epost:"info@alviksik.se",epostOrdf:"info@alviksik.se",ort:"Luleå",kommun:"Luleå",idrott:"Fotboll",burkar:78,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[914],taggar:[]},
+  {id:915,namn:"IFK Kalix P15/16",epost:"info@ifkkalix.se",epostOrdf:"info@ifkkalix.se",ort:"Kalix",kommun:"Kalix",idrott:"Fotboll",burkar:73,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[915],taggar:[]},
+  {id:916,namn:"Piteå IF FF",epost:"kansliet@piteaif.se",epostOrdf:"kansliet@piteaif.se",ort:"Piteå",kommun:"Piteå",idrott:"Fotboll",burkar:45,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[916],taggar:[]},
+  {id:917,namn:"Arjeplogs Ridklubb",epost:"kontakt@arjeplogsridklubb.com",epostOrdf:"kontakt@arjeplogsridklubb.com",ort:"Arjeplog",kommun:"Arjeplog",idrott:"Ridsport",burkar:42,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[917],taggar:[]},
+  {id:918,namn:"Råneå BK",epost:"brottning@raneabrottarklubb.se",epostOrdf:"brottning@raneabrottarklubb.se",ort:"Råneå",kommun:"Råneå",idrott:"Brottning",burkar:34,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[918],taggar:[]},
+  {id:919,namn:"Malmbergets AIF Tjejligan hockey",epost:"malmbergets.aif@telia.com",epostOrdf:"malmbergets.aif@telia.com",ort:"Gällivare",kommun:"Gällivare",idrott:"Ishockey",burkar:22,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[919],taggar:[]},
+  {id:920,namn:"Alviks IK P09 Lag 1",epost:"info@alviksik.se",epostOrdf:"info@alviksik.se",ort:"Luleå",kommun:"Luleå",idrott:"Fotboll",burkar:12,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[920],taggar:[]},
+  {id:921,namn:"Piteå Ridklubb",epost:"kansliet@prk.nu",epostOrdf:"kansliet@prk.nu",ort:"Piteå",kommun:"Piteå",idrott:"Ridsport",burkar:11,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[921],taggar:[]},
+  {id:922,namn:"Hertsö Basket",epost:"hertsobasket@gmail.com",epostOrdf:"hertsobasket@gmail.com",ort:"Luleå",kommun:"Luleå",idrott:"Basket",burkar:8,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[922],taggar:[]},
+  {id:923,namn:"BBK Handboll Flickor 06/07",epost:"bbkhandboll@bbkhandboll.se",epostOrdf:"bbkhandboll@bbkhandboll.se",ort:"Boden",kommun:"Boden",idrott:"Handboll",burkar:1,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[923],taggar:[]},
+  {id:924,namn:"Sunderby Sportklubb",epost:"kansliet@sunderbysk.se",epostOrdf:"kansliet@sunderbysk.se",ort:"Luleå",kommun:"Luleå",idrott:"Fleridrott",burkar:1,skickadeMail:0,ordforande:"",telefon:"",lan:"Norrbotten",ant:"",mailLog:[],kontaktIds:[924],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS];
+const NORRBOTTEN_CONTACTS=[
+  {id:905,fornamn:"Info",efternamn:"",epost:"info@notvikensik.se",telefon:"",roll:"Info",foreningId:905,anteckningar:"Notvikens IK"},
+  {id:906,fornamn:"Kontakt",efternamn:"",epost:"ifkarvidsjaurfotboll@hotmail.com",telefon:"",roll:"Kontakt",foreningId:906,anteckningar:"IFK Arvidsjaur Fotboll SKL"},
+  {id:907,fornamn:"Info",efternamn:"",epost:"info@piteakk.se",telefon:"",roll:"Info",foreningId:907,anteckningar:"Piteå KK"},
+  {id:908,fornamn:"Kontakt",efternamn:"",epost:"lss.hemsida@gmail.com",telefon:"",roll:"Kontakt",foreningId:908,anteckningar:"LSS grupp T1"},
+  {id:909,fornamn:"Kontakt",efternamn:"",epost:"lulegymnasterna.trupp@gmail.com",telefon:"",roll:"Kontakt",foreningId:909,anteckningar:"Lulegymnasterna Trupp FT3"},
+  {id:910,fornamn:"Kontakt",efternamn:"",epost:"nordiccheerathletics@gmail.com",telefon:"",roll:"Kontakt",foreningId:910,anteckningar:"Nordic Cheer Athletics"},
+  {id:911,fornamn:"Kansli",efternamn:"",epost:"kansli@lirabk.se",telefon:"",roll:"Kansli",foreningId:911,anteckningar:"Lira BK"},
+  {id:912,fornamn:"Kontakt",efternamn:"",epost:"lulea.cheerleading@gmail.com",telefon:"",roll:"Kontakt",foreningId:912,anteckningar:"Luleå Cheerleadingförening LCD"},
+  {id:913,fornamn:"Info",efternamn:"",epost:"info@acalulea.com",telefon:"",roll:"Info",foreningId:913,anteckningar:"Arctic Cheer Avalanches"},
+  {id:914,fornamn:"Info",efternamn:"",epost:"info@alviksik.se",telefon:"",roll:"Info",foreningId:914,anteckningar:"Alviks IK Fotboll"},
+  {id:915,fornamn:"Info",efternamn:"",epost:"info@ifkkalix.se",telefon:"",roll:"Info",foreningId:915,anteckningar:"IFK Kalix P15/16"},
+  {id:916,fornamn:"Kansli",efternamn:"",epost:"kansliet@piteaif.se",telefon:"",roll:"Kansli",foreningId:916,anteckningar:"Piteå IF FF"},
+  {id:917,fornamn:"Kontakt",efternamn:"",epost:"kontakt@arjeplogsridklubb.com",telefon:"",roll:"Kontakt",foreningId:917,anteckningar:"Arjeplogs Ridklubb"},
+  {id:918,fornamn:"Kontakt",efternamn:"",epost:"brottning@raneabrottarklubb.se",telefon:"",roll:"Kontakt",foreningId:918,anteckningar:"Råneå BK"},
+  {id:919,fornamn:"Kontakt",efternamn:"",epost:"malmbergets.aif@telia.com",telefon:"",roll:"Kontakt",foreningId:919,anteckningar:"Malmbergets AIF Tjejligan hockey"},
+  {id:920,fornamn:"Info",efternamn:"",epost:"info@alviksik.se",telefon:"",roll:"Info",foreningId:920,anteckningar:"Alviks IK P09 Lag 1"},
+  {id:921,fornamn:"Kansli",efternamn:"",epost:"kansliet@prk.nu",telefon:"",roll:"Kansli",foreningId:921,anteckningar:"Piteå Ridklubb"},
+  {id:922,fornamn:"Kontakt",efternamn:"",epost:"hertsobasket@gmail.com",telefon:"",roll:"Kontakt",foreningId:922,anteckningar:"Hertsö Basket"},
+  {id:923,fornamn:"Kontakt",efternamn:"",epost:"bbkhandboll@bbkhandboll.se",telefon:"",roll:"Kontakt",foreningId:923,anteckningar:"BBK Handboll Flickor 06/07"},
+  {id:924,fornamn:"Kansli",efternamn:"",epost:"kansliet@sunderbysk.se",telefon:"",roll:"Kansli",foreningId:924,anteckningar:"Sunderby Sportklubb"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -1718,7 +1764,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
