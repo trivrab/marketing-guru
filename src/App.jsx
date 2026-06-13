@@ -1266,9 +1266,117 @@ const STOCKHOLM_CONTACTS=[
   {id:1046,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1046,anteckningar:"Mälaröarnas Ridklubb Sektion ridtält"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM];
+const SODERMANLAND=[
+  {id:1047,namn:"Gropptorps IF",epost:"gropptorpsif@hotmail.com",epostOrdf:"gropptorpsif@hotmail.com",ort:"Vingåker",kommun:"Vingåker",idrott:"Fleridrott",burkar:16599,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1047],taggar:[]},
+  {id:1048,namn:"IFK Mariefred",epost:"kansli@ifkmariefred.se",epostOrdf:"kansli@ifkmariefred.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Fleridrott",burkar:10614,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1048],taggar:[]},
+  {id:1049,namn:"Högsjö Bollklubb",epost:"mimman69@gmail.com",epostOrdf:"mimman69@gmail.com",ort:"Vingåker",kommun:"Vingåker",idrott:"Fleridrott",burkar:7071,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1049],taggar:[]},
+  {id:1050,namn:"Tisnarbro IF",epost:"tisnarbroif@gmail.com",epostOrdf:"tisnarbroif@gmail.com",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Fleridrott",burkar:5844,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1050],taggar:[]},
+  {id:1051,namn:"Spökbackens Alpina Skidklubb",epost:"info@spokbacken.se",epostOrdf:"info@spokbacken.se",ort:"Katrineholm",kommun:"Katrineholm",idrott:"Alpint",burkar:5772,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1051],taggar:[]},
+  {id:1052,namn:"Hargs BK",epost:"kansliet@hargsbk.se",epostOrdf:"kansliet@hargsbk.se",ort:"Katrineholm",kommun:"Katrineholm",idrott:"Fleridrott",burkar:5495,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1052],taggar:[]},
+  {id:1053,namn:"Strängnäs GF Trupp 13",epost:"sofie.holmberg@strangnasgf.se",epostOrdf:"sofie.holmberg@strangnasgf.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Gymnastik",burkar:3354,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1053],taggar:[]},
+  {id:1054,namn:"ERICSBERGS GOIF",epost:"klubben@goif.se",epostOrdf:"klubben@goif.se",ort:"Vingåker",kommun:"Vingåker",idrott:"Fleridrott",burkar:2922,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1054],taggar:[]},
+  {id:1055,namn:"Torshälla IBK",epost:"",epostOrdf:"",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Innebandy",burkar:2592,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1055],taggar:[]},
+  {id:1056,namn:"Skogstorps GoIF",epost:"",epostOrdf:"",ort:"Södermanland",kommun:"Södermanland",idrott:"Fleridrott",burkar:1718,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1056],taggar:[]},
+  {id:1057,namn:"KAIK Handboll F2010",epost:"info@kaik.se",epostOrdf:"info@kaik.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Handboll",burkar:1700,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1057],taggar:[]},
+  {id:1058,namn:"Vingåker Volleybollklubb",epost:"vvkkansli@hotmail.com",epostOrdf:"vvkkansli@hotmail.com",ort:"Vingåker",kommun:"Vingåker",idrott:"Volleyboll",burkar:1464,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1058],taggar:[]},
+  {id:1059,namn:"Runtuna Idrottsklubb",epost:"runtunaik@outlook.com",epostOrdf:"runtunaik@outlook.com",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Fleridrott",burkar:1449,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1059],taggar:[]},
+  {id:1060,namn:"Eskilstuna Linden Hockeyklubb",epost:"info@lindenhockey.se",epostOrdf:"info@lindenhockey.se",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Ishockey",burkar:1004,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1060],taggar:[]},
+  {id:1061,namn:"Vingåkers Ryttarförening",epost:"info@vingakersrf.se",epostOrdf:"info@vingakersrf.se",ort:"Vingåker",kommun:"Vingåker",idrott:"Ridsport",burkar:927,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1061],taggar:[]},
+  {id:1062,namn:"Simsällskapet För Handikappade i Nyköping",epost:"robbanjernberg@gmail.com",epostOrdf:"robbanjernberg@gmail.com",ort:"Nyköping",kommun:"Nyköping",idrott:"Simning",burkar:873,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1062],taggar:[]},
+  {id:1063,namn:"Nyby-Torshälla Ridklubb",epost:"info@ntrk.org",epostOrdf:"info@ntrk.org",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Ridsport",burkar:716,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1063],taggar:[]},
+  {id:1064,namn:"Smederna Speedway Ungdom",epost:"kansli@eskilstunasmederna.se",epostOrdf:"kansli@eskilstunasmederna.se",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Motorsport",burkar:701,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1064],taggar:[]},
+  {id:1065,namn:"Strängnäsbygdens Ryttarförening",epost:"kontoret@strangnasridskola.se",epostOrdf:"kontoret@strangnasridskola.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Ridsport",burkar:584,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1065],taggar:[]},
+  {id:1066,namn:"Stallarholmen SK",epost:"kansli@stallarholmenssk.se",epostOrdf:"kansli@stallarholmenssk.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Fleridrott",burkar:550,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1066],taggar:[]},
+  {id:1067,namn:"Sköldinge Idrottsförening",epost:"andreaslarsson_@outlook.com",epostOrdf:"andreaslarsson_@outlook.com",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Fleridrott",burkar:541,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1067],taggar:[]},
+  {id:1068,namn:"VoIF Diana",epost:"info@voifdiana.se",epostOrdf:"info@voifdiana.se",ort:"Södermanland",kommun:"Södermanland",idrott:"Fleridrott",burkar:513,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1068],taggar:[]},
+  {id:1069,namn:"MC-Team Strengnäs",epost:"hojmarknad@mcteam.se",epostOrdf:"hojmarknad@mcteam.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Motorsport",burkar:507,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1069],taggar:[]},
+  {id:1070,namn:"Baggetorps IF",epost:"521pettersson@gmail.com",epostOrdf:"521pettersson@gmail.com",ort:"Vingåker",kommun:"Vingåker",idrott:"Fleridrott",burkar:500,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1070],taggar:[]},
+  {id:1071,namn:"BK Taggen",epost:"mikael.lundqvist@flen.se",epostOrdf:"mikael.lundqvist@flen.se",ort:"Flen",kommun:"Flen",idrott:"Fleridrott",burkar:500,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1071],taggar:[]},
+  {id:1072,namn:"Eskilstuna Gymnastik Brottning",epost:"eskilstunagak@gmail.com",epostOrdf:"eskilstunagak@gmail.com",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Tyngdlyftning",burkar:430,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1072],taggar:[]},
+  {id:1073,namn:"Vrena IF",epost:"nafets.forss@hotmail.se",epostOrdf:"nafets.forss@hotmail.se",ort:"Vingåker",kommun:"Vingåker",idrott:"Fleridrott",burkar:400,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1073],taggar:[]},
+  {id:1074,namn:"Valla IF Fotbollssektion",epost:"kansli@vallaidrottsforening.se",epostOrdf:"kansli@vallaidrottsforening.se",ort:"Katrineholm",kommun:"Katrineholm",idrott:"Fotboll",burkar:315,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1074],taggar:[]},
+  {id:1075,namn:"Stenkvista GoIF",epost:"stenkvista.goif@hotmail.com",epostOrdf:"stenkvista.goif@hotmail.com",ort:"Flen",kommun:"Flen",idrott:"Fleridrott",burkar:314,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1075],taggar:[]},
+  {id:1076,namn:"Strängnäs Tennisklubb",epost:"info@sntk.se",epostOrdf:"info@sntk.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Tennis",burkar:250,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1076],taggar:[]},
+  {id:1077,namn:"Djulö Sportklubb Ungdomslag",epost:"",epostOrdf:"",ort:"Katrineholm",kommun:"Katrineholm",idrott:"Fleridrott",burkar:246,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1077],taggar:[]},
+  {id:1078,namn:"IFA Eskilstuna",epost:"ifaeskilstuna@outlook.com",epostOrdf:"ifaeskilstuna@outlook.com",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Fleridrott",burkar:244,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1078],taggar:[]},
+  {id:1079,namn:"Ärla IF",epost:"klubb@arlaif.se",epostOrdf:"klubb@arlaif.se",ort:"Flen",kommun:"Flen",idrott:"Fleridrott",burkar:243,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1079],taggar:[]},
+  {id:1080,namn:"Katrineholm Griffins Dartsektion",epost:"christopherhallberg4@gmail.com",epostOrdf:"christopherhallberg4@gmail.com",ort:"Katrineholm",kommun:"Katrineholm",idrott:"Dart",burkar:240,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1080],taggar:[]},
+  {id:1081,namn:"Broby GOIF",epost:"info@brobygoif.se",epostOrdf:"info@brobygoif.se",ort:"Flen",kommun:"Flen",idrott:"Fleridrott",burkar:236,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1081],taggar:[]},
+  {id:1082,namn:"Nyköping Knights Baseboll",epost:"info@nykopingknights.se",epostOrdf:"info@nykopingknights.se",ort:"Nyköping",kommun:"Nyköping",idrott:"Baseboll",burkar:215,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1082],taggar:[]},
+  {id:1083,namn:"Dragracingteamet",epost:"",epostOrdf:"",ort:"Södermanland",kommun:"Södermanland",idrott:"Fleridrott",burkar:198,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1083],taggar:[]},
+  {id:1084,namn:"Jäders IF",epost:"info@jadersif.se",epostOrdf:"info@jadersif.se",ort:"Flen",kommun:"Flen",idrott:"Fleridrott",burkar:185,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1084],taggar:[]},
+  {id:1085,namn:"Eskilstuna United DFF",epost:"sportkontoret@eskilstunaunited.se",epostOrdf:"sportkontoret@eskilstunaunited.se",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Fotboll",burkar:170,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1085],taggar:[]},
+  {id:1086,namn:"Eskilstuna Sharks",epost:"info@eskilstunasharks.se",epostOrdf:"info@eskilstunasharks.se",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Ishockey",burkar:154,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1086],taggar:[]},
+  {id:1087,namn:"Eskilstunaortens Ryttarförening",epost:"ekeby@erf.one",epostOrdf:"ekeby@erf.one",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Ridsport",burkar:83,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1087],taggar:[]},
+  {id:1088,namn:"Torshälla IBK P10",epost:"p.eriksson@tradteknik.se",epostOrdf:"p.eriksson@tradteknik.se",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Innebandy",burkar:70,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1088],taggar:[]},
+  {id:1089,namn:"Sundbyholms Travskola",epost:"travskola@sundbyholm.travsport.se",epostOrdf:"travskola@sundbyholm.travsport.se",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Travsport",burkar:24,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1089],taggar:[]},
+  {id:1090,namn:"Allmänna Sportklubben Tyngdlyft & Styrkelyft",epost:"info@ask-eskilstuna.se",epostOrdf:"info@ask-eskilstuna.se",ort:"Södermanland",kommun:"Södermanland",idrott:"Tyngdlyftning",burkar:24,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1090],taggar:[]},
+  {id:1091,namn:"BK Sport",epost:"info@bksport.se",epostOrdf:"info@bksport.se",ort:"Södermanland",kommun:"Södermanland",idrott:"Fleridrott",burkar:10,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1091],taggar:[]},
+  {id:1092,namn:"Eskilstuna Basket P12",epost:"kansliet@eskilstunabasket.se",epostOrdf:"kansliet@eskilstunabasket.se",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Basket",burkar:8,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1092],taggar:[]},
+  {id:1093,namn:"Eskilstuna City FK P10-BLÅ",epost:"eskilstuna@city-fotboll.com",epostOrdf:"eskilstuna@city-fotboll.com",ort:"Eskilstuna",kommun:"Eskilstuna",idrott:"Fotboll",burkar:7,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1093],taggar:[]},
+  {id:1094,namn:"HK Eskil",epost:"info@hkeskil.nu",epostOrdf:"info@hkeskil.nu",ort:"Södermanland",kommun:"Södermanland",idrott:"Fleridrott",burkar:3,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1094],taggar:[]},
+  {id:1095,namn:"Mariefreds Ridklubb",epost:"mariefredsridklubb@gmail.com",epostOrdf:"mariefredsridklubb@gmail.com",ort:"Strängnäs",kommun:"Strängnäs",idrott:"Ridsport",burkar:3,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1095],taggar:[]},
+  {id:1096,namn:"OK -Grip",epost:"okgrip@gmail.com",epostOrdf:"okgrip@gmail.com",ort:"Södermanland",kommun:"Södermanland",idrott:"Orientering",burkar:2,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1096],taggar:[]},
+  {id:1097,namn:"SIK Fotboll Barn/Ungdom",epost:"",epostOrdf:"",ort:"Södermanland",kommun:"Södermanland",idrott:"Fotboll",burkar:13,skickadeMail:0,ordforande:"",telefon:"",lan:"Södermanland",ant:"",mailLog:[],kontaktIds:[1097],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS];
+const SODERMANLAND_CONTACTS=[
+  {id:1047,fornamn:"Kontakt",efternamn:"",epost:"gropptorpsif@hotmail.com",telefon:"",roll:"Kontakt",foreningId:1047,anteckningar:"Gropptorps IF"},
+  {id:1048,fornamn:"Kansli",efternamn:"",epost:"kansli@ifkmariefred.se",telefon:"",roll:"Kansli",foreningId:1048,anteckningar:"IFK Mariefred"},
+  {id:1049,fornamn:"Kontakt",efternamn:"",epost:"mimman69@gmail.com",telefon:"",roll:"Kontakt",foreningId:1049,anteckningar:"Högsjö Bollklubb"},
+  {id:1050,fornamn:"Kontakt",efternamn:"",epost:"tisnarbroif@gmail.com",telefon:"",roll:"Kontakt",foreningId:1050,anteckningar:"Tisnarbro IF"},
+  {id:1051,fornamn:"Info",efternamn:"",epost:"info@spokbacken.se",telefon:"",roll:"Info",foreningId:1051,anteckningar:"Spökbackens Alpina Skidklubb"},
+  {id:1052,fornamn:"Kansli",efternamn:"",epost:"kansliet@hargsbk.se",telefon:"",roll:"Kansli",foreningId:1052,anteckningar:"Hargs BK"},
+  {id:1053,fornamn:"Kontakt",efternamn:"",epost:"sofie.holmberg@strangnasgf.se",telefon:"",roll:"Kontakt",foreningId:1053,anteckningar:"Strängnäs GF Trupp 13"},
+  {id:1054,fornamn:"Kontakt",efternamn:"",epost:"klubben@goif.se",telefon:"",roll:"Kontakt",foreningId:1054,anteckningar:"ERICSBERGS GOIF"},
+  {id:1055,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1055,anteckningar:"Torshälla IBK"},
+  {id:1056,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1056,anteckningar:"Skogstorps GoIF"},
+  {id:1057,fornamn:"Info",efternamn:"",epost:"info@kaik.se",telefon:"",roll:"Info",foreningId:1057,anteckningar:"KAIK Handboll F2010"},
+  {id:1058,fornamn:"Kansli",efternamn:"",epost:"vvkkansli@hotmail.com",telefon:"",roll:"Kansli",foreningId:1058,anteckningar:"Vingåker Volleybollklubb"},
+  {id:1059,fornamn:"Kontakt",efternamn:"",epost:"runtunaik@outlook.com",telefon:"",roll:"Kontakt",foreningId:1059,anteckningar:"Runtuna Idrottsklubb"},
+  {id:1060,fornamn:"Info",efternamn:"",epost:"info@lindenhockey.se",telefon:"",roll:"Info",foreningId:1060,anteckningar:"Eskilstuna Linden Hockeyklubb"},
+  {id:1061,fornamn:"Info",efternamn:"",epost:"info@vingakersrf.se",telefon:"",roll:"Info",foreningId:1061,anteckningar:"Vingåkers Ryttarförening"},
+  {id:1062,fornamn:"Kontakt",efternamn:"",epost:"robbanjernberg@gmail.com",telefon:"",roll:"Kontakt",foreningId:1062,anteckningar:"Simsällskapet För Handikappade i Nyköping"},
+  {id:1063,fornamn:"Info",efternamn:"",epost:"info@ntrk.org",telefon:"",roll:"Info",foreningId:1063,anteckningar:"Nyby-Torshälla Ridklubb"},
+  {id:1064,fornamn:"Kansli",efternamn:"",epost:"kansli@eskilstunasmederna.se",telefon:"",roll:"Kansli",foreningId:1064,anteckningar:"Smederna Speedway Ungdom"},
+  {id:1065,fornamn:"Kontoret",efternamn:"",epost:"kontoret@strangnasridskola.se",telefon:"",roll:"Kontoret",foreningId:1065,anteckningar:"Strängnäsbygdens Ryttarförening"},
+  {id:1066,fornamn:"Kansli",efternamn:"",epost:"kansli@stallarholmenssk.se",telefon:"",roll:"Kansli",foreningId:1066,anteckningar:"Stallarholmen SK"},
+  {id:1067,fornamn:"Kontakt",efternamn:"",epost:"andreaslarsson_@outlook.com",telefon:"",roll:"Kontakt",foreningId:1067,anteckningar:"Sköldinge Idrottsförening"},
+  {id:1068,fornamn:"Info",efternamn:"",epost:"info@voifdiana.se",telefon:"",roll:"Info",foreningId:1068,anteckningar:"VoIF Diana"},
+  {id:1069,fornamn:"Kontakt",efternamn:"",epost:"hojmarknad@mcteam.se",telefon:"",roll:"Kontakt",foreningId:1069,anteckningar:"MC-Team Strengnäs"},
+  {id:1070,fornamn:"Kontakt",efternamn:"",epost:"521pettersson@gmail.com",telefon:"",roll:"Kontakt",foreningId:1070,anteckningar:"Baggetorps IF"},
+  {id:1071,fornamn:"Kontakt",efternamn:"",epost:"mikael.lundqvist@flen.se",telefon:"",roll:"Kontakt",foreningId:1071,anteckningar:"BK Taggen"},
+  {id:1072,fornamn:"Kontakt",efternamn:"",epost:"eskilstunagak@gmail.com",telefon:"",roll:"Kontakt",foreningId:1072,anteckningar:"Eskilstuna Gymnastik Brottning"},
+  {id:1073,fornamn:"Kontakt",efternamn:"",epost:"nafets.forss@hotmail.se",telefon:"",roll:"Kontakt",foreningId:1073,anteckningar:"Vrena IF"},
+  {id:1074,fornamn:"Kansli",efternamn:"",epost:"kansli@vallaidrottsforening.se",telefon:"",roll:"Kansli",foreningId:1074,anteckningar:"Valla IF Fotbollssektion"},
+  {id:1075,fornamn:"Kontakt",efternamn:"",epost:"stenkvista.goif@hotmail.com",telefon:"",roll:"Kontakt",foreningId:1075,anteckningar:"Stenkvista GoIF"},
+  {id:1076,fornamn:"Info",efternamn:"",epost:"info@sntk.se",telefon:"",roll:"Info",foreningId:1076,anteckningar:"Strängnäs Tennisklubb"},
+  {id:1077,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1077,anteckningar:"Djulö Sportklubb Ungdomslag"},
+  {id:1078,fornamn:"Kontakt",efternamn:"",epost:"ifaeskilstuna@outlook.com",telefon:"",roll:"Kontakt",foreningId:1078,anteckningar:"IFA Eskilstuna"},
+  {id:1079,fornamn:"Kontakt",efternamn:"",epost:"klubb@arlaif.se",telefon:"",roll:"Kontakt",foreningId:1079,anteckningar:"Ärla IF"},
+  {id:1080,fornamn:"Kontakt",efternamn:"",epost:"christopherhallberg4@gmail.com",telefon:"",roll:"Kontakt",foreningId:1080,anteckningar:"Katrineholm Griffins Dartsektion"},
+  {id:1081,fornamn:"Info",efternamn:"",epost:"info@brobygoif.se",telefon:"",roll:"Info",foreningId:1081,anteckningar:"Broby GOIF"},
+  {id:1082,fornamn:"Info",efternamn:"",epost:"info@nykopingknights.se",telefon:"",roll:"Info",foreningId:1082,anteckningar:"Nyköping Knights Baseboll"},
+  {id:1083,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1083,anteckningar:"Dragracingteamet"},
+  {id:1084,fornamn:"Info",efternamn:"",epost:"info@jadersif.se",telefon:"",roll:"Info",foreningId:1084,anteckningar:"Jäders IF"},
+  {id:1085,fornamn:"Sportkontor",efternamn:"",epost:"sportkontoret@eskilstunaunited.se",telefon:"",roll:"Sportkontor",foreningId:1085,anteckningar:"Eskilstuna United DFF"},
+  {id:1086,fornamn:"Info",efternamn:"",epost:"info@eskilstunasharks.se",telefon:"",roll:"Info",foreningId:1086,anteckningar:"Eskilstuna Sharks"},
+  {id:1087,fornamn:"Kontakt",efternamn:"",epost:"ekeby@erf.one",telefon:"",roll:"Kontakt",foreningId:1087,anteckningar:"Eskilstunaortens Ryttarförening"},
+  {id:1088,fornamn:"Kontakt",efternamn:"",epost:"p.eriksson@tradteknik.se",telefon:"",roll:"Kontakt",foreningId:1088,anteckningar:"Torshälla IBK P10"},
+  {id:1089,fornamn:"Sportkontor",efternamn:"",epost:"travskola@sundbyholm.travsport.se",telefon:"",roll:"Sportkontor",foreningId:1089,anteckningar:"Sundbyholms Travskola"},
+  {id:1090,fornamn:"Info",efternamn:"",epost:"info@ask-eskilstuna.se",telefon:"",roll:"Info",foreningId:1090,anteckningar:"Allmänna Sportklubben Tyngdlyft & Styrkelyft"},
+  {id:1091,fornamn:"Sportkontor",efternamn:"",epost:"info@bksport.se",telefon:"",roll:"Sportkontor",foreningId:1091,anteckningar:"BK Sport"},
+  {id:1092,fornamn:"Kansli",efternamn:"",epost:"kansliet@eskilstunabasket.se",telefon:"",roll:"Kansli",foreningId:1092,anteckningar:"Eskilstuna Basket P12"},
+  {id:1093,fornamn:"Kontakt",efternamn:"",epost:"eskilstuna@city-fotboll.com",telefon:"",roll:"Kontakt",foreningId:1093,anteckningar:"Eskilstuna City FK P10-BLÅ"},
+  {id:1094,fornamn:"Info",efternamn:"",epost:"info@hkeskil.nu",telefon:"",roll:"Info",foreningId:1094,anteckningar:"HK Eskil"},
+  {id:1095,fornamn:"Kontakt",efternamn:"",epost:"mariefredsridklubb@gmail.com",telefon:"",roll:"Kontakt",foreningId:1095,anteckningar:"Mariefreds Ridklubb"},
+  {id:1096,fornamn:"Kontakt",efternamn:"",epost:"okgrip@gmail.com",telefon:"",roll:"Kontakt",foreningId:1096,anteckningar:"OK -Grip"},
+  {id:1097,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1097,anteckningar:"SIK Fotboll Barn/Ungdom"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -2020,7 +2128,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
