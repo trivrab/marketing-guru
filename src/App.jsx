@@ -1832,9 +1832,43 @@ const VASTMANLAND_CONTACTS=[
   {id:1311,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1311,anteckningar:"Aros BBK"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN,...VASTERNORRLAND,...VASTMANLAND];
+const VASTRAGOTALAND=[
+  {id:1312,namn:"Ljungskile SK",epost:"admin@LSK.se",epostOrdf:"admin@LSK.se",ort:"Ljungskile",kommun:"Ljungskile",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1312],taggar:[]},
+  {id:1313,namn:"Sotenäs Fältrittklubb",epost:"",epostOrdf:"",ort:"Sotenäs",kommun:"Sotenäs",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1313],taggar:[]},
+  {id:1314,namn:"Mariestad BoIS Hockey",epost:"kansli@mariestadbois.se",epostOrdf:"kansli@mariestadbois.se",ort:"Mariestad",kommun:"Mariestad",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1314],taggar:[]},
+  {id:1315,namn:"Backatorp IF",epost:"kansliet@backatorpif.se",epostOrdf:"kansliet@backatorpif.se",ort:"Göteborg",kommun:"Göteborg",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1315],taggar:[]},
+  {id:1316,namn:"Smögens IF",epost:"info@smogensif.com",epostOrdf:"info@smogensif.com",ort:"Sotenäs",kommun:"Sotenäs",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1316],taggar:[]},
+  {id:1317,namn:"HK Guldkroken",epost:"hkguldkroken@outlook.com",epostOrdf:"hkguldkroken@outlook.com",ort:"Stenungsund",kommun:"Stenungsund",idrott:"Handboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1317],taggar:[]},
+  {id:1318,namn:"Vänersborgs IF",epost:"info@vanersborgsif.se",epostOrdf:"info@vanersborgsif.se",ort:"Vänersborg",kommun:"Vänersborg",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1318],taggar:[]},
+  {id:1319,namn:"Horreds IF",epost:"horredsif@gmail.com",epostOrdf:"horredsif@gmail.com",ort:"Mark",kommun:"Mark",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1319],taggar:[]},
+  {id:1320,namn:"Öxabäck IF",epost:"jespersunneras@live.se",epostOrdf:"jespersunneras@live.se",ort:"Mark",kommun:"Mark",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1320],taggar:[]},
+  {id:1321,namn:"Hyppelns Idrottsklubb",epost:"katarina1974@hotmail.com",epostOrdf:"katarina1974@hotmail.com",ort:"Göteborg",kommun:"Göteborg",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1321],taggar:[]},
+  {id:1322,namn:"Hyssna IF",epost:"hyssnaif@gmail.com",epostOrdf:"hyssnaif@gmail.com",ort:"Mark",kommun:"Mark",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1322],taggar:[]},
+  {id:1323,namn:"Falköpings AIK BK",epost:"faikbowling@gmail.com",epostOrdf:"faikbowling@gmail.com",ort:"Falköping",kommun:"Falköping",idrott:"Bowling",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1323],taggar:[]},
+  {id:1324,namn:"Länghems IF Ungdomssektionen",epost:"info@langhemsif.nu",epostOrdf:"info@langhemsif.nu",ort:"Borås",kommun:"Borås",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1324],taggar:[]},
+  {id:1325,namn:"Torestorp IF",epost:"",epostOrdf:"",ort:"Alingsås",kommun:"Alingsås",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västra Götaland",ant:"",mailLog:[],kontaktIds:[1325],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS,...VASTERNORRLAND_CONTACTS,...VASTMANLAND_CONTACTS];
+const VASTRAGOTALAND_CONTACTS=[
+  {id:1312,fornamn:"Kansli",efternamn:"",epost:"admin@LSK.se",telefon:"",roll:"Kansli",foreningId:1312,anteckningar:"Ljungskile SK"},
+  {id:1313,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1313,anteckningar:"Sotenäs Fältrittklubb"},
+  {id:1314,fornamn:"Kansli",efternamn:"",epost:"kansli@mariestadbois.se",telefon:"",roll:"Kansli",foreningId:1314,anteckningar:"Mariestad BoIS Hockey"},
+  {id:1315,fornamn:"Kansli",efternamn:"",epost:"kansliet@backatorpif.se",telefon:"",roll:"Kansli",foreningId:1315,anteckningar:"Backatorp IF"},
+  {id:1316,fornamn:"Info",efternamn:"",epost:"info@smogensif.com",telefon:"",roll:"Info",foreningId:1316,anteckningar:"Smögens IF"},
+  {id:1317,fornamn:"Kontakt",efternamn:"",epost:"hkguldkroken@outlook.com",telefon:"",roll:"Kontakt",foreningId:1317,anteckningar:"HK Guldkroken"},
+  {id:1318,fornamn:"Info",efternamn:"",epost:"info@vanersborgsif.se",telefon:"",roll:"Info",foreningId:1318,anteckningar:"Vänersborgs IF"},
+  {id:1319,fornamn:"Kontakt",efternamn:"",epost:"horredsif@gmail.com",telefon:"",roll:"Kontakt",foreningId:1319,anteckningar:"Horreds IF"},
+  {id:1320,fornamn:"Kontakt",efternamn:"",epost:"jespersunneras@live.se",telefon:"",roll:"Kontakt",foreningId:1320,anteckningar:"Öxabäck IF"},
+  {id:1321,fornamn:"Kontakt",efternamn:"",epost:"katarina1974@hotmail.com",telefon:"",roll:"Kontakt",foreningId:1321,anteckningar:"Hyppelns Idrottsklubb"},
+  {id:1322,fornamn:"Kontakt",efternamn:"",epost:"hyssnaif@gmail.com",telefon:"",roll:"Kontakt",foreningId:1322,anteckningar:"Hyssna IF"},
+  {id:1323,fornamn:"Kontakt",efternamn:"",epost:"faikbowling@gmail.com",telefon:"",roll:"Kontakt",foreningId:1323,anteckningar:"Falköpings AIK BK"},
+  {id:1324,fornamn:"Info",efternamn:"",epost:"info@langhemsif.nu",telefon:"",roll:"Info",foreningId:1324,anteckningar:"Länghems IF Ungdomssektionen"},
+  {id:1325,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1325,anteckningar:"Torestorp IF"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN,...VASTERNORRLAND,...VASTMANLAND,...VASTRAGOTALAND];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS,...VASTERNORRLAND_CONTACTS,...VASTMANLAND_CONTACTS,...VASTRAGOTALAND_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -2586,7 +2620,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"],["Västernorrland","Västernorrland"],["Västmanland","Västmanland"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"],["Västernorrland","Västernorrland"],["Västmanland","Västmanland"],["Västra Götaland","Västra Götaland"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
