@@ -1866,9 +1866,109 @@ const VASTRAGOTALAND_CONTACTS=[
   {id:1325,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1325,anteckningar:"Torestorp IF"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN,...VASTERNORRLAND,...VASTMANLAND,...VASTRAGOTALAND];
+const OREBRO=[
+  {id:1326,namn:"Hovsta IF Fotboll",epost:"info@hovstaif.se",epostOrdf:"info@hovstaif.se",ort:"Örebro",kommun:"Örebro",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1326],taggar:[]},
+  {id:1327,namn:"Karlslunds IF FK P2013",epost:"info@karlslund.nu",epostOrdf:"info@karlslund.nu",ort:"Örebro",kommun:"Örebro",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1327],taggar:[]},
+  {id:1328,namn:"Östansjö IF",epost:"kontakt.oif@gmail.com",epostOrdf:"kontakt.oif@gmail.com",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1328],taggar:[]},
+  {id:1329,namn:"Svartå IF",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1329],taggar:[]},
+  {id:1330,namn:"Lindlövens IF",epost:"kansli@lindloven.com",epostOrdf:"kansli@lindloven.com",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1330],taggar:[]},
+  {id:1331,namn:"Karlskoga BBK",epost:"",epostOrdf:"",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Baseboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1331],taggar:[]},
+  {id:1332,namn:"IFK Hallsbergs Hockey",epost:"info@hallsbergshockey.se",epostOrdf:"info@hallsbergshockey.se",ort:"Hallsberg",kommun:"Hallsberg",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1332],taggar:[]},
+  {id:1333,namn:"Stoneridge Electronics Fritidsklubb",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1333],taggar:[]},
+  {id:1334,namn:"Karlskoga Badmintonklubb",epost:"infokbmk@gmail.com",epostOrdf:"infokbmk@gmail.com",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Badminton",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1334],taggar:[]},
+  {id:1335,namn:"BIK Karlskoga Ungdom 2013",epost:"isabella.ottosson@scandfoil.se",epostOrdf:"isabella.ottosson@scandfoil.se",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1335],taggar:[]},
+  {id:1336,namn:"Sydnärkepolisens IF",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1336],taggar:[]},
+  {id:1337,namn:"Vretstorps IF Fotboll",epost:"vretstorpsif@live.se",epostOrdf:"vretstorpsif@live.se",ort:"Örebro",kommun:"Örebro",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1337],taggar:[]},
+  {id:1338,namn:"Adolfsbergs IK",epost:"jakob@adolfsbergsik.se",epostOrdf:"jakob@adolfsbergsik.se",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1338],taggar:[]},
+  {id:1339,namn:"Örebro SK Söder",epost:"tommy.sandberg60@outlook.com",epostOrdf:"tommy.sandberg60@outlook.com",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1339],taggar:[]},
+  {id:1340,namn:"Degerfors Innebandyklubb",epost:"dibk@hotmail.se",epostOrdf:"dibk@hotmail.se",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Innebandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1340],taggar:[]},
+  {id:1341,namn:"Rynninge IK",epost:"kansli@rynningeik.se",epostOrdf:"kansli@rynningeik.se",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1341],taggar:[]},
+  {id:1342,namn:"Yxhults IK",epost:"yxhultsik1929@gmail.com",epostOrdf:"yxhultsik1929@gmail.com",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1342],taggar:[]},
+  {id:1343,namn:"KIF Eagles Baseboll",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Baseboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1343],taggar:[]},
+  {id:1344,namn:"Hallsbergs MK Folkrace",epost:"info@hallsbergsmk.se",epostOrdf:"info@hallsbergsmk.se",ort:"Hallsberg",kommun:"Hallsberg",idrott:"Motorsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1344],taggar:[]},
+  {id:1345,namn:"KFUM Örebro Basket",epost:"info@kfumorebrobasket.se",epostOrdf:"info@kfumorebrobasket.se",ort:"Örebro",kommun:"Örebro",idrott:"Basket",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1345],taggar:[]},
+  {id:1346,namn:"IF Eker",epost:"jorgen.nanberg@hotmail.com",epostOrdf:"jorgen.nanberg@hotmail.com",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1346],taggar:[]},
+  {id:1347,namn:"Granbergsdals IF",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1347],taggar:[]},
+  {id:1348,namn:"Karlskoga Ridklubb",epost:"styrelsen@karlskogaridklubb.se",epostOrdf:"styrelsen@karlskogaridklubb.se",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1348],taggar:[]},
+  {id:1349,namn:"Örebro Simallians",epost:"kansliet@osasim.se",epostOrdf:"kansliet@osasim.se",ort:"Örebro",kommun:"Örebro",idrott:"Simning",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1349],taggar:[]},
+  {id:1350,namn:"Linde Båtklubb",epost:"info@lindebatklubb.se",epostOrdf:"info@lindebatklubb.se",ort:"Lindesberg",kommun:"Lindesberg",idrott:"Båtsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1350],taggar:[]},
+  {id:1351,namn:"Örebro Segelflygklubb",epost:"orebro.segelflygklubb@gmail.com",epostOrdf:"orebro.segelflygklubb@gmail.com",ort:"Örebro",kommun:"Örebro",idrott:"Segelflygning",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1351],taggar:[]},
+  {id:1352,namn:"Hidingsta IK Fotboll",epost:"janne.snickarbroderna@hotmail.com",epostOrdf:"janne.snickarbroderna@hotmail.com",ort:"Örebro",kommun:"Örebro",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1352],taggar:[]},
+  {id:1353,namn:"Bråtens IK",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1353],taggar:[]},
+  {id:1354,namn:"Laxå Ridklubb",epost:"laxaridklubb@outlook.com",epostOrdf:"laxaridklubb@outlook.com",ort:"Laxå",kommun:"Laxå",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1354],taggar:[]},
+  {id:1355,namn:"Askersunds Orienteringsklubb",epost:"sofiahardvall@gmail.com",epostOrdf:"sofiahardvall@gmail.com",ort:"Askersund",kommun:"Askersund",idrott:"Orientering",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1355],taggar:[]},
+  {id:1356,namn:"Glanshammar IF Fotboll",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1356],taggar:[]},
+  {id:1357,namn:"Hallsbergs Brottarklubb",epost:"",epostOrdf:"",ort:"Hallsberg",kommun:"Hallsberg",idrott:"Brottning",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1357],taggar:[]},
+  {id:1358,namn:"Örebro Brukshundklubb",epost:"styrelse@orebrobk.nu",epostOrdf:"styrelse@orebrobk.nu",ort:"Örebro",kommun:"Örebro",idrott:"Hundsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1358],taggar:[]},
+  {id:1359,namn:"Östra Almby FK",epost:"ordforande@oafk.se",epostOrdf:"ordforande@oafk.se",ort:"Örebro",kommun:"Örebro",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1359],taggar:[]},
+  {id:1360,namn:"Hagaby GoIF",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1360],taggar:[]},
+  {id:1361,namn:"Örebro Sportdykarklubb",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Dykning",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1361],taggar:[]},
+  {id:1362,namn:"Kårsta Golfklubb",epost:"info@karstagk.se",epostOrdf:"info@karstagk.se",ort:"Örebro",kommun:"Örebro",idrott:"Golf",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1362],taggar:[]},
+  {id:1363,namn:"Kumla Handboll",epost:"kumla.handboll@swipnet.se",epostOrdf:"kumla.handboll@swipnet.se",ort:"Kumla",kommun:"Kumla",idrott:"Handboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1363],taggar:[]},
+  {id:1364,namn:"BIK Karlskoga Junior",epost:"marcus.kull@bikkarlskoga.se",epostOrdf:"marcus.kull@bikkarlskoga.se",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1364],taggar:[]},
+  {id:1365,namn:"Karlskoga Sportklubb",epost:"",epostOrdf:"",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1365],taggar:[]},
+  {id:1366,namn:"Rävåsen IK",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1366],taggar:[]},
+  {id:1367,namn:"Karlskoga FBC",epost:"",epostOrdf:"",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Innebandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1367],taggar:[]},
+  {id:1368,namn:"Örebro Syrianska IF Ungdom",epost:"info@orebrosyrianska.com",epostOrdf:"info@orebrosyrianska.com",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1368],taggar:[]},
+  {id:1369,namn:"Karlskoga Skateboardförening",epost:"Rampaborg@gmail.com",epostOrdf:"Rampaborg@gmail.com",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Skateboard",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1369],taggar:[]},
+  {id:1370,namn:"Bofors KK Kanotsport",epost:"",epostOrdf:"",ort:"Karlskoga",kommun:"Karlskoga",idrott:"Kanot",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1370],taggar:[]},
+  {id:1371,namn:"Cheer Unlimited Storm",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Cheerleading",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1371],taggar:[]},
+  {id:1372,namn:"Immetorps BK",epost:"",epostOrdf:"",ort:"Örebro",kommun:"Örebro",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Örebro",ant:"",mailLog:[],kontaktIds:[1372],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS,...VASTERNORRLAND_CONTACTS,...VASTMANLAND_CONTACTS,...VASTRAGOTALAND_CONTACTS];
+const OREBRO_CONTACTS=[
+  {id:1326,fornamn:"Info",efternamn:"",epost:"info@hovstaif.se",telefon:"",roll:"Info",foreningId:1326,anteckningar:"Hovsta IF Fotboll"},
+  {id:1327,fornamn:"Info",efternamn:"",epost:"info@karlslund.nu",telefon:"",roll:"Info",foreningId:1327,anteckningar:"Karlslunds IF FK P2013"},
+  {id:1328,fornamn:"Kontakt",efternamn:"",epost:"kontakt.oif@gmail.com",telefon:"",roll:"Kontakt",foreningId:1328,anteckningar:"Östansjö IF"},
+  {id:1329,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1329,anteckningar:"Svartå IF"},
+  {id:1330,fornamn:"Kansli",efternamn:"",epost:"kansli@lindloven.com",telefon:"",roll:"Kansli",foreningId:1330,anteckningar:"Lindlövens IF"},
+  {id:1331,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1331,anteckningar:"Karlskoga BBK"},
+  {id:1332,fornamn:"Info",efternamn:"",epost:"info@hallsbergshockey.se",telefon:"",roll:"Info",foreningId:1332,anteckningar:"IFK Hallsbergs Hockey"},
+  {id:1333,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1333,anteckningar:"Stoneridge Electronics Fritidsklubb"},
+  {id:1334,fornamn:"Kontakt",efternamn:"",epost:"infokbmk@gmail.com",telefon:"",roll:"Kontakt",foreningId:1334,anteckningar:"Karlskoga Badmintonklubb"},
+  {id:1335,fornamn:"Kontakt",efternamn:"",epost:"isabella.ottosson@scandfoil.se",telefon:"",roll:"Kontakt",foreningId:1335,anteckningar:"BIK Karlskoga Ungdom 2013"},
+  {id:1336,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1336,anteckningar:"Sydnärkepolisens IF"},
+  {id:1337,fornamn:"Kontakt",efternamn:"",epost:"vretstorpsif@live.se",telefon:"",roll:"Kontakt",foreningId:1337,anteckningar:"Vretstorps IF Fotboll"},
+  {id:1338,fornamn:"Kontakt",efternamn:"",epost:"jakob@adolfsbergsik.se",telefon:"",roll:"Kontakt",foreningId:1338,anteckningar:"Adolfsbergs IK"},
+  {id:1339,fornamn:"Kontakt",efternamn:"",epost:"tommy.sandberg60@outlook.com",telefon:"",roll:"Kontakt",foreningId:1339,anteckningar:"Örebro SK Söder"},
+  {id:1340,fornamn:"Kontakt",efternamn:"",epost:"dibk@hotmail.se",telefon:"",roll:"Kontakt",foreningId:1340,anteckningar:"Degerfors Innebandyklubb"},
+  {id:1341,fornamn:"Kansli",efternamn:"",epost:"kansli@rynningeik.se",telefon:"",roll:"Kansli",foreningId:1341,anteckningar:"Rynninge IK"},
+  {id:1342,fornamn:"Kontakt",efternamn:"",epost:"yxhultsik1929@gmail.com",telefon:"",roll:"Kontakt",foreningId:1342,anteckningar:"Yxhults IK"},
+  {id:1343,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1343,anteckningar:"KIF Eagles Baseboll"},
+  {id:1344,fornamn:"Info",efternamn:"",epost:"info@hallsbergsmk.se",telefon:"",roll:"Info",foreningId:1344,anteckningar:"Hallsbergs MK Folkrace"},
+  {id:1345,fornamn:"Info",efternamn:"",epost:"info@kfumorebrobasket.se",telefon:"",roll:"Info",foreningId:1345,anteckningar:"KFUM Örebro Basket"},
+  {id:1346,fornamn:"Kontakt",efternamn:"",epost:"jorgen.nanberg@hotmail.com",telefon:"",roll:"Kontakt",foreningId:1346,anteckningar:"IF Eker"},
+  {id:1347,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1347,anteckningar:"Granbergsdals IF"},
+  {id:1348,fornamn:"Styrelsen",efternamn:"",epost:"styrelsen@karlskogaridklubb.se",telefon:"",roll:"Styrelsen",foreningId:1348,anteckningar:"Karlskoga Ridklubb"},
+  {id:1349,fornamn:"Kansli",efternamn:"",epost:"kansliet@osasim.se",telefon:"",roll:"Kansli",foreningId:1349,anteckningar:"Örebro Simallians"},
+  {id:1350,fornamn:"Info",efternamn:"",epost:"info@lindebatklubb.se",telefon:"",roll:"Info",foreningId:1350,anteckningar:"Linde Båtklubb"},
+  {id:1351,fornamn:"Kontakt",efternamn:"",epost:"orebro.segelflygklubb@gmail.com",telefon:"",roll:"Kontakt",foreningId:1351,anteckningar:"Örebro Segelflygklubb"},
+  {id:1352,fornamn:"Kontakt",efternamn:"",epost:"janne.snickarbroderna@hotmail.com",telefon:"",roll:"Kontakt",foreningId:1352,anteckningar:"Hidingsta IK Fotboll"},
+  {id:1353,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1353,anteckningar:"Bråtens IK"},
+  {id:1354,fornamn:"Kontakt",efternamn:"",epost:"laxaridklubb@outlook.com",telefon:"",roll:"Kontakt",foreningId:1354,anteckningar:"Laxå Ridklubb"},
+  {id:1355,fornamn:"Kontakt",efternamn:"",epost:"sofiahardvall@gmail.com",telefon:"",roll:"Kontakt",foreningId:1355,anteckningar:"Askersunds Orienteringsklubb"},
+  {id:1356,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1356,anteckningar:"Glanshammar IF Fotboll"},
+  {id:1357,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1357,anteckningar:"Hallsbergs Brottarklubb"},
+  {id:1358,fornamn:"Styrelsen",efternamn:"",epost:"styrelse@orebrobk.nu",telefon:"",roll:"Styrelsen",foreningId:1358,anteckningar:"Örebro Brukshundklubb"},
+  {id:1359,fornamn:"Ordförande",efternamn:"",epost:"ordforande@oafk.se",telefon:"",roll:"Ordförande",foreningId:1359,anteckningar:"Östra Almby FK"},
+  {id:1360,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1360,anteckningar:"Hagaby GoIF"},
+  {id:1361,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1361,anteckningar:"Örebro Sportdykarklubb"},
+  {id:1362,fornamn:"Info",efternamn:"",epost:"info@karstagk.se",telefon:"",roll:"Info",foreningId:1362,anteckningar:"Kårsta Golfklubb"},
+  {id:1363,fornamn:"Kontakt",efternamn:"",epost:"kumla.handboll@swipnet.se",telefon:"",roll:"Kontakt",foreningId:1363,anteckningar:"Kumla Handboll"},
+  {id:1364,fornamn:"Kontakt",efternamn:"",epost:"marcus.kull@bikkarlskoga.se",telefon:"",roll:"Kontakt",foreningId:1364,anteckningar:"BIK Karlskoga Junior"},
+  {id:1365,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1365,anteckningar:"Karlskoga Sportklubb"},
+  {id:1366,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1366,anteckningar:"Rävåsen IK"},
+  {id:1367,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1367,anteckningar:"Karlskoga FBC"},
+  {id:1368,fornamn:"Info",efternamn:"",epost:"info@orebrosyrianska.com",telefon:"",roll:"Info",foreningId:1368,anteckningar:"Örebro Syrianska IF Ungdom"},
+  {id:1369,fornamn:"Kontakt",efternamn:"",epost:"Rampaborg@gmail.com",telefon:"",roll:"Kontakt",foreningId:1369,anteckningar:"Karlskoga Skateboardförening"},
+  {id:1370,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1370,anteckningar:"Bofors KK Kanotsport"},
+  {id:1371,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1371,anteckningar:"Cheer Unlimited Storm"},
+  {id:1372,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1372,anteckningar:"Immetorps BK"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN,...VASTERNORRLAND,...VASTMANLAND,...VASTRAGOTALAND,...OREBRO];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS,...VASTERNORRLAND_CONTACTS,...VASTMANLAND_CONTACTS,...VASTRAGOTALAND_CONTACTS,...OREBRO_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -2620,7 +2720,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"],["Västernorrland","Västernorrland"],["Västmanland","Västmanland"],["Västra Götaland","Västra Götaland"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"],["Västernorrland","Västernorrland"],["Västmanland","Västmanland"],["Västra Götaland","Västra Götaland"],["Örebro","Örebro"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
