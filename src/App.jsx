@@ -2125,7 +2125,7 @@ export default function App(){
   const [fr,setFr]=useState(INIT_FR);
   const [camp,setCamp]=useState(INIT_CAMP);
   const [contacts,setContacts]=useState(INIT_CONTACTS_ALL);
-  const [cfg,setCfg]=useState({apiKey:"",senderName:"Marketing Guru",senderEmail:"",preferOrdf:false,proxyUrl:"",brevoTag:"Marketingguru - BottleDROP"});
+  const [cfg,setCfg]=useState({apiKey:"",senderName:"Marketing Guru",senderEmail:"",preferOrdf:false,proxyUrl:"",brevoTag:"Marketingguru - BottleDROP",dailyLimit:0});
   const [templates,setTemplates]=useState(TEMPLATES);
   const [kontexter,setKontexter]=useState(INIT_KONTEXTER);
   const [aktivKontextId,setAktivKontextId]=useState("gepant");
@@ -2854,19 +2854,35 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
 
   const sendAll=async()=>{
     if(!cfg.apiKey||!cfg.senderEmail||!selList.length)return;
+    // Daily limit check
+    const todayStr=new Date().toLocaleDateString("sv-SE");
+    const sentToday=fr.reduce((acc,f)=>{
+      return acc+(f.mailLog||[]).filter(m=>m.date&&m.date.startsWith(todayStr)&&m.status==="sent").length;
+    },0);
+    const limit=Number(cfg.dailyLimit)||0;
+    if(limit>0&&sentToday>=limit){
+      alert(\`Dagsgränsen på \${limit} mail är nådd. Inga fler mail skickas idag.\`);
+      return;
+    }
     setSending(true);setResults(null);setView("preview");
     const res=[];
     const campId=Date.now();
     const now=new Date().toLocaleDateString("sv-SE")+" "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
     // Accumulate all fr updates – apply once at end to avoid stale closure overwrites
     const frUpdates={}; // id → updated forening object
+    let sentTodayCount=sentToday;
     for(const f of selList){
+      if(limit>0&&sentTodayCount>=limit){
+        res.push({id:f.id,namn:f.namn,ok:false,msg:"Dagsgräns nådd"});
+        continue;
+      }
       const recs=getRecipients(f);
       if(!recs.length){res.push({id:f.id,namn:f.namn,ok:false,msg:"Ingen e-post"});continue;}
       try{
         const r=await brevoPost({sender:{name:cfg.senderName||"Marketing Guru",email:cfg.senderEmail},to:recs,subject:fill(subj,f,cfg.senderName),htmlContent:makeHtml(fill(body,f,cfg.senderName),getHtmlTmpl(),f,cfg.senderName),textContent:fill(body,f,cfg.senderName),tags:cfg.brevoTag?[cfg.brevoTag]:[]});
         if(r.ok){
           res.push({id:f.id,namn:f.namn,ok:true});
+          sentTodayCount++;
           const email=recs.map(r=>r.email).join(" + ");
           const logEntry={id:campId+"_"+f.id,campaignId:campId,date:now,subject:fill(subj,f,cfg.senderName),toEmail:email,status:"sent"};
           // Build on top of any earlier update in this batch, not stale fr
@@ -3054,6 +3070,14 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
             {/* Send button */}
             <div style={{display:"flex",gap:8}}>
               <button onClick={()=>setView("compose")} style={{...btn("ghost"),flex:1,justifyContent:"center"}}>← Tillbaka</button>
+              {(()=>{
+                const todayStr2=new Date().toLocaleDateString("sv-SE");
+                const sentToday2=fr.reduce((acc,f)=>(acc+(f.mailLog||[]).filter(m=>m.date&&m.date.startsWith(todayStr2)&&m.status==="sent").length),0);
+                const limit2=Number(cfg.dailyLimit)||0;
+                return limit2>0&&<div style={{fontSize:11,color:sentToday2>=limit2?C.red:C.muted,marginBottom:6,textAlign:"center",fontWeight:sentToday2>=limit2?700:400}}>
+                  {sentToday2>=limit2?"🚫 Dagsgräns nådd":"📊 Skickat idag:"} {sentToday2}{limit2>0&&" / "+limit2}
+                </div>;
+              })()}
               <button onClick={sendAll} disabled={sending||!cfg.apiKey||!cfg.senderEmail||!selList.length} style={{...btn("primary"),flex:2,justifyContent:"center",minHeight:M?52:46,opacity:(!cfg.apiKey||!cfg.senderEmail)?0.5:1}}>
                 {sending?"⏳ Skickar…":"🚀 Skicka till "+selList.length+" föreningar"}
               </button>
@@ -3589,6 +3613,11 @@ function Installningar({cfg,saveCfg,templates:tmplsProp,saveTemplates,kontexter,
               <label style={lbl}>Brevo-tagg (valfritt)</label>
               <input value={cfg.brevoTag||""} onChange={e=>saveCfg({...cfg,brevoTag:e.target.value})} placeholder="Marketingguru - BottleDROP" style={{...I(),minHeight:M?46:42}}/>
               <div style={{fontSize:10,color:C.muted,marginTop:4}}>Taggen läggs på alla mail som skickas och syns i Brevo under Transactional → Logs. Lämna tomt för ingen tagg.</div>
+            </div>
+            <div style={{marginTop:10}}>
+              <label style={lbl}>Maxgräns per dag (antal mail)</label>
+              <input type="number" min="0" value={cfg.dailyLimit||""} onChange={e=>saveCfg({...cfg,dailyLimit:Number(e.target.value)||0})} placeholder="0 = ingen gräns" style={{...I(),minHeight:M?46:42}}/>
+              <div style={{fontSize:10,color:C.muted,marginTop:4}}>Appen stoppar automatiskt när gränsen nås under dagen. 0 = ingen gräns.</div>
             </div>
           </div>
         </div>
