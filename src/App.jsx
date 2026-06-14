@@ -1700,9 +1700,55 @@ const VASTERBOTTEN_CONTACTS=[
   {id:1251,fornamn:"Info",efternamn:"",epost:"info@medlesk.com",telefon:"",roll:"Info",foreningId:1251,anteckningar:"Medle SK"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN];
+const VASTERNORRLAND=[
+  {id:1252,namn:"Holmbygdens Utveckling och Idrott",epost:"info@holmbygden.se",epostOrdf:"info@holmbygden.se",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1252],taggar:[]},
+  {id:1253,namn:"SFRK Sundsvalls Fältrittklubb",epost:"ridskolan@sfrk.net",epostOrdf:"ridskolan@sfrk.net",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1253],taggar:[]},
+  {id:1254,namn:"Friska Viljor FC",epost:"kansliet@friskaviljor.se",epostOrdf:"kansliet@friskaviljor.se",ort:"Örnsköldsvik",kommun:"Örnsköldsvik",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1254],taggar:[]},
+  {id:1255,namn:"Sundsvall FBC Elit",epost:"",epostOrdf:"",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Innebandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1255],taggar:[]},
+  {id:1256,namn:"Örnsköldsviks Tennisklubb",epost:"bertil@oviktk.se",epostOrdf:"bertil@oviktk.se",ort:"Örnsköldsvik",kommun:"Örnsköldsvik",idrott:"Tennis",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1256],taggar:[]},
+  {id:1257,namn:"Härnö Ishockeyklubb",epost:"",epostOrdf:"",ort:"Härnösand",kommun:"Härnösand",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1257],taggar:[]},
+  {id:1258,namn:"AIK Hockey Härnösand",epost:"kansli@aikharnosand.se",epostOrdf:"kansli@aikharnosand.se",ort:"Härnösand",kommun:"Härnösand",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1258],taggar:[]},
+  {id:1259,namn:"Örnsköldsviks Allmänna Simsällskap",epost:"",epostOrdf:"",ort:"Örnsköldsvik",kommun:"Örnsköldsvik",idrott:"Simning",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1259],taggar:[]},
+  {id:1260,namn:"BK Flash A-Lag",epost:"bowling.olsson@gmail.com",epostOrdf:"bowling.olsson@gmail.com",ort:"Härnösand",kommun:"Härnösand",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1260],taggar:[]},
+  {id:1261,namn:"Sundsvalls Innebandyförening",epost:"info@sundsvallsibf.se",epostOrdf:"info@sundsvallsibf.se",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Innebandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1261],taggar:[]},
+  {id:1262,namn:"Svedjeholmens IF",epost:"kansli@svedjeholmen.se",epostOrdf:"kansli@svedjeholmen.se",ort:"Örnsköldsvik",kommun:"Örnsköldsvik",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1262],taggar:[]},
+  {id:1263,namn:"Sundsvall Fallskärmsklubb",epost:"info@frifall.com",epostOrdf:"info@frifall.com",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Fallskärm",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1263],taggar:[]},
+  {id:1264,namn:"Kubikenborgs IF",epost:"kansli.kubikenborgsif@gmail.com",epostOrdf:"kansli.kubikenborgsif@gmail.com",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1264],taggar:[]},
+  {id:1265,namn:"Sundsvalls Brukshundklubb",epost:"styrelsen@sundsvallsbhk.se",epostOrdf:"styrelsen@sundsvallsbhk.se",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Hundsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1265],taggar:[]},
+  {id:1266,namn:"GIF Sundsvall Herr",epost:"norrlandslaget@gifsundsvall.se",epostOrdf:"norrlandslaget@gifsundsvall.se",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1266],taggar:[]},
+  {id:1267,namn:"Sundsvalls Slalomklubb",epost:"info@sundsvallsslalomklubb.se",epostOrdf:"info@sundsvallsslalomklubb.se",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Alpint",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1267],taggar:[]},
+  {id:1268,namn:"Ånge Ridklubb",epost:"",epostOrdf:"",ort:"Ånge",kommun:"Ånge",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1268],taggar:[]},
+  {id:1269,namn:"Moälvens Kanotklubb",epost:"",epostOrdf:"",ort:"Örnsköldsvik",kommun:"Örnsköldsvik",idrott:"Kanot",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1269],taggar:[]},
+  {id:1270,namn:"Njurunda SK Team17 Ishockey",epost:"kansli@nsk.nu",epostOrdf:"kansli@nsk.nu",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1270],taggar:[]},
+  {id:1271,namn:"Kovland Hockey",epost:"kovlandhockey@gmail.com",epostOrdf:"kovlandhockey@gmail.com",ort:"Sundsvall",kommun:"Sundsvall",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västernorrland",ant:"",mailLog:[],kontaktIds:[1271],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS];
+const VASTERNORRLAND_CONTACTS=[
+  {id:1252,fornamn:"Info",efternamn:"",epost:"info@holmbygden.se",telefon:"",roll:"Info",foreningId:1252,anteckningar:"Holmbygdens Utveckling och Idrott"},
+  {id:1253,fornamn:"Ridskolan",efternamn:"",epost:"ridskolan@sfrk.net",telefon:"",roll:"Ridskolan",foreningId:1253,anteckningar:"SFRK Sundsvalls Fältrittklubb"},
+  {id:1254,fornamn:"Kansli",efternamn:"",epost:"kansliet@friskaviljor.se",telefon:"",roll:"Kansli",foreningId:1254,anteckningar:"Friska Viljor FC"},
+  {id:1255,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1255,anteckningar:"Sundsvall FBC Elit"},
+  {id:1256,fornamn:"Kontakt",efternamn:"",epost:"bertil@oviktk.se",telefon:"",roll:"Kontakt",foreningId:1256,anteckningar:"Örnsköldsviks Tennisklubb"},
+  {id:1257,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1257,anteckningar:"Härnö Ishockeyklubb"},
+  {id:1258,fornamn:"Kansli",efternamn:"",epost:"kansli@aikharnosand.se",telefon:"",roll:"Kansli",foreningId:1258,anteckningar:"AIK Hockey Härnösand"},
+  {id:1259,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1259,anteckningar:"Örnsköldsviks Allmänna Simsällskap"},
+  {id:1260,fornamn:"Kontakt",efternamn:"",epost:"bowling.olsson@gmail.com",telefon:"",roll:"Kontakt",foreningId:1260,anteckningar:"BK Flash A-Lag"},
+  {id:1261,fornamn:"Info",efternamn:"",epost:"info@sundsvallsibf.se",telefon:"",roll:"Info",foreningId:1261,anteckningar:"Sundsvalls Innebandyförening"},
+  {id:1262,fornamn:"Kansli",efternamn:"",epost:"kansli@svedjeholmen.se",telefon:"",roll:"Kansli",foreningId:1262,anteckningar:"Svedjeholmens IF"},
+  {id:1263,fornamn:"Info",efternamn:"",epost:"info@frifall.com",telefon:"",roll:"Info",foreningId:1263,anteckningar:"Sundsvall Fallskärmsklubb"},
+  {id:1264,fornamn:"Kansli",efternamn:"",epost:"kansli.kubikenborgsif@gmail.com",telefon:"",roll:"Kansli",foreningId:1264,anteckningar:"Kubikenborgs IF"},
+  {id:1265,fornamn:"Styrelsen",efternamn:"",epost:"styrelsen@sundsvallsbhk.se",telefon:"",roll:"Styrelsen",foreningId:1265,anteckningar:"Sundsvalls Brukshundklubb"},
+  {id:1266,fornamn:"Sportansvarig",efternamn:"",epost:"norrlandslaget@gifsundsvall.se",telefon:"",roll:"Sportansvarig",foreningId:1266,anteckningar:"GIF Sundsvall Herr"},
+  {id:1267,fornamn:"Info",efternamn:"",epost:"info@sundsvallsslalomklubb.se",telefon:"",roll:"Info",foreningId:1267,anteckningar:"Sundsvalls Slalomklubb"},
+  {id:1268,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1268,anteckningar:"Ånge Ridklubb"},
+  {id:1269,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1269,anteckningar:"Moälvens Kanotklubb"},
+  {id:1270,fornamn:"Kansli",efternamn:"",epost:"kansli@nsk.nu",telefon:"",roll:"Kansli",foreningId:1270,anteckningar:"Njurunda SK Team17 Ishockey"},
+  {id:1271,fornamn:"Kontakt",efternamn:"",epost:"kovlandhockey@gmail.com",telefon:"",roll:"Kontakt",foreningId:1271,anteckningar:"Kovland Hockey"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN,...VASTERNORRLAND];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS,...VASTERNORRLAND_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -2454,7 +2500,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"],["Västernorrland","Västernorrland"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
