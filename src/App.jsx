@@ -2995,7 +2995,7 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     },0);
     const limit=Number(cfg.dailyLimit)||0;
     if(limit>0&&sentToday>=limit){
-      alert(\`Dagsgränsen på \${limit} mail är nådd. Inga fler mail skickas idag.\`);
+      alert("Dagsgränsen på "+limit+" mail är nådd. Inga fler mail skickas idag.");
       return;
     }
     setSending(true);setResults(null);setView("preview");
