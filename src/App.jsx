@@ -1746,9 +1746,95 @@ const VASTERNORRLAND_CONTACTS=[
   {id:1271,fornamn:"Kontakt",efternamn:"",epost:"kovlandhockey@gmail.com",telefon:"",roll:"Kontakt",foreningId:1271,anteckningar:"Kovland Hockey"}
 ];
 
-const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN,...VASTERNORRLAND];
+const VASTMANLAND=[
+  {id:1272,namn:"Västerås SK Bandyklubb",epost:"kansliet@vskbandy.se",epostOrdf:"kansliet@vskbandy.se",ort:"Västerås",kommun:"Västerås",idrott:"Bandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1272],taggar:[]},
+  {id:1273,namn:"Skinnskatteberg Sportklubb",epost:"gitte.parkatti@smsk.slu.se",epostOrdf:"gitte.parkatti@smsk.slu.se",ort:"Skinnskatteberg",kommun:"Skinnskatteberg",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1273],taggar:[]},
+  {id:1274,namn:"Irsta IF P12",epost:"info@irstaif.se",epostOrdf:"info@irstaif.se",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1274],taggar:[]},
+  {id:1275,namn:"Yrkesgymnasiet Skol-IF",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1275],taggar:[]},
+  {id:1276,namn:"Köpings Ridklubb",epost:"info@kopingsridklubb.se",epostOrdf:"info@kopingsridklubb.se",ort:"Köping",kommun:"Köping",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1276],taggar:[]},
+  {id:1277,namn:"IFK Ekberga Fotboll",epost:"thomas.fors@tingstad.se",epostOrdf:"thomas.fors@tingstad.se",ort:"Västerås",kommun:"Västerås",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1277],taggar:[]},
+  {id:1278,namn:"Rönnby Tigers Västerås IBK",epost:"info@ronnby.se",epostOrdf:"info@ronnby.se",ort:"Västerås",kommun:"Västerås",idrott:"Innebandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1278],taggar:[]},
+  {id:1279,namn:"Västerås Innebandysällskap",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Bandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1279],taggar:[]},
+  {id:1280,namn:"Baståsens Ridklubb",epost:"bastasensridklubb@outlook.com",epostOrdf:"bastasensridklubb@outlook.com",ort:"Surahammar",kommun:"Surahammar",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1280],taggar:[]},
+  {id:1281,namn:"Kungsörs Ridklubb",epost:"info@kungsorsridklubb.se",epostOrdf:"info@kungsorsridklubb.se",ort:"Kungsör",kommun:"Kungsör",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1281],taggar:[]},
+  {id:1282,namn:"Surahammars Ryttarförening",epost:"surarf@telia.com",epostOrdf:"surarf@telia.com",ort:"Surahammar",kommun:"Surahammar",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1282],taggar:[]},
+  {id:1283,namn:"Västerås Friidrottsklubb",epost:"kansliet@vasterasfriidrott.se",epostOrdf:"kansliet@vasterasfriidrott.se",ort:"Västerås",kommun:"Västerås",idrott:"Friidrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1283],taggar:[]},
+  {id:1284,namn:"Himmeta IF",epost:"hif@himmeta.se",epostOrdf:"hif@himmeta.se",ort:"Köping",kommun:"Köping",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1284],taggar:[]},
+  {id:1285,namn:"SMF-Västerås",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1285],taggar:[]},
+  {id:1286,namn:"Skälby IBK",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Innebandy",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1286],taggar:[]},
+  {id:1287,namn:"Skultuna Idrottssällskap",epost:"skultuna.is@telia.com",epostOrdf:"skultuna.is@telia.com",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1287],taggar:[]},
+  {id:1288,namn:"VästeråsIrsta HF Handboll",epost:"handboll@vasterasirsta.se",epostOrdf:"handboll@vasterasirsta.se",ort:"Västerås",kommun:"Västerås",idrott:"Handboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1288],taggar:[]},
+  {id:1289,namn:"Västerås Taekwondoklubb",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Kampsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1289],taggar:[]},
+  {id:1290,namn:"Bjurhovda Bulls Dart Club",epost:"bjurhovda_bulls_dc@idrott.se",epostOrdf:"bjurhovda_bulls_dc@idrott.se",ort:"Västerås",kommun:"Västerås",idrott:"Dart",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1290],taggar:[]},
+  {id:1291,namn:"Västerås Badmintonförening",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Badminton",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1291],taggar:[]},
+  {id:1292,namn:"Surahammars SOK",epost:"info@surahammarssok.se",epostOrdf:"info@surahammarssok.se",ort:"Surahammar",kommun:"Surahammar",idrott:"Orientering",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1292],taggar:[]},
+  {id:1293,namn:"Arboga Sportryttare",epost:"arboga.sportryttare@gmail.com",epostOrdf:"arboga.sportryttare@gmail.com",ort:"Arboga",kommun:"Arboga",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1293],taggar:[]},
+  {id:1294,namn:"Fortuna Voltige Köping",epost:"fortunavoltige@gmail.com",epostOrdf:"fortunavoltige@gmail.com",ort:"Köping",kommun:"Köping",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1294],taggar:[]},
+  {id:1295,namn:"Stora Ekeby Ridklubb",epost:"sterk@storaekeby.nu",epostOrdf:"sterk@storaekeby.nu",ort:"Västerås",kommun:"Västerås",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1295],taggar:[]},
+  {id:1296,namn:"Kvicksunds SK",epost:"kansli@kvicksundssportklubb.se",epostOrdf:"kansli@kvicksundssportklubb.se",ort:"Köping",kommun:"Köping",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1296],taggar:[]},
+  {id:1297,namn:"Bäckby United FC",epost:"kansli@backbyunited.se",epostOrdf:"kansli@backbyunited.se",ort:"Västerås",kommun:"Västerås",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1297],taggar:[]},
+  {id:1298,namn:"IK Franke",epost:"kansli@ikfranke.com",epostOrdf:"kansli@ikfranke.com",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1298],taggar:[]},
+  {id:1299,namn:"Fagersta AIK Ishockey",epost:"faik@westhockey.se",epostOrdf:"faik@westhockey.se",ort:"Fagersta",kommun:"Fagersta",idrott:"Ishockey",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1299],taggar:[]},
+  {id:1300,namn:"Jollekappseglarna Västerås",epost:"info@jkv.se",epostOrdf:"info@jkv.se",ort:"Västerås",kommun:"Västerås",idrott:"Segling",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1300],taggar:[]},
+  {id:1301,namn:"Gideonsbergs IF",epost:"kansli@gideonsbergsif.se",epostOrdf:"kansli@gideonsbergsif.se",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1301],taggar:[]},
+  {id:1302,namn:"Västerås Cykelklubb",epost:"sekreterare@vasterasck.se",epostOrdf:"sekreterare@vasterasck.se",ort:"Västerås",kommun:"Västerås",idrott:"Cykling",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1302],taggar:[]},
+  {id:1303,namn:"Kolsva IF Brottning",epost:"",epostOrdf:"",ort:"Köping",kommun:"Köping",idrott:"Brottning",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1303],taggar:[]},
+  {id:1304,namn:"Skiljebo SK",epost:"info@skiljebosk.nu",epostOrdf:"info@skiljebosk.nu",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1304],taggar:[]},
+  {id:1305,namn:"Arboga Ryttarsällskap",epost:"arbogars@gmail.com",epostOrdf:"arbogars@gmail.com",ort:"Arboga",kommun:"Arboga",idrott:"Ridsport",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1305],taggar:[]},
+  {id:1306,namn:"Forsby FF",epost:"styrelsen.forsbyff@outlook.com",epostOrdf:"styrelsen.forsbyff@outlook.com",ort:"Köping",kommun:"Köping",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1306],taggar:[]},
+  {id:1307,namn:"IFK Västerås FK",epost:"info@ifk.nu",epostOrdf:"info@ifk.nu",ort:"Västerås",kommun:"Västerås",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1307],taggar:[]},
+  {id:1308,namn:"Sörstafors Kolbäck FK",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1308],taggar:[]},
+  {id:1309,namn:"Hallstahammars SK FK",epost:"styrelse@hsk-fotboll.nu",epostOrdf:"styrelse@hsk-fotboll.nu",ort:"Hallstahammar",kommun:"Hallstahammar",idrott:"Fotboll",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1309],taggar:[]},
+  {id:1310,namn:"IKW Köping Bowlingklubb",epost:"",epostOrdf:"",ort:"Köping",kommun:"Köping",idrott:"Bowling",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1310],taggar:[]},
+  {id:1311,namn:"Aros BBK",epost:"",epostOrdf:"",ort:"Västerås",kommun:"Västerås",idrott:"Fleridrott",burkar:0,skickadeMail:0,ordforande:"",telefon:"",lan:"Västmanland",ant:"",mailLog:[],kontaktIds:[1311],taggar:[]}
+];
 
-const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS,...VASTERNORRLAND_CONTACTS];
+const VASTMANLAND_CONTACTS=[
+  {id:1272,fornamn:"Kansli",efternamn:"",epost:"kansliet@vskbandy.se",telefon:"",roll:"Kansli",foreningId:1272,anteckningar:"Västerås SK Bandyklubb"},
+  {id:1273,fornamn:"Kontakt",efternamn:"",epost:"gitte.parkatti@smsk.slu.se",telefon:"",roll:"Kontakt",foreningId:1273,anteckningar:"Skinnskatteberg Sportklubb"},
+  {id:1274,fornamn:"Info",efternamn:"",epost:"info@irstaif.se",telefon:"",roll:"Info",foreningId:1274,anteckningar:"Irsta IF P12"},
+  {id:1275,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1275,anteckningar:"Yrkesgymnasiet Skol-IF"},
+  {id:1276,fornamn:"Info",efternamn:"",epost:"info@kopingsridklubb.se",telefon:"",roll:"Info",foreningId:1276,anteckningar:"Köpings Ridklubb"},
+  {id:1277,fornamn:"Kontakt",efternamn:"",epost:"thomas.fors@tingstad.se",telefon:"",roll:"Kontakt",foreningId:1277,anteckningar:"IFK Ekberga Fotboll"},
+  {id:1278,fornamn:"Info",efternamn:"",epost:"info@ronnby.se",telefon:"",roll:"Info",foreningId:1278,anteckningar:"Rönnby Tigers Västerås IBK"},
+  {id:1279,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1279,anteckningar:"Västerås Innebandysällskap"},
+  {id:1280,fornamn:"Kontakt",efternamn:"",epost:"bastasensridklubb@outlook.com",telefon:"",roll:"Kontakt",foreningId:1280,anteckningar:"Baståsens Ridklubb"},
+  {id:1281,fornamn:"Info",efternamn:"",epost:"info@kungsorsridklubb.se",telefon:"",roll:"Info",foreningId:1281,anteckningar:"Kungsörs Ridklubb"},
+  {id:1282,fornamn:"Kontakt",efternamn:"",epost:"surarf@telia.com",telefon:"",roll:"Kontakt",foreningId:1282,anteckningar:"Surahammars Ryttarförening"},
+  {id:1283,fornamn:"Kansli",efternamn:"",epost:"kansliet@vasterasfriidrott.se",telefon:"",roll:"Kansli",foreningId:1283,anteckningar:"Västerås Friidrottsklubb"},
+  {id:1284,fornamn:"Kontakt",efternamn:"",epost:"hif@himmeta.se",telefon:"",roll:"Kontakt",foreningId:1284,anteckningar:"Himmeta IF"},
+  {id:1285,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1285,anteckningar:"SMF-Västerås"},
+  {id:1286,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1286,anteckningar:"Skälby IBK"},
+  {id:1287,fornamn:"Kontakt",efternamn:"",epost:"skultuna.is@telia.com",telefon:"",roll:"Kontakt",foreningId:1287,anteckningar:"Skultuna Idrottssällskap"},
+  {id:1288,fornamn:"Handboll",efternamn:"",epost:"handboll@vasterasirsta.se",telefon:"",roll:"Handboll",foreningId:1288,anteckningar:"VästeråsIrsta HF Handboll"},
+  {id:1289,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1289,anteckningar:"Västerås Taekwondoklubb"},
+  {id:1290,fornamn:"Kontakt",efternamn:"",epost:"bjurhovda_bulls_dc@idrott.se",telefon:"",roll:"Kontakt",foreningId:1290,anteckningar:"Bjurhovda Bulls Dart Club"},
+  {id:1291,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1291,anteckningar:"Västerås Badmintonförening"},
+  {id:1292,fornamn:"Info",efternamn:"",epost:"info@surahammarssok.se",telefon:"",roll:"Info",foreningId:1292,anteckningar:"Surahammars SOK"},
+  {id:1293,fornamn:"Kontakt",efternamn:"",epost:"arboga.sportryttare@gmail.com",telefon:"",roll:"Kontakt",foreningId:1293,anteckningar:"Arboga Sportryttare"},
+  {id:1294,fornamn:"Kontakt",efternamn:"",epost:"fortunavoltige@gmail.com",telefon:"",roll:"Kontakt",foreningId:1294,anteckningar:"Fortuna Voltige Köping"},
+  {id:1295,fornamn:"Kontakt",efternamn:"",epost:"sterk@storaekeby.nu",telefon:"",roll:"Kontakt",foreningId:1295,anteckningar:"Stora Ekeby Ridklubb"},
+  {id:1296,fornamn:"Kansli",efternamn:"",epost:"kansli@kvicksundssportklubb.se",telefon:"",roll:"Kansli",foreningId:1296,anteckningar:"Kvicksunds SK"},
+  {id:1297,fornamn:"Kansli",efternamn:"",epost:"kansli@backbyunited.se",telefon:"",roll:"Kansli",foreningId:1297,anteckningar:"Bäckby United FC"},
+  {id:1298,fornamn:"Kansli",efternamn:"",epost:"kansli@ikfranke.com",telefon:"",roll:"Kansli",foreningId:1298,anteckningar:"IK Franke"},
+  {id:1299,fornamn:"Kontakt",efternamn:"",epost:"faik@westhockey.se",telefon:"",roll:"Kontakt",foreningId:1299,anteckningar:"Fagersta AIK Ishockey"},
+  {id:1300,fornamn:"Info",efternamn:"",epost:"info@jkv.se",telefon:"",roll:"Info",foreningId:1300,anteckningar:"Jollekappseglarna Västerås"},
+  {id:1301,fornamn:"Kansli",efternamn:"",epost:"kansli@gideonsbergsif.se",telefon:"",roll:"Kansli",foreningId:1301,anteckningar:"Gideonsbergs IF"},
+  {id:1302,fornamn:"Sekreterare",efternamn:"",epost:"sekreterare@vasterasck.se",telefon:"",roll:"Sekreterare",foreningId:1302,anteckningar:"Västerås Cykelklubb"},
+  {id:1303,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1303,anteckningar:"Kolsva IF Brottning"},
+  {id:1304,fornamn:"Info",efternamn:"",epost:"info@skiljebosk.nu",telefon:"",roll:"Info",foreningId:1304,anteckningar:"Skiljebo SK"},
+  {id:1305,fornamn:"Kontakt",efternamn:"",epost:"arbogars@gmail.com",telefon:"",roll:"Kontakt",foreningId:1305,anteckningar:"Arboga Ryttarsällskap"},
+  {id:1306,fornamn:"Styrelsen",efternamn:"",epost:"styrelsen.forsbyff@outlook.com",telefon:"",roll:"Styrelsen",foreningId:1306,anteckningar:"Forsby FF"},
+  {id:1307,fornamn:"Info",efternamn:"",epost:"info@ifk.nu",telefon:"",roll:"Info",foreningId:1307,anteckningar:"IFK Västerås FK"},
+  {id:1308,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1308,anteckningar:"Sörstafors Kolbäck FK"},
+  {id:1309,fornamn:"Styrelsen",efternamn:"",epost:"styrelse@hsk-fotboll.nu",telefon:"",roll:"Styrelsen",foreningId:1309,anteckningar:"Hallstahammars SK FK"},
+  {id:1310,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1310,anteckningar:"IKW Köping Bowlingklubb"},
+  {id:1311,fornamn:"Kontakt",efternamn:"",epost:"",telefon:"",roll:"Kontakt",foreningId:1311,anteckningar:"Aros BBK"}
+];
+
+const INIT_FR=[...BLEKINGE,...DALARNA,...GOTLAND,...GAVLEBORG,...HALLAND,...JAMTLAND,...SMALAND,...KALMAR,...NORRBOTTEN,...SKANE,...STOCKHOLM,...SODERMANLAND,...UPPSALA,...VARMLAND,...VASTERBOTTEN,...VASTERNORRLAND,...VASTMANLAND];
+
+const INIT_CONTACTS_ALL=[...INIT_CONTACTS,...GOTLAND_CONTACTS,...GAVLEBORG_CONTACTS,...HALLAND_CONTACTS,...JAMTLAND_CONTACTS,...SMALAND_CONTACTS,...KALMAR_CONTACTS,...NORRBOTTEN_CONTACTS,...SKANE_CONTACTS,...STOCKHOLM_CONTACTS,...SODERMANLAND_CONTACTS,...UPPSALA_CONTACTS,...VARMLAND_CONTACTS,...VASTERBOTTEN_CONTACTS,...VASTERNORRLAND_CONTACTS,...VASTMANLAND_CONTACTS];
 // Expose for Supabase sync
 window.__INIT_FR_JSON=JSON.stringify(INIT_FR);
 window.__INIT_CONTACTS_JSON=JSON.stringify(INIT_CONTACTS_ALL);
@@ -2500,7 +2586,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {/* Region quick-filter */}
       <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
         <span style={{fontSize:10,color:C.muted,fontWeight:700,letterSpacing:"0.5px",textTransform:"uppercase",flexShrink:0,marginRight:2}}>Region</span>
-        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"],["Västernorrland","Västernorrland"]].map(([v,l])=>{
+        {[["","Alla"],["Blekinge","Blekinge"],["Dalarna","Dalarna"],["Gotland","Gotland"],["Gävleborg","Gävleborg"],["Halland","Halland"],["Jämtland","Jämtland"],["Jönköping","Jönköping"],["Kalmar","Kalmar"],["Norrbotten","Norrbotten"],["Skåne","Skåne"],["Stockholm","Stockholm"],["Södermanland","Södermanland"],["Uppsala","Uppsala"],["Värmland","Värmland"],["Västerbotten","Västerbotten"],["Västernorrland","Västernorrland"],["Västmanland","Västmanland"]].map(([v,l])=>{
           const active=filters.lan===v;
           const count=v?fr.filter(f=>f.lan===v).length:fr.length;
           return(
