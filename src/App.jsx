@@ -3053,14 +3053,19 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
     </div>
   );
 
+  const previewFr = selList[0] || null;
+  const previewRecips = previewFr ? getRecipients(previewFr) : [];
+  const previewHtml = previewFr ? makeHtml(fill(body,previewFr,cfg.senderName),getHtmlTmpl(),previewFr,cfg.senderName) : "";
+
   return(
     <div>
 
-      {/* View switcher */}
-      <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
-        {[["compose","✉️ Komponera"],["preview","📋 Granska & skicka"],["history","📚 Historik"]].map(([v,l])=>(
-          <button key={v} onClick={()=>{setView(v);if(v!=="preview")setResults(null);}} style={{...btn(view===v?"primary":"ghost"),minHeight:M?44:38}}>{l}{v==="preview"&&selList.length>0?` (${selList.length})`:""}</button>
-        ))}
+      {/* Top bar: title + historik button */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+        <div style={{fontSize:14,fontWeight:700,color:C.text}}>Utskick</div>
+        <button onClick={()=>setView(view==="history"?"compose":"history")} style={{...btn(view==="history"?"primary":"ghost"),minHeight:36,fontSize:12}}>
+          {view==="history"?"← Tillbaka":"📚 Historik"+(camp.length>0?" ("+camp.length+")":"")}
+        </button>
       </div>
 
       {/* Historik */}
@@ -3068,15 +3073,18 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
         <HistoryList camp={camp} M={M}/>
       )}
 
-      {/* Komponera */}
-      {view==="compose"&&(
-        <div style={{display:"grid",gridTemplateColumns:M?"1fr":"260px 1fr",gap:12}}>
+      {/* Main compose+preview */}
+      {view!=="history"&&(
+        <div style={{display:"grid",gridTemplateColumns:M?"1fr":"260px 1fr",gap:12,alignItems:"start"}}>
           <Sidebar/>
+
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
+
+            {/* Template + subject */}
             <div style={card()}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
                 <label style={{...lbl,margin:0}}>Mall</label>
-                {seqActive&&<span style={{fontSize:10,color:C.amber,fontWeight:600}}>🔒 Låst av sekvens – <button onClick={()=>setSeqActive(null)} style={{background:"none",border:"none",color:C.blue,cursor:"pointer",fontSize:10,fontFamily:"inherit",fontWeight:600,padding:0}}>lås upp</button></span>}
+                {seqActive&&<span style={{fontSize:10,color:C.amber,fontWeight:600}}>🔒 <button onClick={()=>setSeqActive(null)} style={{background:"none",border:"none",color:C.blue,cursor:"pointer",fontSize:10,fontFamily:"inherit",fontWeight:600,padding:0}}>lås upp</button></span>}
               </div>
               {seqActive?(
                 <div style={{...I({marginBottom:10,minHeight:M?46:40,display:"flex",alignItems:"center",gap:8,opacity:0.8})}}>
@@ -3087,39 +3095,47 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
                 <select value={tmpl} onChange={e=>pickTmpl(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:40}}>{T.map(t=><option key={t.id} value={t.id}>{t.namn}</option>)}</select>
               )}
               <label style={lbl}>Ämnesrad</label>
-              <input value={subj} onChange={e=>setSubj(e.target.value)} style={{...I(),marginBottom:10,minHeight:M?46:40}}/>
-              <label style={lbl}>Meddelande</label>
-              <textarea value={body} onChange={e=>setBody(e.target.value)} rows={M?10:12} style={{...I(),resize:"vertical",lineHeight:1.7}}/>
-              <div style={{fontSize:10,color:C.muted,marginTop:4}}>{"{{namn}} {{mottagare}} {{ort}} {{idrott}} {{avsandare}}"}</div>
+              <input value={subj} onChange={e=>setSubj(e.target.value)} style={{...I(),minHeight:M?46:40}}/>
             </div>
-            <button onClick={()=>setView("preview")} disabled={!selList.length} style={{...btn("primary",M),width:"100%",justifyContent:"center",minHeight:M?52:44,opacity:selList.length?1:0.4}}>
-              Granska {selList.length} mail →
-            </button>
-          </div>
-        </div>
-      )}
 
-      {/* Granska & Skicka */}
-      {view==="preview"&&(
-        <div style={{display:"grid",gridTemplateColumns:M?"1fr":"260px 1fr",gap:12}}>
-          <Sidebar/>
-          <div style={{display:"flex",flexDirection:"column",gap:10}}>
-            {/* Preview list */}
-            <MailPreviewList selList={selList} subj={subj} body={body} htmlTmpl={getHtmlTmpl()} cfg={cfg} getRecipients={getRecipients} hasDual={hasDual} M={M}/>
+            {/* HTML preview */}
+            {previewFr&&getHtmlTmpl()&&(
+              <div style={{...card({padding:0,overflow:"hidden"})}}>
+                <div style={{padding:"8px 14px",background:"rgba(59,130,246,0.07)",borderBottom:`1px solid ${C.border}`,fontSize:12,fontWeight:600,color:C.muted}}>
+                  Förhandsgranskning – {fill(subj,previewFr,cfg.senderName)}
+                </div>
+                <div style={{padding:0,background:"#f8f8f8"}}>
+                  <iframe
+                    srcDoc={previewHtml}
+                    sandbox="allow-same-origin"
+                    style={{width:"100%",border:"none",display:"block",minHeight:420}}
+                    onLoad={e=>{try{const h=e.target.contentDocument.body.scrollHeight;e.target.style.height=(Math.min(Math.max(h,300),800))+"px";}catch{}}}
+                  />
+                </div>
+              </div>
+            )}
+            {previewFr&&!getHtmlTmpl()&&(
+              <div style={{...card({background:"rgba(59,130,246,0.04)"})}}>
+                <div style={{fontSize:12,color:C.muted,marginBottom:8,fontWeight:600}}>Förhandsgranskning (text)</div>
+                <pre style={{margin:0,fontSize:13,color:C.text,whiteSpace:"pre-wrap",lineHeight:1.7}}>{fill(body,previewFr,cfg.senderName)}</pre>
+              </div>
+            )}
+            {!previewFr&&(
+              <div style={{...card({textAlign:"center",padding:32,color:C.muted})}}>Välj mall och region för att se förhandsgranskning</div>
+            )}
 
             {/* Testmail */}
             <div style={{...card({borderColor:C.amber+"44",background:"rgba(245,158,11,0.03)"})}}>
-              <div style={{fontWeight:600,fontSize:12,marginBottom:8,color:C.amber}}>🧪 Skicka testmail (personaliserat med första mottagaren)</div>
+              <div style={{fontWeight:600,fontSize:12,marginBottom:8,color:C.amber}}>🧪 Testmail (personaliserat med första mottagaren)</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>
                 <input value={testEmail} onChange={e=>{setTestEmail(e.target.value);setTestResult(null);}} placeholder="din@epost.se" type="email" style={{...I({minHeight:M?44:38,flex:1,minWidth:150})}}/>
                 <button onClick={sendTest} disabled={testSending||!testEmail||!cfg.apiKey||!cfg.senderEmail} style={{...btn("ghost"),minHeight:M?44:38,borderColor:C.amber+"66",color:C.amber}}>{testSending?"⏳":selList[0]?`Skicka till mig →`:"Välj mottagare"}</button>
               </div>
               {testResult&&<div style={{fontSize:12,color:testResult.ok?C.green:C.red,padding:"6px 8px",background:testResult.ok?"rgba(34,197,94,0.07)":"rgba(239,68,68,0.07)",borderRadius:6}}>{testResult.msg}</div>}
               {(!cfg.apiKey||!cfg.senderEmail)&&<div style={{fontSize:11,color:C.muted}}>⚙️ Fyll i API-nyckel och avsändar-e-post under Inställningar</div>}
-
             </div>
 
-            {/* Sending results */}
+            {/* Results */}
             {results&&(
               <div style={card()}>
                 <div style={{fontWeight:600,marginBottom:8}}>{sending?"Skickar…":results.filter(r=>r.ok).length+"/"+results.length+" skickade"}</div>
@@ -3132,26 +3148,25 @@ function Utskick({fr,camp,saveCamp,saveFr,cfg,saveCfg,templates,kontexter,M}){
                     </div>
                   ))}
                 </div>
-
               </div>
             )}
 
-            {/* Send button */}
-            <div style={{display:"flex",gap:8}}>
-              <button onClick={()=>setView("compose")} style={{...btn("ghost"),flex:1,justifyContent:"center"}}>← Tillbaka</button>
+            {/* Send */}
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
               {(()=>{
                 const todayStr2=new Date().toLocaleDateString("sv-SE");
                 const sentToday2=fr.reduce((acc,f)=>(acc+(f.mailLog||[]).filter(m=>m.date&&m.date.startsWith(todayStr2)&&m.status==="sent").length),0);
                 const limit2=Number(cfg.dailyLimit)||0;
-                return limit2>0&&<div style={{fontSize:11,color:sentToday2>=limit2?C.red:C.muted,marginBottom:6,textAlign:"center",fontWeight:sentToday2>=limit2?700:400}}>
-                  {sentToday2>=limit2?"🚫 Dagsgräns nådd":"📊 Skickat idag:"} {sentToday2}{limit2>0&&" / "+limit2}
+                return limit2>0&&<div style={{fontSize:11,color:sentToday2>=limit2?C.red:C.muted,textAlign:"center",fontWeight:sentToday2>=limit2?700:400}}>
+                  {sentToday2>=limit2?"🚫 Dagsgräns nådd":"📊 Skickat idag: "+sentToday2+" / "+limit2}
                 </div>;
               })()}
-              <button onClick={sendAll} disabled={sending||!cfg.apiKey||!cfg.senderEmail||!selList.length} style={{...btn("primary"),flex:2,justifyContent:"center",minHeight:M?52:46,opacity:(!cfg.apiKey||!cfg.senderEmail)?0.5:1}}>
+              <button onClick={sendAll} disabled={sending||!cfg.apiKey||!cfg.senderEmail||!selList.length} style={{...btn("primary"),width:"100%",justifyContent:"center",minHeight:M?52:46,opacity:(!cfg.apiKey||!cfg.senderEmail)?0.5:1}}>
                 {sending?"⏳ Skickar…":"🚀 Skicka till "+selList.length+" föreningar"}
               </button>
+              {(!cfg.apiKey||!cfg.senderEmail)&&<div style={{fontSize:11,color:C.amber,textAlign:"center"}}>⚠️ Fyll i API-nyckel och avsändar-e-post under ⚙️ Inställningar</div>}
             </div>
-            {(!cfg.apiKey||!cfg.senderEmail)&&<div style={{fontSize:11,color:C.amber,textAlign:"center"}}>⚠️ Fyll i API-nyckel och avsändar-e-post under ⚙️ Inställningar</div>}
+
           </div>
         </div>
       )}
