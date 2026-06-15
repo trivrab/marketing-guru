@@ -2047,91 +2047,26 @@ Allt gott,
     id:"mail2",
     namn:"🤝 Mail 2 – Uppföljning",
     steg:2,
-    subject:"De flesta föreningar vet inte om det här",
+    subject:"{{namn}} - sa har fungerar BottleDROP Ge Pant",
     body:`Hej {{namn}}!
 
-Följer upp mitt förra mail – och tänkte dela en sak som ofta förvånar föreningar.
+Tankte folja upp med lite mer om vad BottleDROP - Ge Pant faktiskt innebar for er forening.
 
-Problemet ser ut så här: ett hushåll vill ge sin pant till {{namn}}, men vet inte riktigt hur. De samlar på sig tills nästa insamlingsrunda – men glömmer, eller orkar inte köra dit. Föreningen å sin sida vet inte när det är värt att köra en runda, för de vet inte hur mycket som väntar.
+Ge Pant ar en digital losning dar era supportrar enkelt kan skanka sin pant direkt till {{namn}} via mobilappen - utan att ni behover lyfta ett finger.
 
-Resultatet: pengarna stannar hos butiken i stället.
+Det har far ni:
+- En ny, passiv intaktskalla som rullar pa utan er insats
+- Fler hushall som donerar - for det ar enkelt via appen
+- Synlighet i BottleDROPs app och natverk
+- Pilot utan kostnad eller bindning
 
-Ge Pant löser det. Hushållet pantar när det passar dem – och summan går direkt till {{namn}} via appen. Inga rundor att planera. Inga påminnelser att skicka. Ingen logistik.
+Ge Pant ar redan igang i flera regioner och vi letar nu partners i ert omrade.
 
-Vill ni vara med och testa det under piloten?
+Vill ni veta mer? Svarar garna pa fragor, eller las mer och anmal intresse har: https://www.bottledrop.se/
 
-Ansök här: https://www.bottledrop.se/
-
-Allt gott,
+Med vanlig halsning,
 {{avsandare}}`,
-    html:`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f4f4f5;font-family:Aptos,Arial,Helvetica,sans-serif">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px">
-<tr><td align="center">
-<table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07)">
-  <tr><td style="background:#0f172a;padding:20px 32px;text-align:center">
-    <div style="color:#2dd4bf;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase">BottleDROP – Ge Pant</div>
-  </td></tr>
-  <tr><td style="padding:32px 32px 8px">
-    <p style="margin:0 0 20px;font-size:15px;color:#1e293b;line-height:1.6">Hej {{namn}}!</p>
-    <p style="margin:0 0 20px;font-size:15px;color:#374151;line-height:1.7">Följer upp mitt förra mail – och tänkte dela en sak som ofta förvånar föreningar.</p>
-    <!-- Problem box -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fafafa;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:24px">
-      <tr><td style="padding:20px 24px">
-        <div style="font-size:12px;font-weight:700;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">Hur det ser ut idag</div>
-        <table cellpadding="0" cellspacing="0" style="width:100%">
-          <tr><td style="padding:7px 0;border-bottom:1px solid #f1f5f9">
-            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
-            <span style="font-size:14px;color:#374151">Hushållet vill ge sin pant till {{namn}} – men vet inte hur</span>
-          </td></tr>
-          <tr><td style="padding:7px 0;border-bottom:1px solid #f1f5f9">
-            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
-            <span style="font-size:14px;color:#374151">De samlar på sig, glömmer bort, orkar inte köra</span>
-          </td></tr>
-          <tr><td style="padding:7px 0;border-bottom:1px solid #f1f5f9">
-            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
-            <span style="font-size:14px;color:#374151">{{namn}} vet inte när det är värt att köra en runda</span>
-          </td></tr>
-          <tr><td style="padding:7px 0">
-            <span style="color:#ef4444;font-weight:700;margin-right:10px">✗</span>
-            <span style="font-size:14px;color:#374151">Pengarna stannar hos butiken i stället</span>
-          </td></tr>
-        </table>
-      </td></tr>
-    </table>
-    <!-- Solution box -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;margin-bottom:24px">
-      <tr><td style="padding:20px 24px">
-        <div style="font-size:12px;font-weight:700;color:#16a34a;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">Ge Pant löser det</div>
-        <table cellpadding="0" cellspacing="0" style="width:100%">
-          <tr><td style="padding:7px 0;border-bottom:1px solid #dcfce7">
-            <span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span>
-            <span style="font-size:14px;color:#374151">Hushållet pantar när det passar dem – direkt via appen</span>
-          </td></tr>
-          <tr><td style="padding:7px 0;border-bottom:1px solid #dcfce7">
-            <span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span>
-            <span style="font-size:14px;color:#374151">Summan går direkt till {{namn}} – automatiskt</span>
-          </td></tr>
-          <tr><td style="padding:7px 0">
-            <span style="color:#22c55e;font-weight:700;margin-right:10px">✓</span>
-            <span style="font-size:14px;color:#374151">Inga rundor att planera. Ingen logistik.</span>
-          </td></tr>
-        </table>
-      </td></tr>
-    </table>
-    <p style="margin:0 0 28px;font-size:14px;color:#64748b;line-height:1.6">Vill ni vara med och testa det under piloten?</p>
-    <table cellpadding="0" cellspacing="0" style="margin-bottom:8px">
-      <tr><td style="background:#2dd4bf;border-radius:8px;padding:14px 28px">
-        <a href="https://www.bottledrop.se/" style="color:#0f172a;font-size:15px;font-weight:700;text-decoration:none">Ansök om partnerskap →</a>
-      </td></tr>
-    </table>
-  </td></tr>
-  <tr><td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0">
-    <p style="margin:0;font-size:13px;color:#94a3b8">Allt gott,<br><strong style="color:#374151">{{avsandare}}</strong></p>
-  </td></tr>
-</table>
-</td></tr>
-</table>
-</body></html>`
+    html:`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f4f4f5;font-family:Arial,sans-serif"><table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)"><tr><td style="background:#0f172a;padding:20px 32px;text-align:center"><div style="color:#2dd4bf;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase">BottleDROP - Ge Pant</div></td></tr><tr><td style="padding:32px"><p style="margin:0 0 20px;font-size:15px;color:#1e293b;line-height:1.6">Hej {{namn}}!</p><p style="margin:0 0 20px;font-size:15px;color:#374151;line-height:1.7">Tankte folja upp med lite mer om vad <strong>BottleDROP - Ge Pant</strong> faktiskt innebar for er forening.</p><p style="margin:0 0 20px;font-size:15px;color:#374151;line-height:1.7">Ge Pant lar era supportrar enkelt skanka sin pant direkt till <strong>{{namn}}</strong> via mobilappen - utan att ni behover lyfta ett finger.</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;margin-bottom:24px"><tr><td style="padding:20px 24px"><div style="font-size:11px;font-weight:700;color:#16a34a;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Det har far ni</div><p style="margin:6px 0;font-size:14px;color:#374151">&#10003; En ny, passiv intaktskalla utan er insats</p><p style="margin:6px 0;font-size:14px;color:#374151">&#10003; Fler hushall som donerar via appen</p><p style="margin:6px 0;font-size:14px;color:#374151">&#10003; Synlighet i BottleDROPs natverk</p><p style="margin:6px 0;font-size:14px;color:#374151">&#10003; Pilot utan kostnad eller bindning</p></td></tr></table><p style="margin:0 0 24px;font-size:14px;color:#64748b;line-height:1.6">Ge Pant ar redan igang i flera regioner. Las mer och anmal intresse:</p><table cellpadding="0" cellspacing="0"><tr><td style="background:#2dd4bf;border-radius:8px;padding:14px 28px"><a href="https://www.bottledrop.se/" style="color:#0f172a;font-size:15px;font-weight:700;text-decoration:none">Las mer om Ge Pant</a></td></tr></table></td></tr><tr><td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0"><p style="margin:0;font-size:13px;color:#94a3b8">Med vanlig halsning,<br><strong style="color:#374151">{{avsandare}}</strong></p></td></tr></table></td></tr></table></body></html>`
   },
   {
     id:"mail3",
