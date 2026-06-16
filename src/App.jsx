@@ -2493,7 +2493,7 @@ function Pipeline({fr,pipelineOverrides,savePipe,kontexter,M}){
   );
 }
 
-const BLANK_F={q:"",lan:"",ort:"",idrott:"",epost:"all",mail:"all",kontext:""};
+const BLANK_F={q:"",lan:"",ort:"",idrott:"",epost:"all",mail:"all",kontext:"",intresse:"all"};
 function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides,savePipe,M}){
   const [selectedId,setSelectedId]=useState(null);
   const [detTab,setDetTab]=useState("info");
@@ -2521,6 +2521,9 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
     if(idrott&&f.idrott!==idrott)return false;
     if(epost==="yes"&&!hasEmail(f))return false;
     if(epost==="no"&&hasEmail(f))return false;
+    const intresseF=filters.intresse||"all";
+    if(intresseF==="yes"&&!(f.taggar||[]).includes("intresse"))return false;
+    if(intresseF==="no"&&(f.taggar||[]).includes("intresse"))return false;
     const m=f.skickadeMail||0;
     if(mail==="0"&&m!==0)return false;
     if(mail==="1"&&m!==1)return false;
@@ -2591,7 +2594,24 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
                   </div>
                 </div>
               )}
-              <button onClick={()=>{setEditVals({...sel});setEditing(true);}} style={{...btn("ghost"),marginTop:12,width:"100%",justifyContent:"center"}}>✎ Redigera</button>
+              {/* Intresse-knapp */}
+              {(()=>{
+                const harIntresse=(sel.taggar||[]).includes("intresse");
+                return(
+                  <button
+                    onClick={()=>{
+                      const curr=sel.taggar||[];
+                      const next=harIntresse?curr.filter(x=>x!=="intresse"):[...curr,"intresse"];
+                      saveFr(fr.map(f=>f.id===sel.id?{...f,taggar:next}:f));
+                    }}
+                    style={{...btn(harIntresse?"primary":"ghost"),marginTop:12,width:"100%",justifyContent:"center",
+                      ...(harIntresse?{background:"rgba(34,197,94,0.15)",borderColor:C.green,color:C.green}:{})}}
+                  >
+                    {harIntresse?"✅ Visade intresse":"☐ Markera som intresserad"}
+                  </button>
+                );
+              })()}
+              <button onClick={()=>{setEditVals({...sel});setEditing(true);}} style={{...btn("ghost"),marginTop:6,width:"100%",justifyContent:"center"}}>✎ Redigera</button>
             </div>
           ))}
           {detTab==="mail"&&(
@@ -2670,7 +2690,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
       {showFilt&&(
         <div style={{...card({marginBottom:12})}}>
           <div style={{display:"grid",gridTemplateColumns:M?"1fr 1fr":"repeat(4,1fr)",gap:8,marginBottom:10}}>
-            {[["Ort","ort",[["","Alla orter"],...orter.map(o=>[o,o])]],["Idrott","idrott",[["","Alla"],...idrotts.map(i=>[i,i])]],["E-post","epost",[["all","Alla"],["yes","Ja"],["no","Nej"]]],["Mail","mail",[["all","Alla"],["0","Ej kontaktad"],["1","Mail 1"],["2","Mail 1–2"],["3+","Alla 3"]]],["Kontext","kontext",[["","Alla"],...kontexter.map(k=>[k.id,k.namn])]]].map(([l,k,opts])=>(
+            {[["Ort","ort",[["","Alla orter"],...orter.map(o=>[o,o])]],["Idrott","idrott",[["","Alla"],...idrotts.map(i=>[i,i])]],["E-post","epost",[["all","Alla"],["yes","Ja"],["no","Nej"]]],["Intresse","intresse",[["all","Alla"],["yes","Ja"],["no","Nej"]]],["Mail","mail",[["all","Alla"],["0","Ej kontaktad"],["1","Mail 1"],["2","Mail 1–2"],["3+","Alla 3"]]],["Kontext","kontext",[["","Alla"],...kontexter.map(k=>[k.id,k.namn])]]].map(([l,k,opts])=>(
               <div key={k}><label style={lbl}>{l}</label><select value={filters[k]} onChange={e=>setFilters(p=>({...p,[k]:e.target.value}))} style={{...I(),minHeight:M?46:40}}>{opts.map(([v,t])=><option key={v} value={v}>{t}</option>)}</select></div>
             ))}
           </div>
@@ -2760,7 +2780,7 @@ function Foreningar({fr,saveFr,contacts,saveContacts,kontexter,pipelineOverrides
                       <td style={{padding:"9px 12px",color:C.muted,fontSize:11}}>{f.idrott}</td>
                       <td style={{padding:"9px 12px",color:C.muted,fontSize:11}}>{f.ort}</td>
                       <td style={{padding:"9px 12px"}}><Chip color={f.lan==="Dalarna"?C.teal:C.muted} sm>{f.lan}</Chip></td>
-                      <td style={{padding:"9px 12px",fontSize:11}}>{hasDual(f)?<Chip color={C.teal} sm>2</Chip>:hasEmail(f)?<span style={{color:C.green}}>✓</span>:<span style={{color:C.red}}>✗</span>}</td>
+                      <td style={{padding:"9px 12px",fontSize:11}}>{(f.taggar||[]).includes("intresse")?<Chip color={C.green} sm>★</Chip>:hasDual(f)?<Chip color={C.teal} sm>2</Chip>:hasEmail(f)?<span style={{color:C.green}}>✓</span>:<span style={{color:C.red}}>✗</span>}</td>
                       <td style={{padding:"9px 12px",color:C.muted,fontSize:11,maxWidth:100,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.ordforande||"—"}</td>
                       <td style={{padding:"9px 12px",color:C.green,fontWeight:500}}>{f.burkar>0?fmtN(f.burkar):"—"}</td>
                       <td style={{padding:"9px 12px"}}>
