@@ -2060,7 +2060,7 @@ Det har far ni:
 - Synlighet i BottleDROPs app och natverk
 - Pilot utan kostnad eller bindning
 
-Ge Pant ar redan igang i flera regioner och vi letar nu partners i ert omrade.
+Ge Pant ar nu under lansering och vi letar partners i ert omrade som vill vara med fran start.
 
 Vill ni veta mer? Svarar garna pa fragor, eller las mer och anmal intresse har: https://www.bottledrop.se/
 
