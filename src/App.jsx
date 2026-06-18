@@ -2047,7 +2047,7 @@ Allt gott,
     id:"mail2",
     namn:"🤝 Mail 2 – Uppföljning",
     steg:2,
-    subject:"{{namn}} - sa har fungerar BottleDROP Ge Pant",
+    subject:"Ett hett sommartips till {{namn}}",
     body:`Hej {{namn}}!
 
 Tänkte följa upp med lite mer om vad BottleDROP – Ge Pant faktiskt innebär för er förening.
