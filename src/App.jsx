@@ -2047,7 +2047,7 @@ Allt gott,
     id:"mail2",
     namn:"🤝 Mail 2 – Uppföljning",
     steg:2,
-    subject:"Ett hett sommartips till {{namn}}",
+    subject:"Innan ni tar sommarledigt, {{namn}}…",
     body:`Hej {{namn}}!
 
 Vi letar just nu efter ett fåtal föreningar som vill vara med och forma hur Ge Pant fungerar i praktiken.
